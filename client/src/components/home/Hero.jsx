@@ -82,7 +82,8 @@ const Hero = () => {
 
        <div className="mt-7 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-5 w-full sm:w-auto">
 
-  <Link
+  {/* <Link
+  type="button"
     to="/request-sample"
     className="
       group
@@ -108,8 +109,40 @@ const Hero = () => {
     "
   >
     Request a Sample
+    
     <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-  </Link>
+  </Link> */}
+
+<a
+  href="https://wa.me/919427061888"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="
+    group
+    w-full sm:w-auto
+    inline-flex
+    items-center
+    justify-center
+    gap-2
+    rounded-2xl
+    bg-sky-500
+    px-6 sm:px-8
+    py-3.5 sm:py-4
+    text-base sm:text-lg
+    font-semibold
+    text-white
+    shadow-lg
+    shadow-sky-500/20
+    transition-all
+    duration-300
+    hover:bg-sky-600
+    hover:scale-[1.02]
+    active:scale-[0.98]
+  "
+>
+   +91 94270 61888
+  <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+</a>
 
   <button
     className="

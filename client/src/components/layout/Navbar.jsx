@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "../search/SearchBar";
 
-
+import logo from "../../assets/logo/logo.png";
 
 import {
   FiSearch,
@@ -110,11 +110,13 @@ const Navbar = () => {
   </div>
   */}
 
-  <div>
-    <h1 className="text-3xl lg:text-[40px] font-extrabold tracking-tight leading-none text-white">
-      imprenta
-    </h1>
-  </div>
+ <div className="flex items-center">
+  <img
+    src={logo}
+    alt="Imprenta"
+    className="h-10 sm:h-11 lg:h-12 w-auto object-contain"
+  />
+</div>
 
 </Link>
 
@@ -127,23 +129,23 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-10 ml-auto">
 
             {/* Help */}
-            <button className="flex items-center gap-3 hover:text-sky-600 transition">
+          <button
+  type="button"
+  onClick={() => (window.location.href = "tel:+919427061888")}
+  className="flex items-center gap-3 cursor-pointer"
+>
+  <FiHelpCircle size={22} />
 
-              <FiHelpCircle size={22} />
+  <div className="leading-tight text-left">
+    <p className="text-[11px] uppercase tracking-wider text-slate-300">
+      Need Help?
+    </p>
 
-              <div className="leading-tight text-left">
-
-                <p className="text-[11px] uppercase tracking-wider text-slate-300">
-                  Need Help?
-                </p>
-
-                <p className="text-[15px] font-semibold text-white">
-                  02522-669393
-                </p>
-
-              </div>
-
-            </button>
+    <p className="text-[15px] font-semibold text-white">
+      +91 94270 61888
+    </p>
+  </div>
+</button>
 
             {/* Favorites */}
           <button className="flex items-center gap-2 text-white hover:text-sky-300 transition">
