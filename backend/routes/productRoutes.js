@@ -4,6 +4,7 @@ import {
   createProduct,
   getProducts,
   getProductById,
+  getProductBySlug,
   updateProduct,
   deleteProduct,
 } from "../controllers/productController.js";
@@ -19,10 +20,13 @@ const router = express.Router();
 router.post("/", protect, adminOnly, createProduct);
 
 // Get All Products
-router.get("/", protect, adminOnly, getProducts);
+router.get("/", getProducts);
 
 // Get Single Product
-router.get("/:id", protect, adminOnly, getProductById);
+router.get("/:id", getProductById); // Left unprotected for public viewing
+
+// Get Single Product By Slug
+router.get("/slug/:slug", getProductBySlug);
 
 // Update Product
 router.put("/:id", protect, adminOnly, updateProduct);

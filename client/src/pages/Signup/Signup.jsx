@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { registerUser } from "../../services/authService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 import {
   FiUser,
   FiMail,
@@ -14,40 +14,49 @@ import {
 
 const Signup = () => {
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [formData, setFormData] = useState({
-  name: "",
-  email: "",
-  phone: "",
-  password: "",
-  confirmPassword: "",
-});
-
-const handleChange = (e) => {
-  setFormData({
-    ...formData,
-    [e.target.name]: e.target.value,
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
   });
-};
+  const { register } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  if (formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match");
-    return;
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const result = await registerUser(formData);
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
-  if (result.success) {
-    alert("Registration Successful");
-    navigate("/login");
-  } else {
-    alert(result.message);
-  }
-};
+    if (formData.password.length < 8) {
+      toast.error("Password must be at least 8 characters");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await register(formData);
+      toast.success("Account created successfully!");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -98,9 +107,9 @@ const handleSubmit = async (e) => {
           <div className="bg-white px-6 py-10 sm:px-10 lg:px-16 lg:py-16">
 
             <form
-  onSubmit={handleSubmit}
-  className="mx-auto max-w-md"
->
+              onSubmit={handleSubmit}
+              className="mx-auto max-w-md"
+            >
               <h2 className="text-4xl font-bold">
                 Create Account
               </h2>
@@ -119,10 +128,14 @@ const handleSubmit = async (e) => {
 
                 <div className="relative">
 
-                  <FiUser className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"/>
+                  <FiUser className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
 
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
                     placeholder="Enter your name"
                     className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-5 outline-none focus:border-sky-500"
                   />
@@ -141,10 +154,14 @@ const handleSubmit = async (e) => {
 
                 <div className="relative">
 
-                  <FiMail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"/>
+                  <FiMail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
 
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
                     placeholder="Enter email"
                     className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-5 outline-none focus:border-sky-500"
                   />
@@ -163,10 +180,14 @@ const handleSubmit = async (e) => {
 
                 <div className="relative">
 
-                  <FiPhone className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"/>
+                  <FiPhone className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
 
                   <input
                     type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
                     placeholder="Enter mobile number"
                     className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-5 outline-none focus:border-sky-500"
                   />
@@ -185,10 +206,14 @@ const handleSubmit = async (e) => {
 
                 <div className="relative">
 
-                  <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"/>
+                  <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
 
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
                     placeholder="Password"
                     className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-14 outline-none focus:border-sky-500"
                   />
@@ -198,7 +223,7 @@ const handleSubmit = async (e) => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-5 top-1/2 -translate-y-1/2"
                   >
-                    {showPassword ? <FiEyeOff/> : <FiEye/>}
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
 
                 </div>
@@ -215,10 +240,14 @@ const handleSubmit = async (e) => {
 
                 <div className="relative">
 
-                  <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"/>
+                  <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
 
                   <input
                     type={showConfirm ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
                     placeholder="Confirm password"
                     className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-14 outline-none focus:border-sky-500"
                   />
@@ -228,18 +257,22 @@ const handleSubmit = async (e) => {
                     onClick={() => setShowConfirm(!showConfirm)}
                     className="absolute right-5 top-1/2 -translate-y-1/2"
                   >
-                    {showConfirm ? <FiEyeOff/> : <FiEye/>}
+                    {showConfirm ? <FiEyeOff /> : <FiEye />}
                   </button>
 
                 </div>
 
               </div>
 
-              <button className="mt-8 w-full h-14 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold flex items-center justify-center gap-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="mt-8 w-full h-14 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold flex items-center justify-center gap-3 disabled:opacity-50 transition"
+              >
 
-                Create Account
+                {isSubmitting ? "Creating Account..." : "Create Account"}
 
-                <FiArrowRight/>
+                <FiArrowRight />
 
               </button>
 
@@ -255,14 +288,14 @@ const handleSubmit = async (e) => {
 
               </div>
 
-              <button className="w-full h-14 rounded-xl border border-gray-300 flex items-center justify-center gap-4 hover:bg-gray-50">
+              <button type="button" className="w-full h-14 rounded-xl border border-gray-300 flex items-center justify-center gap-4 hover:bg-gray-50 text-gray-500 transition opacity-60 cursor-not-allowed" title="Coming Soon">
 
                 <img
                   src="https://www.svgrepo.com/show/475656/google-color.svg"
                   className="w-6 h-6"
                 />
 
-                Continue with Google
+                Continue with Google (Coming Soon)
 
               </button>
 

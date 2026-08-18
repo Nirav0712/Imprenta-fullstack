@@ -10,32 +10,12 @@ import {
   FiFileText,
 } from "react-icons/fi";
 
-const CompanyDetails = ({ next, back }) => {
-
-  const [form, setForm] = useState({
-
-    company: "",
-    person: "",
-    email: "",
-    phone: "",
-    gst: "",
-    city: "",
-    state: "",
-    address: "",
-    notes: "",
-
-  });
+const CompanyDetails = ({ next, back, formData, updateFormData }) => {
 
   const handleChange = (e) => {
-
-    setForm({
-
-      ...form,
-
+    updateFormData({
       [e.target.name]: e.target.value,
-
     });
-
   };
 
   const Input = ({
@@ -56,7 +36,7 @@ const CompanyDetails = ({ next, back }) => {
       <input
         type={type}
         name={name}
-        value={form[name]}
+        value={formData[name] || ""}
         onChange={handleChange}
         placeholder={placeholder}
         className="
@@ -158,7 +138,7 @@ const CompanyDetails = ({ next, back }) => {
       <textarea
         rows={5}
         name="address"
-        value={form.address}
+        value={formData.address || ""}
         onChange={handleChange}
         placeholder="Complete Address"
         className="
@@ -180,7 +160,7 @@ const CompanyDetails = ({ next, back }) => {
       <textarea
         rows={5}
         name="notes"
-        value={form.notes}
+        value={formData.notes || ""}
         onChange={handleChange}
         placeholder="Additional Instructions..."
         className="

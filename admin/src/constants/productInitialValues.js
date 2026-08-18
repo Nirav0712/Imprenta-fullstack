@@ -13,6 +13,7 @@ export const productInitialValues = {
   salePrice: "",
   discount: "",
   gst: "",
+  showPrice: false,
 
   stock: "",
   lowStockAlert: "",
@@ -23,7 +24,7 @@ export const productInitialValues = {
   bestSeller: false,
   newArrival: false,
 
-showOnHome: false,
+  showOnHome: false,
 
   status: "Published",
 

@@ -1,9 +1,11 @@
+import { useState, useEffect } from "react";
 import {
   FiPhone,
   FiMail,
   FiMapPin,
   FiClock,
 } from "react-icons/fi";
+import { fetchSettings } from "../../services/api";
 
 const contactCards = [
   {
@@ -33,6 +35,51 @@ const contactCards = [
 ];
 
 const ContactInfo = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const getSettings = async () => {
+      try {
+        const res = await fetchSettings();
+        if (res?.data) {
+          setSettings(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to load settings:", error);
+      }
+    };
+    getSettings();
+  }, []);
+
+  const getDynamicCards = () => {
+    return [
+      {
+        icon: <FiPhone size={26} />,
+        title: "Call Us",
+        value: settings?.phone || "+91 94270 61888",
+        sub: "Mon - Sat | 9:00 AM - 7:00 PM",
+      },
+      {
+        icon: <FiMail size={26} />,
+        title: "Email Us",
+        value: settings?.email || "info@imprenta.com",
+        sub: "We'll reply within 24 hours",
+      },
+      {
+        icon: <FiMapPin size={26} />,
+        title: "Visit Office",
+        value: settings?.address || "Gala No. C-2, Dungra Park, Vapi, Gujarat-396195",
+        sub: "India",
+      },
+      {
+        icon: <FiClock size={26} />,
+        title: "Working Hours",
+        value: "Mon - Sat",
+        sub: "09:00 AM - 07:00 PM",
+      },
+    ];
+  };
+
   return (
     <section className="py-20">
 
@@ -64,7 +111,7 @@ const ContactInfo = () => {
 
         <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
 
-          {contactCards.map((card) => (
+          {getDynamicCards().map((card) => (
 
             <div
               key={card.title}

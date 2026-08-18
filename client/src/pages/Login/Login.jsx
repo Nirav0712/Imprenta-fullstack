@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../services/authService";
+import { useAuth } from "../../context/AuthContext";
+import toast from "react-hot-toast";
 import {
   FiMail,
   FiLock,
@@ -10,33 +11,35 @@ import {
 } from "react-icons/fi";
 
 const Login = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [formData, setFormData] = useState({
-  email: "",
-  password: "",
-});
-
-const handleChange = (e) => {
-  setFormData({
-    ...formData,
-    [e.target.name]: e.target.value,
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
   });
-};
+  const { login } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const result = await loginUser(formData);
-
-  if (result.success) {
-    localStorage.setItem("token", result.token);
-
-    navigate("/");
-  } else {
-    alert(result.message);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await login(formData.email, formData.password);
+      toast.success("Welcome back!");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -92,9 +95,9 @@ const handleSubmit = async (e) => {
           <div className="bg-white px-6 py-10 sm:px-10 lg:px-16 lg:py-20">
 
             <form
-  onSubmit={handleSubmit}
-  className="mx-auto max-w-md"
->
+              onSubmit={handleSubmit}
+              className="mx-auto max-w-md"
+            >
 
               <h2 className="text-4xl font-bold text-gray-900">
                 Sign In
@@ -117,12 +120,14 @@ const handleSubmit = async (e) => {
                   {/* <FiMail className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" /> */}
 
                   <input
-  type="email"
-  name="email"
-  value={formData.email}
-  onChange={handleChange}
-  placeholder="Enter your email"
-/>
+                    type="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-5 outline-none focus:border-sky-500"
+                  />
 
                 </div>
 
@@ -140,13 +145,15 @@ const handleSubmit = async (e) => {
 
                   {/* <FiLock className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" /> */}
 
-                 <input
-  type={showPassword ? "text" : "password"}
-  name="password"
-  value={formData.password}
-  onChange={handleChange}
-  placeholder="Enter your password"
-/>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    className="w-full h-14 rounded-xl border border-gray-300 pl-14 pr-14 outline-none focus:border-sky-500"
+                  />
 
                   <button
                     type="submit"
@@ -158,9 +165,9 @@ const handleSubmit = async (e) => {
 
                 </div>
 
-              </div> 
+              </div>
 
-                            {/* Remember + Forgot */}
+              {/* Remember + Forgot */}
 
               <div className="mt-6 flex items-center justify-between">
 
@@ -177,22 +184,25 @@ const handleSubmit = async (e) => {
 
                 </label>
 
-                <Link
-                 to="/login"
-                  className="text-sky-600 hover:text-sky-700 font-medium"
+                <button
+                  type="button"
+                  title="Coming Soon"
+                  className="text-gray-400 font-medium cursor-not-allowed opacity-70"
                 >
                   Forgot Password?
-                </Link>
+                </button>
 
               </div>
 
               {/* Login Button */}
 
               <button
-                className="mt-8 flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-sky-500 text-lg font-semibold text-white transition-all duration-300 hover:bg-sky-600 hover:shadow-xl"
+                type="submit"
+                disabled={isSubmitting}
+                className="mt-8 flex h-14 w-full items-center justify-center gap-3 rounded-xl bg-sky-500 text-lg font-semibold text-white transition-all duration-300 hover:bg-sky-600 hover:shadow-xl disabled:opacity-50"
               >
 
-                Login
+                {isSubmitting ? "Logging in..." : "Login"}
 
                 <FiArrowRight />
 
@@ -215,7 +225,9 @@ const handleSubmit = async (e) => {
               {/* Google */}
 
               <button
-                className="flex h-14 w-full items-center justify-center gap-4 rounded-xl border border-gray-300 bg-white font-medium transition hover:bg-gray-50"
+                type="button"
+                title="Coming Soon"
+                className="flex h-14 w-full items-center justify-center gap-4 rounded-xl border border-gray-300 bg-white font-medium transition hover:bg-gray-50 text-gray-500 opacity-60 cursor-not-allowed"
               >
 
                 <img
@@ -224,7 +236,7 @@ const handleSubmit = async (e) => {
                   className="h-6 w-6"
                 />
 
-                Continue with Google
+                Continue with Google (Coming Soon)
 
               </button>
 

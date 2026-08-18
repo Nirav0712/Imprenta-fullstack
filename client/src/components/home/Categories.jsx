@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import "swiper/css";
@@ -9,45 +10,73 @@ import category4 from "../../assets/images/categories/category-4.png";
 import category5 from "../../assets/images/categories/category-5.png";
 import category6 from "../../assets/images/categories/category-6.png";
 
-const categories = [
-  {
-    title: "Labels",
-    image: category1,
-  },
-  {
-    title: "Shrink Sleeves",
-    image: category2,
-  },
-  {
-    title: "Mono Cartons",
-    image: category3,
-  },
-  {
-    title: "Seamless Plastic Tubes",
-    image: category4,
-  },
-  {
-    title: "Corporate Branding",
-    image: category5,
-  },
-  {
-    title: "Design Services",
-    image: category6,
-  },
-];
+import { useState, useEffect } from "react";
+import { fetchCategories, fetchHomepage } from "../../services/api";
+
+const imageMap = {
+  "category-1.png": category1,
+  "category-2.png": category2,
+  "category-3.png": category3,
+  "category-4.png": category4,
+  "category-5.png": category5,
+  "category-6.png": category6,
+};
+
+const getSrcFromMap = (path) => {
+  if (!path) return null;
+  const filename = path.split(/[\\/]/).pop();
+  return imageMap[filename] || null;
+};
 
 const Categories = () => {
+  const [categories, setCategories] = useState([]);
+  const [cmsData, setCmsData] = useState(null);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await fetchCategories();
+        let dbCategories = [];
+        if (Array.isArray(res)) {
+          dbCategories = res;
+        } else if (res && res.categories) {
+          dbCategories = res.categories;
+        }
+
+        // Filter only active categories
+        const activeCategories = dbCategories.filter(cat => cat.status === "active");
+        setCategories(activeCategories);
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+    const loadCMS = async () => {
+      try {
+        const res = await fetchHomepage();
+        if (res?.data && res.data.active) {
+          setCmsData(res.data);
+        }
+      } catch (err) {
+        console.error("Failed to load CMS", err);
+      }
+    };
+    loadCategories();
+    loadCMS();
+  }, []);
+
   return (
-   <section className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
+    <section className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
       {/* Section Heading */}
       <div className="w-full mb-7 sm:mb-9 lg:mb-10 flex items-end justify-between">
         <div>
-          {/* <p className="mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-sky-400">
-            What We Manufacture
-          </p> */}
+          {cmsData?.servicesDescription && (
+            <p className="mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-sky-400">
+              {cmsData.servicesDescription}
+            </p>
+          )}
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
-            Explore all categories
+            {cmsData?.servicesTitle || "Explore all categories"}
           </h2>
         </div>
       </div>
@@ -108,8 +137,8 @@ const Categories = () => {
         }}
       >
         {categories.map((item, index) => (
-          <SwiperSlide key={index}>
-            <div className="group cursor-pointer">
+          <SwiperSlide key={item._id || index}>
+            <Link to={`/products?category=${item.slug}`} className="block group cursor-pointer">
 
               {/* Image Card */}
               <div
@@ -131,20 +160,43 @@ const Categories = () => {
                 {/* Image */}
                 <div className="relative aspect-square overflow-hidden bg-slate-100">
 
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    loading="lazy"
-                    className="
-                      h-full
-                      w-full
-                      object-cover
-                      transition-transform
-                      duration-700
-                      ease-out
-                      group-hover:scale-105
-                    "
-                  />
+                  {getSrcFromMap(item.image) ? (
+                    <img
+                      src={getSrcFromMap(item.image)}
+                      alt={item.name}
+                      loading="lazy"
+                      className="
+                        h-full
+                        w-full
+                        object-cover
+                        transition-transform
+                        duration-700
+                        ease-out
+                        group-hover:scale-105
+                      "
+                    />
+                  ) : item.image && !getSrcFromMap(item.image) ? (
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      loading="lazy"
+                      className="
+                        h-full
+                        w-full
+                        object-cover
+                        transition-transform
+                        duration-700
+                        ease-out
+                        group-hover:scale-105
+                      "
+                      onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                    />
+                  ) : null}
+                  {(!item.image || (!getSrcFromMap(item.image) && !item.image)) && (
+                    <div className="h-full w-full flex items-center justify-center bg-slate-200 text-slate-500 font-semibold" style={item.image && !getSrcFromMap(item.image) ? { display: 'none' } : {}}>
+                      No Image
+                    </div>
+                  )}
 
                   {/* Soft Overlay */}
                   <div
@@ -204,7 +256,7 @@ const Categories = () => {
                     group-hover:text-sky-400
                   "
                 >
-                  {item.title}
+                  {item.name}
                 </h3>
 
                 {/* Small Underline */}
@@ -222,7 +274,7 @@ const Categories = () => {
                 />
               </div>
 
-            </div>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

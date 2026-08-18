@@ -3,7 +3,7 @@ import API from "../config/axios";
 export const categoryApi = {
   getAll: async () => {
     const { data } = await API.get("/categories");
-    return data;
+    return data.categories || [];
   },
 
   getById: async (id) => {

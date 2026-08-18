@@ -1,0 +1,51 @@
+﻿node : file:///D:/allweb/impr
+enta%20-%20Copy/backend/contr
+ollers/orderController.js:43
+At line:1 char:1
++ node server.js 2>&1 | 
+Out-File -Encoding utf8 
+error.log
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (file://  
+  /D:/allw...ontroller.js:   
+ 43:String) [], RemoteExc    
+eption
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+import Product from 
+"../models/Product.js";
+^^^^^^^^^^^^^^
+
+SyntaxError: Identifier 
+'Product' has already been 
+declared
+    at 
+compileSourceTextModule (node
+:internal/modules/esm/utils:3
+17:16)
+    at 
+ModuleLoader.moduleStrategy (
+node:internal/modules/esm/tra
+nslators:111:18)
+    at #translate (node:inter
+nal/modules/esm/loader:541:20
+)
+    at afterLoad (node:intern
+al/modules/esm/loader:594:29)
+    at ModuleLoader.loadAndTr
+anslate (node:internal/module
+s/esm/loader:599:12)
+    at #createModuleJob (node
+:internal/modules/esm/loader:
+623:36)
+    at 
+#getJobFromResolveResult (nod
+e:internal/modules/esm/loader
+:329:34)
+    at ModuleLoader.getModule
+JobForImport (node:internal/m
+odules/esm/loader:294:41)
+
+Node.js v24.11.1

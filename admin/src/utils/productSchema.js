@@ -34,37 +34,37 @@ export const productSchema = z.object({
     .string()
     .min(20, "Minimum 20 characters"),
 
-    status: z.string(),
+  status: z.string(),
 
-metaTitle: z
-  .string()
-  .max(60, "Maximum 60 characters"),
+  metaTitle: z
+    .string()
+    .max(60, "Maximum 60 characters"),
 
-metaDescription: z
-  .string()
-  .max(160, "Maximum 160 characters"),
+  metaDescription: z
+    .string()
+    .max(160, "Maximum 160 characters"),
 
-keywords: z.string(),
+  keywords: z.string(),
 
-canonical: z
-  .string()
-  .optional(),
+  canonical: z
+    .string()
+    .optional(),
 
-images: z.array(z.any()),
+  images: z.array(z.any()),
 
   regularPrice: z.coerce.number(),
 
   salePrice: z.coerce.number().optional(),
 
-discount: z.coerce.number().optional(),
+  discount: z.coerce.number().optional(),
 
-gst: z.coerce.number().optional(),
+  gst: z.coerce.number().optional(),
 
-barcode: z.string().optional(),
+  barcode: z.string().optional(),
 
-brand: z.string().optional(),
+  brand: z.string().optional(),
 
-canonical: z.string().optional(),
+  canonical: z.string().optional(),
 
   stock: z.coerce.number(),
 
@@ -80,13 +80,13 @@ canonical: z.string().optional(),
 
   status: z.string(),
 
- metaTitle: z
-  .string()
-  .max(60, "Maximum 60 characters"),
+  metaTitle: z
+    .string()
+    .max(60, "Maximum 60 characters"),
 
-metaDescription: z
-  .string()
-  .max(160, "Maximum 160 characters"),
+  metaDescription: z
+    .string()
+    .max(160, "Maximum 160 characters"),
 
   keywords: z.string(),
 
@@ -94,7 +94,47 @@ metaDescription: z
 
   newArrival: z.boolean(),
 
-showOnHome: z.boolean(),
+  showOnHome: z.boolean(),
+
+  showPrice: z.boolean().default(true),
+
+  configuration: z.object({
+    enabled: z.boolean().default(false),
+    minimumQuantity: z.coerce.number().default(1),
+    allowCustomQuantity: z.boolean().default(false),
+    allowCustomSize: z.boolean().default(false),
+    sizes: z.array(z.object({
+      name: z.string(),
+      additionalPrice: z.coerce.number().default(0),
+      enabled: z.boolean().default(true),
+    })).optional(),
+    materials: z.array(z.object({
+      name: z.string(),
+      additionalPrice: z.coerce.number().default(0),
+      enabled: z.boolean().default(true),
+    })).optional(),
+    laminations: z.array(z.object({
+      name: z.string(),
+      additionalPrice: z.coerce.number().default(0),
+      enabled: z.boolean().default(true),
+    })).optional(),
+    foils: z.array(z.object({
+      name: z.string(),
+      additionalPrice: z.coerce.number().default(0),
+      enabled: z.boolean().default(true),
+    })).optional(),
+    designOptions: z.array(z.object({
+      name: z.string(),
+      additionalPrice: z.coerce.number().default(0),
+      enabled: z.boolean().default(true),
+    })).optional(),
+    splitOnBackPapers: z.array(z.object({
+      name: z.string(),
+      additionalPrice: z.coerce.number().default(0),
+      enabled: z.boolean().default(true),
+    })).optional(),
+    quantityOptions: z.array(z.any()).optional(),
+  }).optional(),
 
 });
 

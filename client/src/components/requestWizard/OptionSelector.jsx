@@ -35,19 +35,10 @@ const sizes = [
 
 const OptionSelector = ({
   template,
+  formData,
+  updateFormData,
   next,
 }) => {
-
-  const [quantity, setQuantity] = useState(250);
-
-  const [material, setMaterial] = useState("Paper");
-
-  const [finish, setFinish] = useState("Matte");
-
-  const [size, setSize] = useState("A5");
-
-  const [printing, setPrinting] =
-    useState("Single Side");
 
   const Card = ({
     title,
@@ -91,10 +82,9 @@ const OptionSelector = ({
               transition-all
               duration-300
 
-              ${
-                value === item
-                  ? "border-sky-400 bg-sky-500 text-white shadow-lg"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:border-sky-400"
+              ${value === item
+                ? "border-sky-400 bg-sky-500 text-white shadow-lg"
+                : "border-white/10 bg-white/5 text-slate-300 hover:border-sky-400"
               }
             `}
           >
@@ -135,92 +125,92 @@ const OptionSelector = ({
 
       {template && (
 
-<div className="rounded-[30px] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+        <div className="rounded-[30px] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
 
-<div className="flex flex-col gap-6 md:flex-row">
+          <div className="flex flex-col gap-6 md:flex-row">
 
-<img
-src={template.image}
-alt={template.title}
-className="h-48 w-full rounded-2xl object-cover md:w-72"
-/>
+            <img
+              src={template.image}
+              alt={template.title}
+              className="h-48 w-full rounded-2xl object-cover md:w-72"
+            />
 
-<div className="flex flex-1 flex-col justify-center">
+            <div className="flex flex-1 flex-col justify-center">
 
-<span className="w-fit rounded-full bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-300">
+              <span className="w-fit rounded-full bg-sky-500/10 px-4 py-2 text-sm font-semibold text-sky-300">
 
-{template.category}
+                {template.category}
 
-</span>
+              </span>
 
-<h2 className="mt-5 text-3xl font-black text-white">
+              <h2 className="mt-5 text-3xl font-black text-white">
 
-{template.title}
+                {template.title}
 
-</h2>
+              </h2>
 
-<p className="mt-4 leading-7 text-slate-400">
+              <p className="mt-4 leading-7 text-slate-400">
 
-Premium professionally designed template ready for commercial printing. Customize specifications below before requesting your production sample.
+                Premium professionally designed template ready for commercial printing. Customize specifications below before requesting your production sample.
 
-</p>
+              </p>
 
-<div className="mt-6">
+              <div className="mt-6">
 
-<p className="text-4xl font-black text-sky-400">
+                <p className="text-4xl font-black text-sky-400">
 
-{template.price}
+                  {template.price}
 
-</p>
+                </p>
 
-</div>
+              </div>
 
-</div>
+            </div>
 
-</div>
+          </div>
 
-</div>
+        </div>
 
-)}
+      )}
 
       <Card
         title="Quantity"
         icon={<FiPackage />}
         options={quantities}
-        value={quantity}
-        setValue={setQuantity}
+        value={formData?.quantity || 250}
+        setValue={(val) => updateFormData({ quantity: val })}
       />
 
       <Card
         title="Material"
         icon={<FiLayers />}
         options={materials}
-        value={material}
-        setValue={setMaterial}
+        value={formData?.material || "Paper"}
+        setValue={(val) => updateFormData({ material: val })}
       />
 
       <Card
         title="Finish"
         icon={<FiDroplet />}
         options={finishes}
-        value={finish}
-        setValue={setFinish}
+        value={formData?.finish || "Matte"}
+        setValue={(val) => updateFormData({ finish: val })}
       />
 
       <Card
         title="Printing"
         icon={<FiPackage />}
         options={printTypes}
-        value={printing}
-        setValue={setPrinting}
+        value={formData?.printing || "Single Side"}
+        setValue={(val) => updateFormData({ printing: val })}
       />
 
       <Card
         title="Size"
         icon={<FiLayers />}
         options={sizes}
-        value={size}
-        setValue={setSize}
+        value={formData?.size || "A5"}
+        setValue={(val) => updateFormData({ size: val })}
       />
 
       {/* Bottom */}

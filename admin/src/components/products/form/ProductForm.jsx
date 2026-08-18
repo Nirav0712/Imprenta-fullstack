@@ -10,11 +10,14 @@ import PricingInventory from "./PricingInventory";
 import ProductImages from "./ProductImages";
 import SeoSettings from "./SeoSettings";
 import PublishSettings from "./PublishSettings";
+import ProductConfiguration from "./ProductConfiguration";
+import { useNavigate } from "react-router-dom";
 
-const ProductForm = () => {
+const ProductForm = ({ isEdit = false, initialData = null, productId = null }) => {
+  const navigate = useNavigate();
   const methods = useForm({
     resolver: zodResolver(productSchema),
-    defaultValues: productInitialValues,
+    defaultValues: initialData || productInitialValues,
     mode: "onChange",
   });
 
@@ -22,26 +25,32 @@ const ProductForm = () => {
     formState: { isSubmitting },
   } = methods;
 
-const onSubmit = async (data) => {
-  try {
-    console.log("Submitting Product:", data);
+  const onSubmit = async (data) => {
+    try {
+      const payload = {
+        ...data,
+        price: data.regularPrice || 0,
+        mainImage: data.images?.find(img => img.featured) || data.images?.[0] || null,
+      };
 
-    const response = await productService.createProduct(data);
+      if (isEdit) {
+        await productService.updateProduct(productId, payload);
+        alert("Product updated successfully.");
+        navigate("/products");
+      } else {
+        await productService.createProduct(payload);
+        alert("Product created successfully.");
+        navigate("/products");
+      }
+    } catch (error) {
+      console.error(error);
 
-    console.log("Server Response:", response);
-
-    alert("Product saved successfully.");
-
-    methods.reset();
-  } catch (error) {
-    console.error(error);
-
-    alert(
-      error.response?.data?.message ||
-      "Failed to save product."
-    );
-  }
-};
+      alert(
+        error.response?.data?.message ||
+        "Failed to save product."
+      );
+    }
+  };
 
   return (
     <FormProvider {...methods}>
@@ -55,6 +64,8 @@ const onSubmit = async (data) => {
           <BasicInfo />
 
           <PricingInventory />
+
+          <ProductConfiguration />
 
           <SeoSettings />
         </div>
@@ -107,7 +118,7 @@ const onSubmit = async (data) => {
                   disabled:opacity-50
                 "
               >
-                {isSubmitting ? "Saving..." : "Save Product"}
+                {isSubmitting ? "Saving..." : isEdit ? "Update Product" : "Save Product"}
               </button>
             </div>
           </div>

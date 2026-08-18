@@ -1,0 +1,22 @@
+Error: Command failed: node backend/server.js
+file:///D:/allweb/imprenta%20-%20Copy/backend/routes/themeRoutes.js:3
+import { protect, admin } from "../middleware/authMiddleware.js";
+                  ^^^^^
+SyntaxError: The requested module '../middleware/authMiddleware.js' does not provide an export named 'admin'
+    at #_instantiate (node:internal/modules/esm/module_job:254:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:369:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:671:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.11.1
+
+file:///D:/allweb/imprenta%20-%20Copy/backend/routes/themeRoutes.js:3
+import { protect, admin } from "../middleware/authMiddleware.js";
+                  ^^^^^
+SyntaxError: The requested module '../middleware/authMiddleware.js' does not provide an export named 'admin'
+    at #_instantiate (node:internal/modules/esm/module_job:254:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:369:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:671:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.11.1

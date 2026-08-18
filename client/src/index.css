@@ -1,8 +1,22 @@
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
 html,
 body,
-#root{
-    width:100%;
-    overflow-x:hidden;
+#root {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 @import "tailwindcss";

@@ -32,8 +32,6 @@ router.post(
 // Get All Categories
 router.get(
   "/",
-  protect,
-  adminOnly,
   getCategories
 );
 

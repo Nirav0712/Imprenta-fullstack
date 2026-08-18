@@ -5,8 +5,9 @@ import {
   FiYoutube,
   FiArrowUp,
 } from "react-icons/fi";
+import logo from "../../assets/logo/logo.png";
 
-const FooterBottom = () => {
+const FooterBottom = ({ settings }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -27,15 +28,15 @@ const FooterBottom = () => {
 
           <div className="text-center lg:text-left">
 
-            <h2 className="text-2xl font-bold text-white">
-
-              imprenta
-
-            </h2>
+            <img
+              src={logo}
+              alt="Imprenta Logo"
+              className="mx-auto lg:mx-0 w-auto h-10 sm:h-11 md:h-12 lg:h-14 xl:h-16 max-w-[150px] sm:max-w-[170px] md:max-w-[190px] object-contain"
+            />
 
             <p className="mt-2 text-gray-400 text-sm">
 
-              © {new Date().getFullYear()} Imprenta.
+              © {new Date().getFullYear()} {settings?.companyName || "Imprenta Pvt Ltd"}.
               All Rights Reserved.
 
             </p>
@@ -68,33 +69,33 @@ const FooterBottom = () => {
 
           <div className="flex items-center gap-4">
 
-            <a
-              href="#"
+            {(settings?.facebook || !settings) && <a
+              href={settings?.facebook || "#"}
               className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-sky-500 transition"
             >
               <FiFacebook size={20} />
-            </a>
+            </a>}
 
-            <a
-              href="#"
+            {(settings?.instagram || !settings) && <a
+              href={settings?.instagram || "#"}
               className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-pink-500 transition"
             >
               <FiInstagram size={20} />
-            </a>
+            </a>}
 
-            <a
-              href="#"
+            {(settings?.linkedin || !settings) && <a
+              href={settings?.linkedin || "#"}
               className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-blue-600 transition"
             >
               <FiLinkedin size={20} />
-            </a>
+            </a>}
 
-            <a
-              href="#"
+            {(settings?.youtube || !settings) && <a
+              href={settings?.youtube || "#"}
               className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-red-600 transition"
             >
               <FiYoutube size={20} />
-            </a>
+            </a>}
 
           </div>
 

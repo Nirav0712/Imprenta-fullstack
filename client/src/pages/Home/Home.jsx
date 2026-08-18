@@ -1,5 +1,6 @@
 import Hero from "../../components/home/Hero";
 import Categories from "../../components/home/Categories";
+import CategoryProductShowcase from "../../components/home/CategoryProductShowcase";
 import PopularProducts from "../../components/home/PopularProducts";
 import TrendingProducts from "../../components/home/TrendingProducts";
 import LabelsPackagingProducts from "../../components/home/LabelsPackagingProducts";
@@ -20,6 +21,7 @@ const Home = () => {
       <About />
 
       <Categories />
+      <CategoryProductShowcase />
 
       {/* <PopularProducts /> */}
 

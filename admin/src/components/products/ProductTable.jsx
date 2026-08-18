@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FiEdit2,
@@ -10,35 +10,7 @@ import {
 import ProductCard from "./ProductCard";
 import DeleteModal from "../common/modal/DeleteModal";
 
-const initialProducts = [
-  {
-    id: 1,
-    image: "https://placehold.co/80x80",
-    name: "Premium Business Card",
-    category: "Business Cards",
-    price: "₹299",
-    featured: true,
-    status: "Published",
-  },
-  {
-    id: 2,
-    image: "https://placehold.co/80x80",
-    name: "Luxury Brochure",
-    category: "Brochures",
-    price: "₹899",
-    featured: false,
-    status: "Draft",
-  },
-  {
-    id: 3,
-    image: "https://placehold.co/80x80",
-    name: "Shrink Sleeve",
-    category: "Shrink Sleeve",
-    price: "₹599",
-    featured: true,
-    status: "Published",
-  },
-];
+import { productService } from "../../services/productService";
 
 const ProductTable = ({
   search = "",
@@ -46,11 +18,29 @@ const ProductTable = ({
   status = "All",
 }) => {
 
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
-
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const res = await productService.getProducts();
+      if (res && res.products) {
+        setProducts(res.products);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredProducts = useMemo(() => {
 
@@ -62,7 +52,8 @@ const ProductTable = ({
 
       const matchCategory =
         category === "All" ||
-        item.category === category;
+        item.category?._id === category ||
+        item.category?.name === category;
 
       const matchStatus =
         status === "All" ||
@@ -86,18 +77,17 @@ const ProductTable = ({
 
   };
 
-  const handleDelete = () => {
-
-    setProducts((prev) =>
-      prev.filter(
-        (item) => item.id !== selectedProduct.id
-      )
-    );
-
-    setDeleteOpen(false);
-
-    setSelectedProduct(null);
-
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+    try {
+      await productService.deleteProduct(selectedProduct._id);
+      setDeleteOpen(false);
+      setSelectedProduct(null);
+      fetchProducts();
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || "Failed to delete product.");
+    }
   };
 
   return (
@@ -130,36 +120,43 @@ const ProductTable = ({
 
             <tbody>
 
-              {filteredProducts.length === 0 && (
-
+              {loading ? (
                 <tr>
-
-                  <td
-                    colSpan={7}
-                    className="py-16 text-center text-slate-500"
-                  >
+                  <td colSpan={7} className="py-16 text-center text-slate-500">
+                    Loading products...
+                  </td>
+                </tr>
+              ) : filteredProducts.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-slate-500">
                     No products found.
                   </td>
-
                 </tr>
+              ) : null}
 
-              )}
-
-              {filteredProducts.map((item) => (
+              {!loading && filteredProducts.map((item) => (
 
                 <tr
-                  key={item.id}
+                  key={item._id}
                   className="border-b border-white/5 hover:bg-white/5"
                 >
 
                   <td className="px-6 py-5">
-
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="h-16 w-16 rounded-xl object-cover"
-                    />
-
+                    {item.mainImage?.url ? (
+                      <img
+                        src={item.mainImage.url}
+                        alt={item.name}
+                        className="h-16 w-16 rounded-xl object-cover"
+                      />
+                    ) : item.images?.[0]?.url ? (
+                      <img
+                        src={item.images[0].url}
+                        alt={item.name}
+                        className="h-16 w-16 rounded-xl object-cover"
+                      />
+                    ) : (
+                      <div className="h-16 w-16 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 text-xs">No Img</div>
+                    )}
                   </td>
 
                   <td className="font-semibold text-white">
@@ -167,21 +164,20 @@ const ProductTable = ({
                   </td>
 
                   <td className="text-slate-400">
-                    {item.category}
+                    {item.category?.name || "Uncategorized"}
                   </td>
 
                   <td className="font-semibold text-sky-400">
-                    {item.price}
+                    ₹{item.price}
                   </td>
 
                   <td>
 
                     <button
-                      className={`rounded-full p-2 ${
-                        item.featured
-                          ? "bg-yellow-500 text-white"
-                          : "bg-white/10 text-slate-500"
-                      }`}
+                      className={`rounded-full p-2 ${item.featured
+                        ? "bg-yellow-500 text-white"
+                        : "bg-white/10 text-slate-500"
+                        }`}
                     >
                       <FiStar />
                     </button>
@@ -191,13 +187,12 @@ const ProductTable = ({
                   <td>
 
                     <span
-                      className={`rounded-full px-4 py-2 text-sm ${
-                        item.status === "Published"
-                          ? "bg-green-500/20 text-green-400"
-                          : item.status === "Draft"
+                      className={`rounded-full px-4 py-2 text-sm ${item.status === "Published"
+                        ? "bg-green-500/20 text-green-400"
+                        : item.status === "Draft"
                           ? "bg-yellow-500/20 text-yellow-400"
                           : "bg-red-500/20 text-red-400"
-                      }`}
+                        }`}
                     >
                       {item.status}
                     </span>
@@ -209,14 +204,14 @@ const ProductTable = ({
                     <div className="flex justify-center gap-3">
 
                       <Link
-                        to={`/products/view/${item.id}`}
+                        to={`/products/view/${item._id}`}
                         className="rounded-xl bg-sky-500/20 p-3 text-sky-400 hover:bg-sky-500 hover:text-white transition"
                       >
                         <FiEye />
                       </Link>
 
                       <Link
-                        to={`/products/edit/${item.id}`}
+                        to={`/products/edit/${item._id}`}
                         className="rounded-xl bg-yellow-500/20 p-3 text-yellow-400 hover:bg-yellow-500 hover:text-white transition"
                       >
                         <FiEdit2 />
@@ -248,13 +243,11 @@ const ProductTable = ({
         <div className="space-y-5 p-5 lg:hidden">
 
           {filteredProducts.map((product) => (
-
-           <ProductCard
-  key={product.id}
-  product={product}
-  onDelete={handleDeleteClick}
-/>
-
+            <ProductCard
+              key={product._id}
+              product={product}
+              onDelete={handleDeleteClick}
+            />
           ))}
 
         </div>

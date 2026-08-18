@@ -9,7 +9,7 @@ import {
   FiMapPin,
 } from "react-icons/fi";
 
-const ReviewOrder = ({ next, back }) => {
+const ReviewOrder = ({ onSubmit, submitting, back, formData }) => {
 
   return (
 
@@ -57,17 +57,17 @@ const ReviewOrder = ({ next, back }) => {
 
             <div className="mt-6 space-y-3 text-slate-300">
 
-              <p>Template : Premium Business Card</p>
+              <p>Product : {formData.product}</p>
 
-              <p>Quantity : 250</p>
+              <p>Quantity : {formData.quantity}</p>
 
-              <p>Material : Paper</p>
+              <p>Material : {formData.material}</p>
 
-              <p>Finish : Matte</p>
+              <p>Finish : {formData.finish}</p>
 
-              <p>Printing : Double Side</p>
+              <p>Printing : {formData.printing}</p>
 
-              <p>Size : A5</p>
+              <p>Size : {formData.size}</p>
 
             </div>
 
@@ -91,7 +91,7 @@ const ReviewOrder = ({ next, back }) => {
 
               <p className="text-slate-300">
 
-                BusinessCard_Final.ai
+                {formData.artwork ? formData.artwork.name : "No artwork uploaded"}
 
               </p>
 
@@ -121,21 +121,13 @@ const ReviewOrder = ({ next, back }) => {
 
             <div className="flex gap-3">
 
-              <FiUser className="text-sky-400 mt-1"/>
+              <FiUser className="text-sky-400 mt-1" />
 
               <div>
 
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500">Contact Person</p>
 
-                  Contact Person
-
-                </p>
-
-                <p className="text-white">
-
-                  John Smith
-
-                </p>
+                <p className="text-white">{formData.person}</p>
 
               </div>
 
@@ -143,21 +135,13 @@ const ReviewOrder = ({ next, back }) => {
 
             <div className="flex gap-3">
 
-              <FiMail className="text-sky-400 mt-1"/>
+              <FiMail className="text-sky-400 mt-1" />
 
               <div>
 
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500">Email</p>
 
-                  Email
-
-                </p>
-
-                <p className="text-white">
-
-                  john@email.com
-
-                </p>
+                <p className="text-white">{formData.email}</p>
 
               </div>
 
@@ -165,21 +149,13 @@ const ReviewOrder = ({ next, back }) => {
 
             <div className="flex gap-3">
 
-              <FiPhone className="text-sky-400 mt-1"/>
+              <FiPhone className="text-sky-400 mt-1" />
 
               <div>
 
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500">Phone</p>
 
-                  Phone
-
-                </p>
-
-                <p className="text-white">
-
-                  +91 9876543210
-
-                </p>
+                <p className="text-white">{formData.phone}</p>
 
               </div>
 
@@ -187,21 +163,13 @@ const ReviewOrder = ({ next, back }) => {
 
             <div className="flex gap-3">
 
-              <FiMapPin className="text-sky-400 mt-1"/>
+              <FiMapPin className="text-sky-400 mt-1" />
 
               <div>
 
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500">Company & Address</p>
 
-                  Address
-
-                </p>
-
-                <p className="text-white">
-
-                  Ahmedabad, Gujarat
-
-                </p>
+                <p className="text-white">{formData.company}, {formData.city}, {formData.state}</p>
 
               </div>
 
@@ -243,7 +211,8 @@ const ReviewOrder = ({ next, back }) => {
         </button>
 
         <button
-          onClick={next}
+          onClick={onSubmit}
+          disabled={submitting}
           className="
             flex
             items-center
@@ -256,13 +225,14 @@ const ReviewOrder = ({ next, back }) => {
             font-semibold
             text-white
             transition
+            disabled:opacity-50
             hover:bg-green-600
           "
         >
 
           <FiCheckCircle />
 
-          Submit Request
+          {submitting ? "Submitting..." : "Submit Request"}
 
         </button>
 

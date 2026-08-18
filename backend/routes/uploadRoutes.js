@@ -1,5 +1,7 @@
 import express from "express";
 import multer from "multer";
+import { uploadImage } from "../controllers/uploadController.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -22,39 +24,8 @@ router.get("/", (req, res) => {
 });
 
 // -------------------------
-// TEST POST ROUTE
+// POST ROUTE: Upload Image
 // -------------------------
-router.post("/", upload.single("image"), (req, res) => {
-  console.log("================================");
-  console.log("POST /api/upload HIT");
-  console.log("================================");
-
-  console.log("Headers:");
-  console.log(req.headers["content-type"]);
-
-  console.log("Body:");
-  console.log(req.body);
-
-  console.log("File:");
-  console.log(req.file);
-
-  if (!req.file) {
-    return res.status(400).json({
-      success: false,
-      message: "No image uploaded",
-    });
-  }
-
-  return res.status(200).json({
-    success: true,
-    message: "Image received successfully",
-    file: {
-      fieldname: req.file.fieldname,
-      originalname: req.file.originalname,
-      mimetype: req.file.mimetype,
-      size: req.file.size,
-    },
-  });
-});
+router.post("/", protect, adminOnly, upload.single("image"), uploadImage);
 
 export default router;

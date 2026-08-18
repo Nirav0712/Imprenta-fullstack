@@ -17,6 +17,16 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
+    phone: {
+      type: String,
+      trim: true,
+    },
+
+    companyName: {
+      type: String,
+      trim: true,
+    },
+
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -33,6 +43,11 @@ const userSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+
+    cart: {
+      type: Array,
+      default: [],
     },
   },
   {

@@ -72,31 +72,88 @@ const productSchema = new mongoose.Schema(
     },
 
     // Images
+    mainImage: {
+      url: { type: String },
+      public_id: { type: String }
+    },
     images: [imageSchema],
 
     // Pricing
-    regularPrice: {
+    price: {
       type: Number,
       default: 0,
       min: 0,
     },
-
     salePrice: {
       type: Number,
-      default: 0,
       min: 0,
     },
-
     discount: {
       type: Number,
-      default: 0,
       min: 0,
+      max: 100,
     },
-
     gst: {
       type: Number,
-      default: 0,
       min: 0,
+      default: 18,
+    },
+    showPrice: {
+      type: Boolean,
+      default: false,
+    },
+
+    badge: {
+      type: String,
+      default: "",
+    },
+
+    features: [
+      { type: String }
+    ],
+
+    specifications: [
+      {
+        key: String,
+        value: String
+      }
+    ],
+
+    // Configurator options
+    configuration: {
+      enabled: { type: Boolean, default: false },
+      minimumQuantity: { type: Number, default: 100 },
+      allowCustomQuantity: { type: Boolean, default: true },
+      allowCustomSize: { type: Boolean, default: true },
+      sizes: [
+        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
+      ],
+      materials: [
+        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
+      ],
+      laminations: [
+        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
+      ],
+      foils: [
+        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
+      ],
+      designOptions: [
+        {
+          name: String,
+          additionalPrice: { type: Number, default: 0 },
+          enabled: { type: Boolean, default: true },
+        },
+      ],
+      splitOnBackPapers: [
+        {
+          name: String,
+          additionalPrice: { type: Number, default: 0 },
+          enabled: { type: Boolean, default: true },
+        },
+      ],
+      quantityOptions: [
+        { quantity: Number, price: Number, enabled: { type: Boolean, default: true } }
+      ]
     },
 
     // Inventory

@@ -8,6 +8,8 @@ import {
   FiMail,
   FiSettings,
   FiFileText,
+  FiLayout,
+  FiMessageCircle,
 } from "react-icons/fi";
 
 export const sidebarMenu = [
@@ -50,6 +52,16 @@ export const sidebarMenu = [
     title: "Users",
     icon: FiUsers,
     path: "/users",
+  },
+  {
+    title: "Theme Customization",
+    icon: FiLayout,
+    path: "/theme-customization",
+  },
+  {
+    title: "Inquiries",
+    icon: FiMessageCircle,
+    path: "/inquiries",
   },
   {
     title: "Settings",

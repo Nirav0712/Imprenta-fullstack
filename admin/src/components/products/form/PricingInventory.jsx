@@ -93,6 +93,28 @@ const PricingInventory = () => {
           <div>
 
             <h4 className="font-semibold text-white">
+              Show Product Price
+            </h4>
+
+            <p className="mt-1 text-sm text-slate-400">
+              When OFF, Price will be hidden on the website and customers will see "Inquire for Price".
+            </p>
+
+          </div>
+
+          <input
+            type="checkbox"
+            {...register("showPrice")}
+            className="h-5 w-5 accent-sky-500"
+          />
+
+        </label>
+
+        <label className="flex items-center justify-between rounded-2xl border border-white/10 bg-[#08111F] px-5 py-4">
+
+          <div>
+
+            <h4 className="font-semibold text-white">
               Manage Inventory
             </h4>
 

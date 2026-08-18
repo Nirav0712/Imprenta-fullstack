@@ -1,9 +1,46 @@
+import { useEffect, useState } from "react";
 import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import ProductForm from "../../components/products/form/ProductForm";
+import { productService } from "../../services/productService";
 
 const EditProduct = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await productService.getProduct(id);
+        if (res && res.product) {
+          // Map backend fields to frontend format
+          const mappedData = {
+            ...res.product,
+            productName: res.product.name,
+            regularPrice: res.product.price,
+            category: res.product.category?._id || res.product.category,
+          };
+          setProduct(mappedData);
+        }
+      } catch (err) {
+        console.error("Failed to load product", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return <div className="text-slate-400 py-10">Loading product data...</div>;
+  }
+
+  if (!product) {
+    return <div className="text-red-400 py-10">Product not found.</div>;
+  }
+
   return (
     <div className="space-y-8">
 
@@ -31,7 +68,7 @@ const EditProduct = () => {
 
       </div>
 
-      <ProductForm />
+      <ProductForm isEdit={true} initialData={product} productId={id} />
 
     </div>
   );

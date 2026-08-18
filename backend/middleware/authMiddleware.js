@@ -40,6 +40,19 @@ export const protect = async (req, res, next) => {
   }
 };
 
+export const optionalAuth = async (req, res, next) => {
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select("-password");
+    } catch (error) {
+      // ignore
+    }
+  }
+  next();
+};
+
 export const adminOnly = (req, res, next) => {
   if (req.user.role !== "admin") {
     return res.status(403).json({

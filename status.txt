@@ -1,0 +1,148 @@
+﻿On branch main
+Your branch and 'origin/main' have diverged,
+and have 1 and 10 different commits each, respectively.
+  (use "git pull" if you want to integrate the remote branch with yours)
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   admin/node_modules/.package-lock.json
+	deleted:    admin/node_modules/.vite/deps/@dnd-kit_core.js
+	deleted:    admin/node_modules/.vite/deps/@dnd-kit_sortable.js
+	deleted:    admin/node_modules/.vite/deps/@dnd-kit_sortable.js.map
+	modified:   admin/node_modules/.vite/deps/_metadata.json
+	deleted:    admin/node_modules/.vite/deps/core.esm-BRjRwMwT.js
+	deleted:    admin/node_modules/.vite/deps/core.esm-BRjRwMwT.js.map
+	modified:   admin/package-lock.json
+	modified:   admin/package.json
+	modified:   admin/src/api/categoryApi.js
+	modified:   admin/src/components/layout/Header.jsx
+	modified:   admin/src/components/products/ProductCard.jsx
+	modified:   admin/src/components/products/ProductTable.jsx
+	modified:   admin/src/components/products/form/BasicInfo.jsx
+	modified:   admin/src/components/products/form/PricingInventory.jsx
+	modified:   admin/src/components/products/form/ProductForm.jsx
+	modified:   admin/src/config/axios.js
+	modified:   admin/src/constants/productInitialValues.js
+	modified:   admin/src/constants/sidebarMenu.js
+	modified:   admin/src/index.css
+	modified:   admin/src/pages/categories/Categories.jsx
+	modified:   admin/src/pages/dashboard/Dashboard.jsx
+	modified:   admin/src/pages/orders/Orders.jsx
+	modified:   admin/src/pages/products/EditProduct.jsx
+	modified:   admin/src/pages/products/ViewProduct.jsx
+	modified:   admin/src/pages/requestSamples/RequestSamples.jsx
+	modified:   admin/src/pages/settings/Settings.jsx
+	modified:   admin/src/routes/AppRoutes.jsx
+	modified:   admin/src/services/contactService.js
+	modified:   admin/src/utils/productSchema.js
+	modified:   backend/app.js
+	modified:   backend/controllers/authController.js
+	modified:   backend/controllers/contactController.js
+	modified:   backend/controllers/homeController.js
+	modified:   backend/controllers/orderController.js
+	modified:   backend/controllers/productController.js
+	modified:   backend/middleware/authMiddleware.js
+	modified:   backend/models/HomePage.js
+	modified:   backend/models/Order.js
+	modified:   backend/models/Product.js
+	modified:   backend/models/User.js
+	modified:   backend/node_modules/.package-lock.json
+	modified:   backend/package-lock.json
+	modified:   backend/package.json
+	modified:   backend/routes/authRoutes.js
+	modified:   backend/routes/categoryRoutes.js
+	modified:   backend/routes/contactRoutes.js
+	modified:   backend/routes/homeRoutes.js
+	modified:   backend/routes/orderRoutes.js
+	modified:   backend/routes/productRoutes.js
+	modified:   backend/routes/uploadRoutes.js
+	modified:   backend/server.js
+	modified:   client/index.html
+	modified:   client/package-lock.json
+	modified:   client/src/App.jsx
+	modified:   client/src/components/Background.jsx
+	modified:   client/src/components/contact/ContactCTA.jsx
+	modified:   client/src/components/contact/ContactInfo.jsx
+	modified:   client/src/components/home/Categories.jsx
+	modified:   client/src/components/home/Hero.jsx
+	modified:   client/src/components/home/PopularProducts.jsx
+	modified:   client/src/components/home/TrendingProducts.jsx
+	modified:   client/src/components/layout/Footer.jsx
+	modified:   client/src/components/layout/FooterBottom.jsx
+	modified:   client/src/components/layout/Navbar.jsx
+	modified:   client/src/components/product/ProductCard.jsx
+	modified:   client/src/components/requestWizard/CompanyDetails.jsx
+	modified:   client/src/components/requestWizard/OptionSelector.jsx
+	modified:   client/src/components/requestWizard/ReviewOrder.jsx
+	modified:   client/src/components/requestWizard/UploadArtwork.jsx
+	modified:   client/src/index.css
+	modified:   client/src/pages/Cart/Cart.jsx
+	modified:   client/src/pages/Checkout/Checkout.jsx
+	modified:   client/src/pages/Home/Home.jsx
+	modified:   client/src/pages/Login/Login.jsx
+	modified:   client/src/pages/ProductDetails/ProductDetails.jsx
+	modified:   client/src/pages/Profile/Profile.jsx
+	modified:   client/src/pages/RequestWizard/RequestWizard.jsx
+	modified:   client/src/pages/Shop/Shop.jsx
+	modified:   client/src/pages/Signup/Signup.jsx
+	modified:   client/src/routes/AppRoutes.jsx
+	modified:   client/src/services/api.js
+	modified:   package-lock.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.env.example
+	README.md
+	admin/.env
+	admin/src/api/themeApi.js
+	admin/src/assets/
+	admin/src/components/layout/NotificationBell.jsx
+	admin/src/components/products/form/ProductConfiguration.jsx
+	admin/src/pages/contact/Contact.jsx
+	admin/src/pages/homepage/
+	admin/src/pages/inquiries/
+	admin/src/pages/notifications/
+	admin/src/pages/theme/
+	admin/src/pages/users/
+	admin/src/services/homeService.js
+	admin/src/services/inquiryService.js
+	admin/src/services/orderService.js
+	admin/src/services/settingService.js
+	admin/src/services/themeService.js
+	admin/src/services/userService.js
+	backend/controllers/inquiryController.js
+	backend/controllers/notificationController.js
+	backend/controllers/settingController.js
+	backend/controllers/themeController.js
+	backend/error.log
+	backend/models/ContactMessage.js
+	backend/models/Inquiry.js
+	backend/models/Notification.js
+	backend/models/Setting.js
+	backend/models/Theme.js
+	backend/routes/inquiryRoutes.js
+	backend/routes/notificationRoutes.js
+	backend/routes/settingRoutes.js
+	backend/routes/themeRoutes.js
+	backend/seed.js
+	backend/socket.js
+	backend_error.txt
+	client/.env
+	client/src/components/ThemeProvider.jsx
+	client/src/components/home/CategoryProductSection.jsx
+	client/src/components/home/CategoryProductShowcase.jsx
+	client/src/components/product/InquiryModal.jsx
+	client/src/context/AuthContext.jsx
+	client/src/context/CartContext.jsx
+	client/src/pages/Profile/MyOrders.jsx
+	diff_files.txt
+	err.txt
+	impentra-comingsoon/
+	node_modules/
+	package.json
+	seed_output.txt
+	status.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+

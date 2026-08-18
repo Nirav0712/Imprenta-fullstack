@@ -1,0 +1,67 @@
+{
+  "mainImage": {
+    "url": "https://res.cloudinary.com/dkenmez3t/image/upload/v1787047680/imprenta/products/p1ccx800mat38pni4bpw.png",
+    "public_id": "imprenta/products/p1ccx800mat38pni4bpw"
+  },
+  "configuration": {
+    "enabled": false,
+    "minimumQuantity": 100,
+    "allowCustomQuantity": true,
+    "allowCustomSize": true,
+    "sizes": [],
+    "materials": [],
+    "laminations": [],
+    "foils": [],
+    "designOptions": [],
+    "quantityOptions": []
+  },
+  "_id": "6a842f2bcdcb900bb35fb722",
+  "name": "new Shrink Sleeve",
+  "slug": "new-shrink-sleeve",
+  "category": {
+    "_id": "6a83ef94889b132bbf84c0b8",
+    "name": "Shrink Sleeves",
+    "slug": "shrink-sleeves",
+    "description": "High quality shrink sleeves"
+  },
+  "brand": "Imprenta",
+  "sku": "IMP-002",
+  "barcode": "789456",
+  "shortDescription": "heyyyyyyyyyyyyyyyyyy",
+  "description": "hellooooooooooooooooooooooooo",
+  "images": [
+    {
+      "url": "https://res.cloudinary.com/dkenmez3t/image/upload/v1787047680/imprenta/products/p1ccx800mat38pni4bpw.png",
+      "public_id": "imprenta/products/p1ccx800mat38pni4bpw",
+      "featured": true
+    }
+  ],
+  "price": 0,
+  "salePrice": 0,
+  "discount": 0,
+  "gst": 0,
+  "showPrice": false,
+  "badge": "",
+  "features": [],
+  "specifications": [],
+  "stock": 0,
+  "lowStockAlert": 0,
+  "manageStock": true,
+  "featured": false,
+  "trending": false,
+  "bestSeller": false,
+  "newArrival": false,
+  "showOnHome": false,
+  "metaTitle": "",
+  "metaDescription": "",
+  "keywords": "",
+  "status": "Published",
+  "createdBy": {
+    "_id": "6a744ed3bd9be09e2f392780",
+    "name": "Admin",
+    "email": "admin2@imprenta.com"
+  },
+  "createdAt": "2026-08-18T10:08:43.423Z",
+  "updatedAt": "2026-08-18T10:08:43.423Z",
+  "__v": 0
+}

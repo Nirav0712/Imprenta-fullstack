@@ -1,0 +1,17 @@
+{
+    "name": "imprenta-monorepo",
+    "version": "1.0.0",
+    "description": "Imprenta Website",
+    "scripts": {
+        "postinstall": "npm install --prefix backend && npm install --prefix client && npm install --prefix admin",
+        "dev:backend": "npm run dev --prefix backend",
+        "dev:client": "npm run dev --prefix client",
+        "dev:admin": "npm run dev --prefix admin",
+        "dev": "concurrently \"npm:dev:backend\" \"npm:dev:client\" \"npm:dev:admin\"",
+        "seed": "npm run seed --prefix backend",
+        "start": "npm start --prefix backend"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}

@@ -1,6 +1,7 @@
 import Product from "../models/Product.js";
 import Category from "../models/Category.js";
 import slugify from "../utils/slugify.js";
+import { createNotification } from "./notificationController.js";
 
 /*
     @desc Create Product
@@ -21,10 +22,15 @@ export const createProduct = async (req, res) => {
       shortDescription,
       description,
 
-      regularPrice,
+      price,
       salePrice,
       discount,
       gst,
+      showPrice,
+      badge,
+      features,
+      specifications,
+      mainImage,
 
       stock,
       lowStockAlert,
@@ -43,6 +49,7 @@ export const createProduct = async (req, res) => {
       keywords,
 
       images,
+      configuration,
     } = req.body;
 
     // Validation
@@ -107,10 +114,15 @@ export const createProduct = async (req, res) => {
       shortDescription,
       description,
 
-      regularPrice,
+      price,
       salePrice,
       discount,
       gst,
+      showPrice: showPrice !== undefined ? showPrice : false,
+      badge,
+      features,
+      specifications,
+      mainImage,
 
       stock,
       lowStockAlert,
@@ -129,9 +141,23 @@ export const createProduct = async (req, res) => {
       keywords,
 
       images: images || [],
+      configuration: configuration || {},
 
       createdBy: req.user._id,
     });
+
+    if (status === "Published") {
+      await createNotification({
+        type: "product_published",
+        title: "Product Published",
+        message: `${productName} has been successfully published.`,
+        entityId: product._id,
+        entityType: "product",
+        productId: product._id,
+        productName: productName,
+        priority: "low",
+      });
+    }
 
     return res.status(201).json({
       success: true,
@@ -156,8 +182,25 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find()
-      .populate("category", "name slug")
+    const { categorySlug } = req.query;
+
+    let filter = {};
+
+    if (categorySlug) {
+      const categoryDoc = await Category.findOne({ slug: categorySlug });
+      if (categoryDoc) {
+        filter.category = categoryDoc._id;
+      } else {
+        return res.status(200).json({
+          success: true,
+          count: 0,
+          products: [],
+        });
+      }
+    }
+
+    const products = await Product.find(filter)
+      .populate("category", "name slug description")
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
@@ -200,7 +243,38 @@ export const getProductById = async (req, res) => {
     });
 
   } catch (error) {
-   return res.status(500).json({
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+/*
+    @desc Get Single Product by Slug
+    @route GET /api/products/slug/:slug
+*/
+
+export const getProductBySlug = async (req, res) => {
+  try {
+    const product = await Product.findOne({ slug: req.params.slug })
+      .populate("category", "name slug")
+      .populate("createdBy", "name email");
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      product,
+    });
+
+  } catch (error) {
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -225,10 +299,15 @@ export const updateProduct = async (req, res) => {
       shortDescription,
       description,
 
-      regularPrice,
+      price,
       salePrice,
       discount,
       gst,
+      showPrice,
+      badge,
+      features,
+      specifications,
+      mainImage,
 
       stock,
       lowStockAlert,
@@ -247,6 +326,7 @@ export const updateProduct = async (req, res) => {
       keywords,
 
       images,
+      configuration,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -307,8 +387,8 @@ export const updateProduct = async (req, res) => {
     product.description =
       description ?? product.description;
 
-    product.regularPrice =
-      regularPrice ?? product.regularPrice;
+    product.price =
+      price ?? product.price;
 
     product.salePrice =
       salePrice ?? product.salePrice;
@@ -318,6 +398,22 @@ export const updateProduct = async (req, res) => {
 
     product.gst =
       gst ?? product.gst;
+
+    product.showPrice =
+      showPrice ?? product.showPrice;
+
+    product.badge =
+      badge ?? product.badge;
+
+    product.features =
+      features ?? product.features;
+
+    product.specifications =
+      specifications ?? product.specifications;
+
+    if (mainImage) {
+      product.mainImage = mainImage;
+    }
 
     product.stock =
       stock ?? product.stock;
@@ -354,6 +450,9 @@ export const updateProduct = async (req, res) => {
 
     product.keywords =
       keywords ?? product.keywords;
+
+    product.configuration =
+      configuration ?? product.configuration;
 
     if (images) {
       product.images = images;
@@ -396,13 +495,13 @@ export const deleteProduct = async (req, res) => {
 
     await product.deleteOne();
 
-   return res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Product deleted successfully",
     });
 
   } catch (error) {
-   return res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });

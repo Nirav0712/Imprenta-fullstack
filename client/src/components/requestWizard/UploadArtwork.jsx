@@ -7,18 +7,16 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 
-const UploadArtwork = ({ next, back }) => {
+const UploadArtwork = ({ next, back, formData, updateFormData }) => {
 
   const inputRef = useRef(null);
 
-  const [files, setFiles] = useState([]);
-
   const handleFiles = (selectedFiles) => {
-
     const arr = Array.from(selectedFiles);
-
-    setFiles((prev) => [...prev, ...arr]);
-
+    // Just keep the first file for simplicity in demo
+    if (arr.length > 0) {
+      updateFormData({ artwork: arr[0] });
+    }
   };
 
   return (
@@ -102,15 +100,12 @@ const UploadArtwork = ({ next, back }) => {
 
       {/* Files */}
 
-      {files.length > 0 && (
+      {formData.artwork && (
 
         <div className="space-y-4">
 
-          {files.map((file, index) => (
-
-            <div
-              key={index}
-              className="
+          <div
+            className="
                 flex
                 items-center
                 justify-between
@@ -120,39 +115,39 @@ const UploadArtwork = ({ next, back }) => {
                 bg-white/5
                 p-5
               "
-            >
+          >
 
-              <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
 
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-500/10">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-500/10">
 
-                  <FiFile className="text-sky-400"/>
-
-                </div>
-
-                <div>
-
-                  <p className="font-semibold text-white">
-
-                    {file.name}
-
-                  </p>
-
-                  <p className="text-sm text-slate-400">
-
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
-
-                  </p>
-
-                </div>
+                <FiFile className="text-sky-400" />
 
               </div>
 
-              <button
-                onClick={() =>
-                  setFiles(files.filter((_, i) => i !== index))
-                }
-                className="
+              <div>
+
+                <p className="font-semibold text-white">
+
+                  {formData.artwork.name}
+
+                </p>
+
+                <p className="text-sm text-slate-400">
+
+                  {(formData.artwork.size / 1024 / 1024).toFixed(2)} MB
+
+                </p>
+
+              </div>
+
+            </div>
+
+            <button
+              onClick={() =>
+                updateFormData({ artwork: null })
+              }
+              className="
                   rounded-xl
                   bg-red-500/10
                   p-3
@@ -161,15 +156,13 @@ const UploadArtwork = ({ next, back }) => {
                   hover:bg-red-500
                   hover:text-white
                 "
-              >
+            >
 
-                <FiTrash2 />
+              <FiTrash2 />
 
-              </button>
+            </button>
 
-            </div>
-
-          ))}
+          </div>
 
         </div>
 

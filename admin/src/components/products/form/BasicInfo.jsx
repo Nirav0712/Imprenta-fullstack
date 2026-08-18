@@ -34,7 +34,10 @@ const BasicInfo = () => {
     try {
       const res = await categoryService.getCategories();
 
-      setCategories(res.categories || []);
+      const categoryArray = Array.isArray(res) ? res : (res.categories || []);
+      const activeCategories = categoryArray.filter(cat => cat.status === "active");
+
+      setCategories(activeCategories);
     } catch (err) {
       console.error("Category Load Error:", err);
     }

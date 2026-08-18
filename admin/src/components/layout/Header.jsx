@@ -4,24 +4,25 @@ import {
   FiUser,
   FiMenu,
 } from "react-icons/fi";
+import NotificationBell from "./NotificationBell";
 
 const Header = ({
   setSidebarOpen,
 }) => {
   return (
     <header className="sticky top-0 z-40 h-20 border-b border-white/10 bg-[#101B2D]/90 backdrop-blur-xl">
-<div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-      
+      <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
 
-      {/* Left */}
 
-<div className="flex items-center gap-4">
+        {/* Left */}
 
-  {/* Mobile Menu */}
+        <div className="flex items-center gap-4">
 
-  <button
-    onClick={() => setSidebarOpen(true)}
-    className="
+          {/* Mobile Menu */}
+
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="
       flex
       h-12
       w-12
@@ -35,27 +36,27 @@ const Header = ({
       hover:bg-sky-500/20
       lg:hidden
     "
-  >
-    <FiMenu size={24} />
-  </button>
+          >
+            <FiMenu size={24} />
+          </button>
 
-  <div>
+          <div>
 
-    <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-2xl font-bold text-white">
 
-      Dashboard
+              Dashboard
 
-    </h1>
+            </h1>
 
-    <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-400">
 
-      Welcome back, Admin 👋
+              Welcome back, Admin 👋
 
-    </p>
+            </p>
 
-  </div>
+          </div>
 
-</div>
+        </div>
 
         {/* Right */}
 
@@ -77,27 +78,7 @@ const Header = ({
 
           {/* Notification */}
 
-          <button
-            className="
-              relative
-              flex
-              h-12
-              w-12
-              items-center
-              justify-center
-              rounded-xl
-              border
-              border-white/10
-              bg-white/5
-              text-white
-              hover:bg-sky-500/20
-            "
-          >
-            <FiBell size={20} />
-
-            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-red-500"></span>
-
-          </button>
+          <NotificationBell />
 
           {/* Profile */}
 

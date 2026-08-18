@@ -1,10 +1,27 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FiArrowRight,
   FiPhoneCall,
 } from "react-icons/fi";
+import { fetchSettings } from "../../services/api";
 
 const ContactCTA = () => {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const getSettings = async () => {
+      try {
+        const res = await fetchSettings();
+        if (res?.data) {
+          setSettings(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to load settings:", error);
+      }
+    };
+    getSettings();
+  }, []);
   return (
     <section className="relative py-24 overflow-hidden">
 
@@ -139,7 +156,7 @@ const ContactCTA = () => {
               </Link>
 
               <a
-                href="tel:+94270 61888"
+                href={settings?.phone ? `tel:${settings.phone}` : "tel:+919427061888"}
                 className="
                   flex
                   items-center
@@ -193,7 +210,7 @@ const ContactCTA = () => {
 
                 <p className="mt-4 text-2xl font-black text-sky-400">
 
-                  +91 94270 61888
+                  {settings?.phone || "+91 94270 61888"}
 
                 </p>
 
