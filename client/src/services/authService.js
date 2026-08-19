@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "https://darkgreen-lyrebird-159850.hostingersite.com/api/auth";
 
 // Signup
 export const registerUser = async (userData) => {
