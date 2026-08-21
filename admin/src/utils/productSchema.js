@@ -20,7 +20,7 @@ export const productSchema = z.object({
 
   sku: z
     .string()
-    .min(1, "SKU is required"),
+    .optional(),
 
   barcode: z
     .string()
