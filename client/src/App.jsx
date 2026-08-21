@@ -7,15 +7,17 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <CartProvider>
-          <Toaster position="top-right" />
-          <Background />
-          <AppRoutes />
-        </CartProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <div className="relative w-full max-w-[100vw] overflow-x-hidden">
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Toaster position="top-right" />
+            <Background />
+            <AppRoutes />
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </div>
   );
 }
 
