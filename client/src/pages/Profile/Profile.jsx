@@ -47,7 +47,7 @@ const Profile = () => {
     if (loading || !user) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
     return (
-        <section className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+        <section className="min-h-screen py-24 px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 lg:px-8">
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-4xl font-bold mb-8 text-white">My Profile</h1>
                 <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">

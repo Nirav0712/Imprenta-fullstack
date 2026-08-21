@@ -20,7 +20,7 @@ export const updateHomePageData = async (req, res) => {
         if (!homepage) {
             homepage = await HomePage.create(req.body);
         } else {
-            Object.assign(homepage, req.body);
+            homepage.set(req.body);
             await homepage.save();
         }
         res.status(200).json({ success: true, data: homepage, message: "Homepage updated successfully" });

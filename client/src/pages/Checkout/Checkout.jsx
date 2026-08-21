@@ -41,9 +41,10 @@ const Checkout = () => {
             const payload = {
                 ...formData,
                 items: cartItems.map(item => ({
-                    productId: item.productId,
+                    productId: item._id || item.id || item.productId,
                     name: item.name,
-                    quantity: Number(item.quantity)
+                    quantity: Number(item.quantity),
+                    configuration: item.configuration || null
                 }))
             };
 
@@ -106,7 +107,7 @@ const Checkout = () => {
 
     return (
         <section className="min-h-screen py-24">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-10" style={{ color: 'var(--theme-heading)' }}>Checkout</h1>
 
                 <div className="grid lg:grid-cols-3 gap-10">
@@ -186,12 +187,15 @@ const Checkout = () => {
                             <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--theme-heading)' }}>Your Order</h2>
 
                             <div className="space-y-4 mb-6 pb-6 border-b border-white/10">
-                                {cartItems.map(item => (
-                                    <div key={item.productId} className="flex justify-between items-center text-sm">
-                                        <span className="text-slate-300 pr-4">{item.name} <span className="text-slate-500">x {item.quantity}</span></span>
-                                        <span className="font-semibold text-white shrink-0">₹{(item.price * item.quantity).toLocaleString()}</span>
-                                    </div>
-                                ))}
+                                {cartItems.map((item, index) => {
+                                    const numericPrice = typeof item.price === "string" ? parseFloat(item.price.replace(/[^0-9.]/g, '')) : (item.price || 0);
+                                    return (
+                                        <div key={item._id || item.productId || index} className="flex justify-between items-center text-sm">
+                                            <span className="text-slate-300 pr-4">{item.name} <span className="text-slate-500">x {item.quantity}</span></span>
+                                            <span className="font-semibold text-white shrink-0">₹{(numericPrice * item.quantity).toLocaleString()}</span>
+                                        </div>
+                                    );
+                                })}
                             </div>
 
                             <div className="space-y-4 text-slate-300">

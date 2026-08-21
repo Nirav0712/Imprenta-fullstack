@@ -4,7 +4,7 @@ const FeaturedBanner = () => {
   return (
     <section className="py-16 bg-white">
 
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="w-full mx-auto px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 

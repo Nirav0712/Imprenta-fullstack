@@ -1,7 +1,11 @@
 import axios from "axios";
 
 // Use environment variable with fallback
-const API_URL = import.meta.env.VITE_API_URL || "https://darkgreen-lyrebird-159850.hostingersite.com/api";
+const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "https://darkgreen-lyrebird-159850.hostingersite.com/api";
+
+console.log("🔥 API URL:", API_URL);
 
 const api = axios.create({
     baseURL: API_URL,
@@ -36,7 +40,7 @@ api.interceptors.response.use(
 );
 
 // Helper for image URLs
-const getImageUrl = (imagePath) => {
+export const getImageUrl = (imagePath) => {
     if (!imagePath) return "";
     if (imagePath.startsWith("http")) return imagePath;
 

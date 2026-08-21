@@ -80,7 +80,7 @@ const RequestWizard = () => {
 
     <section className="min-h-screen bg-gradient-to-b from-[#071321] via-[#08192E] to-[#071321] py-12">
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+      <div className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         <Stepper
           currentStep={step}

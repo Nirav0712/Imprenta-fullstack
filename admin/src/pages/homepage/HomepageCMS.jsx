@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { FiSave } from "react-icons/fi";
 import { homeService } from "../../services/homeService";
+import { uploadService } from "../../services/uploadService";
+import { FiUploadCloud, FiTrash2 } from "react-icons/fi";
 
 const HomepageCMS = () => {
     const [loading, setLoading] = useState(true);
@@ -10,6 +12,12 @@ const HomepageCMS = () => {
         heroSubtitle: "",
         servicesTitle: "",
         servicesDescription: "",
+        newsletterEnabled: true,
+        newsletterHeading: "Hey",
+        newsletterDescription: "Get updates.",
+        newsletterButtonText: "Submit",
+        newsletterButtonLink: "#",
+        newsletterImage: "",
         active: true
     });
 
@@ -22,12 +30,28 @@ const HomepageCMS = () => {
             setLoading(true);
             const res = await homeService.getHomePageData();
             if (res?.data) {
-                setForm(res.data);
+                setForm(prev => ({ ...prev, ...res.data }));
             }
         } catch (error) {
             console.error(error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setSaving(true);
+            const response = await uploadService.uploadImage(file);
+            setForm((prev) => ({ ...prev, newsletterImage: response.image.url }));
+        } catch (error) {
+            console.error(error);
+            alert("Image upload failed");
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -115,6 +139,95 @@ const HomepageCMS = () => {
                                         onChange={(e) => setForm({ ...form, servicesDescription: e.target.value })}
                                         className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
                                     ></textarea>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="rounded-3xl border border-white/10 bg-[#101B2D] p-6 lg:p-8">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-white">Newsletter Section</h2>
+                                <label className="flex cursor-pointer items-center gap-3">
+                                    <span className="text-sm font-semibold text-slate-400">Enabled</span>
+                                    <div className="relative">
+                                        <input
+                                            type="checkbox"
+                                            className="peer sr-only"
+                                            checked={form.newsletterEnabled || false}
+                                            onChange={(e) => setForm({ ...form, newsletterEnabled: e.target.checked })}
+                                        />
+                                        <div className="h-6 w-11 rounded-full bg-slate-700 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-sky-500 peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div className="space-y-5">
+                                {/* Image Upload */}
+                                <div>
+                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Newsletter Image</label>
+                                    {form.newsletterImage ? (
+                                        <div className="relative w-full max-w-sm rounded-xl overflow-hidden border border-white/10">
+                                            <img src={form.newsletterImage} alt="Newsletter" className="w-full h-40 object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => setForm({ ...form, newsletterImage: "" })}
+                                                className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
+                                            >
+                                                <FiTrash2 />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="relative w-full max-w-sm border-2 border-dashed border-white/10 rounded-xl bg-[#08111F] hover:border-sky-500 transition-colors p-6 flex flex-col items-center justify-center cursor-pointer">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                onChange={handleImageUpload}
+                                                disabled={saving}
+                                            />
+                                            <FiUploadCloud size={30} className="text-sky-400 mb-2" />
+                                            <span className="text-slate-400 text-sm font-semibold">Upload Image</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Heading</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={form.newsletterHeading || ""}
+                                        onChange={(e) => setForm({ ...form, newsletterHeading: e.target.value })}
+                                        className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Description</label>
+                                    <textarea
+                                        rows="3"
+                                        value={form.newsletterDescription || ""}
+                                        onChange={(e) => setForm({ ...form, newsletterDescription: e.target.value })}
+                                        className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
+                                    ></textarea>
+                                </div>
+                                <div className="grid sm:grid-cols-2 gap-5">
+                                    <div>
+                                        <label className="mb-2 block text-sm font-semibold text-slate-400">Button Text</label>
+                                        <input
+                                            type="text"
+                                            value={form.newsletterButtonText || ""}
+                                            onChange={(e) => setForm({ ...form, newsletterButtonText: e.target.value })}
+                                            className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="mb-2 block text-sm font-semibold text-slate-400">Button Link</label>
+                                        <input
+                                            type="text"
+                                            value={form.newsletterButtonLink || ""}
+                                            onChange={(e) => setForm({ ...form, newsletterButtonLink: e.target.value })}
+                                            className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </section>

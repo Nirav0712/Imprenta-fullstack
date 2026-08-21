@@ -22,7 +22,7 @@ const IndustriesSection = () => {
   return (
     <section className="py-24">
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="w-full w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         {/* Heading */}
 
@@ -57,79 +57,26 @@ const IndustriesSection = () => {
         </div>
 
         {/* Cards */}
-
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-
+        <div className="mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 items-stretch">
           {industries.map((item, index) => (
-
             <div
               key={index}
-              className="group relative overflow-hidden rounded-[60px_12px_60px_12px] border border-white/10 bg-white/[0.05] backdrop-blur-2xl p-6 sm:p-8 transition-all duration-500 hover:-translate-y-2 hover:border-sky-400/40 hover:bg-white/[0.08] hover:shadow-[0_20px_60px_rgba(56,189,248,0.15)]"
+              className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl p-5 sm:p-6 lg:p-4 xl:p-6 transition-all duration-500 hover:-translate-y-2 hover:border-sky-400/50 hover:shadow-[0_0_30px_rgba(56,189,248,0.15)] flex flex-col items-center text-center justify-center h-full gap-4 sm:gap-5"
             >
+              {/* Glow Overlay */}
+              <div className="absolute inset-0 bg-sky-500/5 opacity-0 transition duration-500 group-hover:opacity-100 pointer-events-none"></div>
 
-              {/* Glow */}
-
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl opacity-0 transition duration-500 group-hover:opacity-100"></div>
-
-              <div className="relative">
-
-                {/* Organic Icon */}
-
-                <div className="relative inline-flex">
-
-                  <div className="absolute inset-0 rounded-[35%_65%_60%_40%/45%_35%_65%_55%] bg-sky-500/20 blur-xl opacity-0 transition duration-500 group-hover:opacity-100"></div>
-
-                  <div
-                    className="
-                      relative
-                      flex
-                      h-20
-                      w-20
-                      items-center
-                      justify-center
-                      rounded-[35%_65%_60%_40%/45%_35%_65%_55%]
-                      border
-                      border-sky-400/20
-                      bg-gradient-to-br
-                      from-sky-500/20
-                      via-cyan-500/10
-                      to-transparent
-                      backdrop-blur-xl
-                      text-sky-300
-                      transition-all
-                      duration-500
-                      group-hover:scale-110
-                      group-hover:rotate-6
-                      group-hover:border-sky-400/40
-                    "
-                  >
-                    {icons[index]}
-                  </div>
-
-                </div>
-
-                {/* Title */}
-
-                <h3 className="mt-8 text-xl sm:text-2xl font-bold text-white leading-snug">
-
-                  {item.title}
-
-                </h3>
-
-                {/* Description */}
-
-                <p className="mt-5 text-sm sm:text-base leading-7 sm:leading-8 text-slate-400">
-
-                  {item.description}
-
-                </p>
-
+              {/* Icon */}
+              <div className="h-12 w-12 sm:h-16 sm:w-16 lg:h-12 lg:w-12 xl:h-16 xl:w-16 rounded-2xl bg-white/5 flex items-center justify-center text-white group-hover:bg-sky-500/20 group-hover:text-sky-400 group-hover:scale-110 transition-all duration-500 relative z-10 shrink-0">
+                {icons[index]}
               </div>
 
+              {/* Title */}
+              <h3 className="text-sm sm:text-base lg:text-[13px] xl:text-base font-bold text-white relative z-10 leading-snug">
+                {item.title}
+              </h3>
             </div>
-
           ))}
-
         </div>
 
       </div>

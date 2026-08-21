@@ -31,7 +31,7 @@ const ContactCTA = () => {
 
       <div className="absolute right-0 bottom-0 h-[420px] w-[420px] rounded-full bg-cyan-400/10 blur-[180px]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         <div
           className="

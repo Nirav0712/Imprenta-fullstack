@@ -1,0 +1,7 @@
+﻿diff --git a/client/.env b/client/.env
+index 377b2c0e..13d3b8a8 100644
+--- a/client/.env
++++ b/client/.env
+@@ -1 +1 @@
+-VITE_API_URL=http://localhost:5000/api
++VITE_API_URL=https://darkgreen-lyrebird-159850.hostingersite.com/api

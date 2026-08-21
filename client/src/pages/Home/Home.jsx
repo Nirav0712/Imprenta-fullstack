@@ -1,43 +1,49 @@
 import Hero from "../../components/home/Hero";
+import WhatWeOffer from "../../components/home/WhatWeOffer";
+
+import AboutHero from "../../components/about/AboutHero";
+import ManufacturingCapabilities from "../../components/about/ManufacturingCapabilities";
+import IndustriesSection from "../../components/about/IndustriesSection";
+import WhyChooseSection from "../../components/about/WhyChooseSection";
+
+import ContactCTA from "../../components/contact/ContactCTA";
+
 import Categories from "../../components/home/Categories";
 import CategoryProductShowcase from "../../components/home/CategoryProductShowcase";
-import PopularProducts from "../../components/home/PopularProducts";
-import TrendingProducts from "../../components/home/TrendingProducts";
-import LabelsPackagingProducts from "../../components/home/LabelsPackagingProducts";
-import FeaturedBanner from "../../components/home/FeaturedBanner";
-import ExploreMoreProducts from "../../components/home/ExploreMoreProducts";
-import NewArrivalsProducts from "../../components/home/NewArrivalsProducts";
 import NewsletterSection from "../../components/home/NewsletterSection";
-import About from "../About/About";
-
-// Sirf CTA chahiye to ye import rakho
-import ContactCTA from "../../components/contact/ContactCTA";
 
 const Home = () => {
   return (
     <>
+      {/* 1. Hero */}
       <Hero />
 
-      <About />
+      {/* 2. About Imprenta */}
+      <AboutHero />
 
+      {/* 3. Manufacturing */}
+      <ManufacturingCapabilities />
+
+      {/* 4. What We Offer */}
+      {/* <WhatWeOffer /> */}
+
+      {/* Existing sections */}
       <Categories />
       <CategoryProductShowcase />
 
-      {/* <PopularProducts /> */}
 
-      {/* <TrendingProducts />
+      {/* 5. Industries */}
+      <IndustriesSection />
 
-      <LabelsPackagingProducts /> */}
-
-      {/* <FeaturedBanner /> */}
-
-      {/* <ExploreMoreProducts />
-
-      <NewArrivalsProducts /> */}
+      {/* 7. Why Imprenta */}
+      <WhyChooseSection />
 
       <NewsletterSection />
 
+      {/* 8. CTA */}
       <ContactCTA />
+
+
     </>
   );
 };

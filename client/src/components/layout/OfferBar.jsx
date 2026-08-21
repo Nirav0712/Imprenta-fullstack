@@ -3,7 +3,7 @@
 // const OfferBar = () => {
 //   return (
 //     <div className="w-full bg-black text-white">
-//       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+//       <div className="max-w-screen-2xl mx-auto px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 lg:px-8 py-2">
 
 //         <div className="flex flex-wrap items-center justify-center gap-2 text-center">
 

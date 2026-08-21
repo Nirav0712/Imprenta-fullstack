@@ -37,10 +37,10 @@ const ProductCard = ({ product, hidePrice = false }) => {
                 src={product.image}
                 alt={product.title}
                 onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                className="h-full w-full object-contain p-6 transition-transform duration-500 group-hover:scale-105 bg-white"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 bg-slate-100"
               />
             ) : null}
-            <div className="h-full w-full bg-white/5 flex items-center justify-center text-slate-500 font-semibold text-sm border border-white/10" style={{ display: product.image ? 'none' : 'flex' }}>
+            <div className="h-full w-full bg-slate-200 flex items-center justify-center text-slate-500 font-semibold text-sm" style={{ display: product.image ? 'none' : 'flex' }}>
               No Image
             </div>
 
@@ -52,7 +52,7 @@ const ProductCard = ({ product, hidePrice = false }) => {
 
         <div className="mt-4 px-1">
 
-          <h3 className="line-clamp-2 text-[18px] font-semibold text-white transition duration-300 group-hover:text-sky-400">
+          <h3 className="line-clamp-2 text-[15px] sm:text-[16px] leading-[1.3] font-semibold text-white transition duration-300 group-hover:text-sky-400">
             {product.title}
           </h3>
 
@@ -75,7 +75,7 @@ const ProductCard = ({ product, hidePrice = false }) => {
             <div className="mt-4">
               <button
                 onClick={handleInquireClick}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-sky-500 hover:text-white"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-white/10 px-3 py-2 text-xs sm:text-sm font-semibold text-white transition-all hover:bg-sky-500 hover:text-white"
               >
                 Inquire for Price
               </button>
@@ -83,7 +83,7 @@ const ProductCard = ({ product, hidePrice = false }) => {
           )}
 
           {hidePrice && product.showPrice !== false && (
-            <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-400 transition-colors group-hover:text-sky-400">
+            <div className="mt-3 inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-400 transition-colors group-hover:text-sky-400">
               Explore Product <span className="transition-transform duration-300 group-hover:translate-x-1">&rarr;</span>
             </div>
           )}

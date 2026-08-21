@@ -30,7 +30,7 @@ const RequestToolbar = () => {
 
     return (
         <section className="relative py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+            <div className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
                 {/* Breadcrumb */}
 

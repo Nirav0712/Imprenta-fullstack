@@ -38,7 +38,7 @@ const steps = [
 const RequestStepper = ({ currentStep = 1 }) => {
   return (
     <section className="py-8">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         <div className="relative">
 

@@ -1,0 +1,26 @@
+﻿On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   admin/src/components/layout/NotificationBell.jsx
+	modified:   admin/src/config/axios.js
+	modified:   admin/src/pages/dashboard/Dashboard.jsx
+	modified:   client/src/services/api.js
+	modified:   client/src/services/authService.js
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   client/.env
+	modified:   client/package.json
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	client/vercel.json
+	git_diff.txt
+	git_diff_env.txt
+	git_diff_package.txt
+	git_status.txt
+	git_status_2.txt
+

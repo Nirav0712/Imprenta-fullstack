@@ -34,13 +34,13 @@ const Hero = () => {
 
   const slide = heroSlides[activeSlide];
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden py-16">
+    <section className="relative min-h-screen flex items-center overflow-hidden py-8">
 
       {/* Background Overlay */}
 
       <div className="absolute inset-0 opacity-90" style={{ backgroundImage: 'linear-gradient(to right, var(--theme-background), transparent)' }}></div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-10">
+      <div className="relative z-10 w-full w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
@@ -149,9 +149,11 @@ const Hero = () => {
                 <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
 
-              <button
+              <Link
+                to="/request-wizard"
                 className="
       w-full sm:w-auto
+      flex items-center justify-center gap-2
       rounded-2xl
       border border-white/15
       bg-white/5
@@ -168,8 +170,8 @@ const Hero = () => {
       active:scale-[0.98]
     "
               >
-                Explore Products →
-              </button>
+                Request a Quote <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
 
             </div>
 

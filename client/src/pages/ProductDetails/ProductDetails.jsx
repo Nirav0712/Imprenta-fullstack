@@ -274,7 +274,7 @@ const ProductDetails = () => {
       {/* Ambient Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-sky-500/10 blur-[150px] rounded-full pointer-events-none"></div>
 
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-sm text-slate-400 mb-8 font-medium">

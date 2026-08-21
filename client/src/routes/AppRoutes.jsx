@@ -22,6 +22,10 @@ import Cart from "../pages/Cart/Cart";
 import Checkout from "../pages/Checkout/Checkout";
 import Profile from "../pages/Profile/Profile";
 import MyOrders from "../pages/Profile/MyOrders";
+import Process from "../pages/Process/Process";
+import Team from "../pages/Team/Team";
+import Blog from "../pages/Blog/Blog";
+import BlogDetails from "../pages/Blog/BlogDetails";
 
 import PageTransition from "../components/common/PageTransition";
 import ScrollToTop from "../components/common/ScrollToTop";
@@ -58,6 +62,50 @@ const AnimatedRoutes = () => {
               <MainLayout>
                 <PageTransition>
                   <About />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/process"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <Process />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/team"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <Team />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/blog"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <Blog />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/blog/:id"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <BlogDetails />
                 </PageTransition>
               </MainLayout>
             }

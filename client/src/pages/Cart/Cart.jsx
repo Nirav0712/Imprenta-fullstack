@@ -23,7 +23,7 @@ const Cart = () => {
 
     return (
         <section className="min-h-screen py-24">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
                 <h1 className="text-3xl sm:text-4xl font-bold mb-10" style={{ color: 'var(--theme-heading)' }}>Shopping Cart</h1>
 
                 <div className="grid lg:grid-cols-3 gap-10">

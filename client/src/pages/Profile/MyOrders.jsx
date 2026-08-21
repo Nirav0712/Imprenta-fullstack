@@ -31,7 +31,7 @@ const MyOrders = () => {
     if (loading || fetching) return <div className="min-h-screen flex items-center justify-center">Loading orders...</div>;
 
     return (
-        <section className="min-h-screen py-24 px-4 sm:px-6 lg:px-8">
+        <section className="min-h-screen py-24 px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 lg:px-8">
             <div className="max-w-5xl mx-auto">
                 <h1 className="text-4xl font-bold mb-8 text-white">My Orders</h1>
 

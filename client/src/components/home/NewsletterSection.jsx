@@ -1,158 +1,96 @@
-import newsletter from "../../assets/images/newsletter/newsletter.png";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { fetchHomepage, getImageUrl } from "../../services/api";
+import { FiArrowRight } from "react-icons/fi";
+import defaultNewsletterImage from "../../assets/images/newsletter/newsletter.png";
 
 const NewsletterSection = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await fetchHomepage();
+        console.log("== DEBUG NEWSLETTER API RESPONSE ==");
+        console.log("Full Res:", res);
+        console.log("Res Data:", res?.data);
+        console.log("NewsletterImage directly:", res?.data?.newsletterImage);
+
+        if (res?.data) setData(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
+
+  if (loading) return null;
+  if (data && data.newsletterEnabled === false) return null;
+
+  const image = data?.newsletterImage ? getImageUrl(data.newsletterImage) : defaultNewsletterImage;
+  const heading = data?.newsletterHeading || "Final";
+  const description = data?.newsletterDescription || "Partner with us today and start experiencing premium quality packaging and branding designed specifically for your industry's demands.";
+  const btnText = data?.newsletterButtonText || "Get in Touch";
+  const btnLink = data?.newsletterButtonLink || "/contact";
+
   return (
-   <section className="py-20 bg-transparent">
-     
-     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+    <section className="py-20 bg-transparent relative z-10">
+      <div className="w-full mx-auto px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
-        {/* Top */}
+        {/* Dynamic Premium Container */}
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-6 sm:p-8 lg:p-12 items-center shadow-[0_20px_60px_rgba(0,0,0,0.5)] group overflow-hidden relative">
 
-        <div className="grid lg:grid-cols-2 gap-10 bg-gray-100 rounded-2xl p-6 lg:p-8 items-center">
+          {/* Subtle Glow Overlay */}
+          <div className="absolute inset-0 bg-sky-400/5 opacity-0 group-hover:opacity-100 transition duration-700 pointer-events-none"></div>
 
-          {/* Left */}
-
-          <div>
-
-           <img
-  src={newsletter}
-  alt="Newsletter"
-  className="w-full rounded-xl object-cover"
-/>
-
+          {/* Left: Dynamic Image */}
+          <div className="relative z-10">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              <img
+                src={image}
+                alt="Newsletter"
+                className="w-full h-full object-cover max-h-[500px] transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-sky-900/30 to-transparent mix-blend-overlay"></div>
+            </div>
           </div>
 
-          {/* Right */}
-
-          <div>
-
-            <h2 className="text-4xl font-bold text-center lg:text-left">
-
-              It's good to be on the list.
-
+          {/* Right: Dynamic Content */}
+          <div className="relative z-10 flex flex-col justify-center text-center lg:text-left">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+              {heading}
             </h2>
 
-            <p className="mt-5 text-2xl font-semibold text-center lg:text-left">
-
-              Get 15% off* your first order when you sign up for our emails
-
+            <p className="mt-5 text-lg sm:text-xl text-slate-300 leading-relaxed font-medium">
+              {description}
             </p>
 
-            <input
-              type="email"
-              placeholder="Subscription email"
-              className="w-full mt-8 h-14 rounded-lg border border-gray-400 px-5 outline-none focus:border-black"
-            />
-
-            <p className="mt-5 text-sm text-gray-600 leading-7">
-
-              Yes, I'd like to receive special offer emails from Imprenta,
-              as well as news about products, services and my designs in
-              progress.
-
-            </p>
-
-            <button
-              className="mt-8 h-14 w-60 rounded-lg bg-gray-300 text-lg font-semibold hover:bg-sky-500 hover:text-white duration-300"
-            >
-
-              Submit
-
-            </button>
-
+            <div className="mt-10 flex justify-center lg:justify-start">
+              {btnLink.startsWith("http") ? (
+                <a
+                  href={btnLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group/btn inline-flex items-center gap-3 rounded-2xl bg-sky-500 px-8 py-4 sm:px-10 sm:py-5 text-lg font-semibold text-white transition-all duration-300 hover:bg-sky-400 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]"
+                >
+                  {btnText} <FiArrowRight className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </a>
+              ) : (
+                <Link
+                  to={btnLink}
+                  className="group/btn inline-flex items-center gap-3 rounded-2xl bg-sky-500 px-8 py-4 sm:px-10 sm:py-5 text-lg font-semibold text-white transition-all duration-300 hover:bg-sky-400 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]"
+                >
+                  {btnText} <FiArrowRight className="transition-transform duration-300 group-hover/btn:translate-x-1" />
+                </Link>
+              )}
+            </div>
           </div>
 
         </div>
-
-        {/* Bottom */}
-
-        {/* <div className="grid lg:grid-cols-2 gap-16 mt-20"> */}
-
-          {/* Left */}
-
-          {/* <div>
-
-            <h2 className="text-3xl text-white font-bold mb-8">
-
-              Imprenta India : The leader in customisation
-
-            </h2>
-
-            <p className="text-gray-700 leading-9 text-lg">
-
-              For more than 20 years, Imprenta has helped business owners,
-              entrepreneurs and individuals create their identities with
-              custom designs and professional marketing.
-
-              Our online printing services are intended to help you find
-              high quality customised products you need — visiting cards,
-              personalized clothing, gifting products and much more.
-
-            </p>
-
-          </div> */}
-
-          {/* Right */}
-
-          {/* <div className="space-y-10">
-
-            <div>
-
-              <h3 className="text-2xl font-bold text-gray-400">
-
-                Even Low Quantities @ Best Prices
-
-              </h3>
-
-              <p className="mt-3 text-gray-700 text-lg">
-
-                We offer low/single product quantities at affordable prices.
-
-              </p>
-
-            </div>
-
-            <div>
-
-              <h3 className="text-2xl font-bold text-gray-400">
-
-                High quality products and Easy design
-
-              </h3>
-
-              <p className="mt-3 text-gray-700 text-lg">
-
-                Our wide selection of high-quality products and online
-                design tools make it easy for you to customize and order
-                your favourite products.
-
-              </p>
-
-            </div>
-
-            <div>
-
-              <h3 className="text-2xl font-bold text-gray-400">
-
-                Free replacement or Full Refund
-
-              </h3>
-
-              <p className="mt-3 text-gray-700 text-lg">
-
-                We stand by everything we sell. If you're not satisfied,
-                we'll make it right.
-
-              </p>
-
-            </div>
-
-          </div> */}
-
-        {/* </div> */}
-
       </div>
-
     </section>
   );
 };

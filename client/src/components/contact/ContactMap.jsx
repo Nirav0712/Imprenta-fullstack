@@ -8,7 +8,7 @@ const ContactMap = () => {
   return (
     <section className="py-20">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         <div className="grid gap-10 lg:grid-cols-[420px_1fr]">
 

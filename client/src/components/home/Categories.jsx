@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode } from "swiper/modules";
-import "swiper/css";
+import { useState, useEffect, useRef } from "react";
+import { fetchCategories } from "../../services/api";
 
 import category1 from "../../assets/images/categories/category-1.png";
 import category2 from "../../assets/images/categories/category-2.png";
@@ -9,9 +8,6 @@ import category3 from "../../assets/images/categories/category-3.png";
 import category4 from "../../assets/images/categories/category-4.png";
 import category5 from "../../assets/images/categories/category-5.png";
 import category6 from "../../assets/images/categories/category-6.png";
-
-import { useState, useEffect } from "react";
-import { fetchCategories, fetchHomepage } from "../../services/api";
 
 const imageMap = {
   "category-1.png": category1,
@@ -30,7 +26,9 @@ const getSrcFromMap = (path) => {
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
-  const [cmsData, setCmsData] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const scrollContainerRef = useRef(null);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -46,238 +44,131 @@ const Categories = () => {
         // Filter only active categories
         const activeCategories = dbCategories.filter(cat => cat.status === "active");
         setCategories(activeCategories);
+
+        if (activeCategories.length > 0) {
+          setActiveCategory(activeCategories[0]);
+        }
       } catch (err) {
         console.error("Failed to load categories", err);
       }
     };
-    const loadCMS = async () => {
-      try {
-        const res = await fetchHomepage();
-        if (res?.data && res.data.active) {
-          setCmsData(res.data);
-        }
-      } catch (err) {
-        console.error("Failed to load CMS", err);
-      }
-    };
     loadCategories();
-    loadCMS();
   }, []);
 
-  return (
-    <section className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
-      {/* Section Heading */}
-      <div className="w-full mb-7 sm:mb-9 lg:mb-10 flex items-end justify-between">
-        <div>
-          {cmsData?.servicesDescription && (
-            <p className="mb-2 text-xs sm:text-sm font-semibold uppercase tracking-[0.18em] text-sky-400">
-              {cmsData.servicesDescription}
-            </p>
-          )}
+  useEffect(() => {
+    if (isHovering || categories.length === 0) return;
 
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
-            {cmsData?.servicesTitle || "Explore all categories"}
-          </h2>
-        </div>
+    const timer = setInterval(() => {
+      setActiveCategory((current) => {
+        if (!current) return categories[0];
+        const currentIndex = categories.findIndex(
+          (c) => c._id === current._id || c.slug === current.slug
+        );
+        const nextIndex = (currentIndex + 1) % categories.length;
+        return categories[nextIndex];
+      });
+    }, 4500); // 4.5 seconds per slide
+
+    return () => clearInterval(timer);
+  }, [categories, isHovering]);
+
+  useEffect(() => {
+    if (activeCategory && scrollContainerRef.current) {
+      const activeBtn = scrollContainerRef.current.querySelector('[data-active="true"]');
+      if (activeBtn && window.innerWidth < 1024) {
+        activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      }
+    }
+  }, [activeCategory]);
+
+  return (
+    <section
+      className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 pt-12 pb-16"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      onTouchStart={() => setIsHovering(true)}
+    >
+
+      {/* Section Heading */}
+      <div className="text-center mb-10 lg:mb-14">
+        <p className="mb-3 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-sky-400">
+          WHAT WE OFFER
+        </p>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
+          Our Services
+        </h2>
       </div>
 
-      {/* Category Slider */}
-      <Swiper
-        modules={[FreeMode]}
-        freeMode={{
-          enabled: true,
-          momentum: true,
-          momentumRatio: 0.8,
-        }}
-        grabCursor={true}
-        centerInsufficientSlides={true}
-        watchOverflow={true}
-        spaceBetween={14}
-        className="!overflow-visible"
-        breakpoints={{
-          0: {
-            slidesPerView: 1.25,
-            spaceBetween: 12,
-          },
-
-          480: {
-            slidesPerView: 2.1,
-            spaceBetween: 14,
-          },
-
-          640: {
-            slidesPerView: 2.7,
-            spaceBetween: 16,
-          },
-
-          768: {
-            slidesPerView: 3.5,
-            spaceBetween: 18,
-          },
-
-          1024: {
-            slidesPerView: 4.5,
-            spaceBetween: 18,
-          },
-
-          1280: {
-            slidesPerView: 5,
-            spaceBetween: 20,
-          },
-
-          1440: {
-            slidesPerView: 5.5,
-            spaceBetween: 20,
-          },
-
-          1600: {
-            slidesPerView: 6,
-            spaceBetween: 22,
-          },
-        }}
+      {/* Category Pills Slider */}
+      <div
+        ref={scrollContainerRef}
+        className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory scroll-smooth items-center justify-start lg:justify-center gap-3 sm:gap-4 lg:gap-3 xl:gap-5 mb-12 w-full pb-4 scrollbar-hide"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        {categories.map((item, index) => (
-          <SwiperSlide key={item._id || index}>
-            <Link to={`/products?category=${item.slug}`} className="block group cursor-pointer">
-
-              {/* Image Card */}
-              <div
-                className="
-                  relative
-                  overflow-hidden
-                  rounded-[22px]
-                  border
-                  border-white/10
-                  bg-white
-                  shadow-[0_12px_35px_rgba(0,0,0,0.18)]
-                  transition-all
-                  duration-500
-                  group-hover:-translate-y-1.5
-                  group-hover:border-sky-400/40
-                  group-hover:shadow-[0_20px_45px_rgba(0,0,0,0.28)]
-                "
-              >
-                {/* Image */}
-                <div className="relative aspect-square overflow-hidden bg-slate-100">
-
-                  {getSrcFromMap(item.image) ? (
-                    <img
-                      src={getSrcFromMap(item.image)}
-                      alt={item.name}
-                      loading="lazy"
-                      className="
-                        h-full
-                        w-full
-                        object-cover
-                        transition-transform
-                        duration-700
-                        ease-out
-                        group-hover:scale-105
-                      "
-                    />
-                  ) : item.image && !getSrcFromMap(item.image) ? (
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      loading="lazy"
-                      className="
-                        h-full
-                        w-full
-                        object-cover
-                        transition-transform
-                        duration-700
-                        ease-out
-                        group-hover:scale-105
-                      "
-                      onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                    />
-                  ) : null}
-                  {(!item.image || (!getSrcFromMap(item.image) && !item.image)) && (
-                    <div className="h-full w-full flex items-center justify-center bg-slate-200 text-slate-500 font-semibold" style={item.image && !getSrcFromMap(item.image) ? { display: 'none' } : {}}>
-                      No Image
-                    </div>
-                  )}
-
-                  {/* Soft Overlay */}
-                  <div
-                    className="
-                      pointer-events-none
-                      absolute
-                      inset-0
-                      bg-gradient-to-t
-                      from-black/20
-                      via-transparent
-                      to-transparent
-                      opacity-0
-                      transition-opacity
-                      duration-500
-                      group-hover:opacity-100
-                    "
-                  />
-
-                  {/* Number */}
-                  <div
-                    className="
-                      absolute
-                      left-3
-                      top-3
-                      flex
-                      h-8
-                      w-8
-                      items-center
-                      justify-center
-                      rounded-full
-                      border
-                      border-white/40
-                      bg-black/30
-                      text-xs
-                      font-semibold
-                      text-white
-                      backdrop-blur-md
-                    "
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                </div>
-              </div>
-
-              {/* Title */}
-              <div className="mt-3.5 px-1">
-                <h3
-                  className="
-                    text-sm
-                    sm:text-[15px]
-                    lg:text-base
-                    font-semibold
-                    leading-6
-                    text-white
-                    transition-colors
-                    duration-300
-                    group-hover:text-sky-400
-                  "
-                >
-                  {item.name}
-                </h3>
-
-                {/* Small Underline */}
-                <div
-                  className="
-                    mt-2
-                    h-[2px]
-                    w-0
-                    rounded-full
-                    bg-sky-400
-                    transition-all
-                    duration-500
-                    group-hover:w-8
-                  "
-                />
-              </div>
-
-            </Link>
-          </SwiperSlide>
+        {categories.map(cat => (
+          <button
+            key={cat._id || cat.slug}
+            data-active={activeCategory?._id === cat._id}
+            onMouseEnter={() => window.innerWidth >= 1024 && setActiveCategory(cat)}
+            onClick={() => setActiveCategory(cat)}
+            className={`snap-center whitespace-nowrap shrink-0 px-5 py-2.5 sm:px-6 sm:py-3 lg:px-5 lg:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 border shadow-lg ${activeCategory?._id === cat._id
+              ? 'bg-sky-500 border-sky-400 text-white shadow-sky-500/30 scale-105'
+              : 'bg-white/5 border-white/10 text-slate-300 backdrop-blur-md hover:bg-white/10 hover:border-sky-400/50 hover:text-white'
+              }`}
+          >
+            {cat.name}
+          </button>
         ))}
-      </Swiper>
+      </div>
+
+      {/* Preview Area */}
+      <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-[21/9] rounded-[32px] overflow-hidden border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.4)] group bg-[#0a1526]">
+        {categories.map(cat => (
+          <div
+            key={cat._id || cat.slug}
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${activeCategory?._id === (cat._id || cat.slug) ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          >
+            {/* Image Source resolution */}
+            {(() => {
+              const mappedSrc = getSrcFromMap(cat.image);
+              const finalSrc = mappedSrc || cat.image;
+              if (finalSrc) {
+                return (
+                  <img
+                    src={finalSrc}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                );
+              }
+              return <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500">No Image Available</div>;
+            })()}
+
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#020813] via-[#020813]/60 to-transparent"></div>
+
+            {/* Content Block */}
+            <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10 lg:p-14 flex flex-col md:flex-row md:items-end justify-between gap-6 transform transition-all duration-700 translate-y-0 opacity-100">
+              <div className="flex-1 max-w-3xl">
+                <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight">{cat.name}</h3>
+                {cat.description && (
+                  <p className="text-slate-300 lg:text-lg leading-relaxed line-clamp-2 md:line-clamp-3">
+                    {cat.description}
+                  </p>
+                )}
+              </div>
+              <Link
+                to={`/products?category=${cat.slug}`}
+                className="shrink-0 inline-flex items-center gap-2 rounded-full bg-sky-500 hover:bg-sky-400 text-white px-8 py-4 font-bold transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(56,189,248,0.3)] hover:shadow-[0_0_25px_rgba(56,189,248,0.5)]"
+              >
+                Explore Products <span className="text-lg">&rarr;</span>
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+
     </section>
   );
 };

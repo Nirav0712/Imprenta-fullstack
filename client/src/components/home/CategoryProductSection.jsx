@@ -14,8 +14,8 @@ const CategoryProductSection = ({ category }) => {
                 setLoading(true);
                 const res = await fetchProducts({ categorySlug: category.slug });
                 if (res?.products) {
-                    // Limit to 4 products for the homepage
-                    setProducts(res.products.slice(0, 4));
+                    // Limit to 6 products for the homepage
+                    setProducts(res.products.slice(0, 6));
                 }
             } catch (err) {
                 console.error(`Failed to load products for ${category.name}`, err);
@@ -32,8 +32,8 @@ const CategoryProductSection = ({ category }) => {
         return (
             <section className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 py-10 opacity-50">
                 <div className="mb-6 h-8 w-64 bg-white/10 rounded animate-pulse"></div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[1, 2, 3, 4].map((n) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-[12px] min-[480px]:gap-[14px] sm:gap-[16px] md:gap-[18px] xl:gap-[20px] 2xl:gap-[22px]">
+                    {[1, 2, 3, 4, 5, 6].map((n) => (
                         <div key={n} className="h-[320px] bg-white/5 border border-white/10 rounded-[22px] animate-pulse"></div>
                     ))}
                 </div>
@@ -65,7 +65,7 @@ const CategoryProductSection = ({ category }) => {
             </div>
 
             {hasProducts ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 gap-[12px] min-[480px]:gap-[14px] sm:gap-[16px] md:gap-[18px] xl:gap-[20px] 2xl:gap-[22px]">
                     {products.map((product) => (
                         <ProductCard key={product.id || product._id} product={product} hidePrice={true} />
                     ))}

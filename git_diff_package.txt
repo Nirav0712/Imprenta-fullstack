@@ -1,0 +1,20 @@
+﻿diff --git a/client/package.json b/client/package.json
+index 6c2e007d..fefb2040 100644
+--- a/client/package.json
++++ b/client/package.json
+@@ -5,7 +5,7 @@
+   "type": "module",
+   "scripts": {
+     "dev": "vite",
+-    "build": "vite build",
++    "build": "node ./node_modules/vite/bin/vite.js build",
+     "lint": "oxlint",
+     "preview": "vite preview"
+   },
+@@ -32,4 +32,4 @@
+     "oxlint": "^1.75.0",
+     "vite": "^8.2.0"
+   }
+-}
++}
+\ No newline at end of file

@@ -18,7 +18,7 @@ const ContactHero = () => {
 
       <div className="absolute bottom-0 left-1/2 h-72 w-72 rounded-full bg-sky-400/10 blur-[120px]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
+      <div className="relative w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         {/* Breadcrumb */}
 

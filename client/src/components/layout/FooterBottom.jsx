@@ -36,8 +36,8 @@ const FooterBottom = ({ settings }) => {
 
             <p className="mt-2 text-gray-400 text-sm">
 
-              © {new Date().getFullYear()} {settings?.companyName || "Imprenta Pvt Ltd"}.
-              All Rights Reserved.
+              © {new Date().getFullYear()} Imprenta Pvt. Ltd. All Rights Reserved.
+
 
             </p>
 
