@@ -50,11 +50,6 @@ const CategoryProductSection = ({ category }) => {
                     <h2 className="text-3xl lg:text-4xl font-black tracking-tight text-white">
                         {category.name}
                     </h2>
-                    {category.description && (
-                        <p className="mt-3 text-slate-400 text-lg">
-                            {category.description}
-                        </p>
-                    )}
                 </div>
                 <Link
                     to={`/products?category=${category.slug}`}
