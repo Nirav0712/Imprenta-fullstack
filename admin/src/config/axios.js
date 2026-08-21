@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://darkgreen-lyrebird-159850.hostingersite.com/api",
+  baseURL: import.meta.env.VITE_API_URL || "https://darkgreen-lyrebird-159850.hostingersite.com/api",
   headers: {
     "Content-Type": "application/json",
   },

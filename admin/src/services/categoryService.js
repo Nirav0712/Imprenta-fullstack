@@ -20,4 +20,8 @@ export const categoryService = {
   deleteCategory(id) {
     return categoryApi.delete(id);
   },
+
+  reorderCategory(categoryId, newOrder) {
+    return categoryApi.reorder(categoryId, newOrder);
+  },
 };

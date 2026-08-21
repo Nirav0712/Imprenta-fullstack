@@ -25,4 +25,13 @@ export const categoryApi = {
     const { data } = await API.delete(`/categories/${id}`);
     return data;
   },
+
+  reorder: async (categoryId, newOrder) => {
+    console.log("=== FRONTEND REQUEST ===");
+    console.log(`PATCH endpoint hit: /categories/reorder`);
+    console.log(`Payload: categoryId=${categoryId}, newOrder=${newOrder}`);
+
+    const { data } = await API.patch('/categories/reorder', { categoryId, newOrder });
+    return data;
+  },
 };

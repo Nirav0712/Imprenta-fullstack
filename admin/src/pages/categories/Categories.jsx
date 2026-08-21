@@ -42,6 +42,9 @@ const Categories = () => {
     const [imageFile, setImageFile] = useState(null);
     const [previewImage, setPreviewImage] = useState("");
 
+    const [editingOrder, setEditingOrder] = useState(null);
+    const [orderInput, setOrderInput] = useState("");
+
     useEffect(() => {
         fetchCategories();
     }, []);
@@ -158,6 +161,38 @@ const Categories = () => {
         }
     };
 
+    const handleOrderDoubleClick = (item) => {
+        setEditingOrder(item._id);
+        setOrderInput(item.order || "");
+    };
+
+    const handleOrderSubmit = async (item) => {
+        if (formLoading) return;
+        if (orderInput && orderInput !== String(item.order)) {
+            try {
+                setFormLoading(true);
+                await categoryService.reorderCategory(item._id, orderInput);
+                await fetchCategories();
+            } catch (error) {
+                console.error("Error reordering category:", error);
+                alert(error.response?.data?.message || error.message || "Failed to reorder");
+            } finally {
+                setFormLoading(false);
+                setEditingOrder(null);
+            }
+        } else {
+            setEditingOrder(null);
+        }
+    };
+
+    const handleOrderKeyDown = (e, item) => {
+        if (e.key === "Enter") {
+            handleOrderSubmit(item);
+        } else if (e.key === "Escape") {
+            setEditingOrder(null);
+        }
+    };
+
     return (
         <div className="space-y-8">
             {/* Header */}
@@ -196,7 +231,8 @@ const Categories = () => {
                     <table className="w-full text-left whitespace-nowrap">
                         <thead className="border-b border-white/10">
                             <tr className="text-left text-slate-400">
-                                <th className="px-6 py-5 whitespace-nowrap">Image</th>
+                                <th className="px-6 py-5 whitespace-nowrap w-24">Order #</th>
+                                <th className="py-5 whitespace-nowrap">Image</th>
                                 <th className="whitespace-nowrap">Name</th>
                                 <th className="whitespace-nowrap">Slug</th>
                                 <th className="whitespace-nowrap">Status</th>
@@ -218,9 +254,26 @@ const Categories = () => {
                                     </td>
                                 </tr>
                             )}
-                            {!loading && filteredCategories.map((item) => (
+                            {!loading && filteredCategories.map((item, index) => (
                                 <tr key={item._id} className="border-b border-white/5 hover:bg-white/5">
-                                    <td className="px-6 py-5">
+                                    <td className="px-6 py-5" onDoubleClick={() => handleOrderDoubleClick(item)}>
+                                        {editingOrder === item._id ? (
+                                            <input
+                                                type="number"
+                                                autoFocus
+                                                value={orderInput}
+                                                onChange={(e) => setOrderInput(e.target.value)}
+                                                onKeyDown={(e) => handleOrderKeyDown(e, item)}
+                                                onBlur={() => handleOrderSubmit(item)}
+                                                className="w-16 rounded bg-[#08111F] px-2 py-1 text-white text-center border border-sky-500 outline-none"
+                                            />
+                                        ) : (
+                                            <div className="w-16 text-center cursor-pointer font-bold text-sky-400 bg-sky-500/10 py-1 rounded">
+                                                {item.order || index + 1}
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td className="py-5">
                                         {getSrcFromMap(item.image) ? (
                                             <img src={getSrcFromMap(item.image)} alt={item.name} className="h-12 w-12 rounded-xl object-contain bg-white/5 border border-white/10 p-1" />
                                         ) : item.image && !getSrcFromMap(item.image) ? (
@@ -271,9 +324,26 @@ const Categories = () => {
                 <div className="grid grid-cols-1 gap-4 p-4 lg:hidden">
                     {loading && <div className="py-10 text-center text-slate-500">Loading categories...</div>}
                     {!loading && filteredCategories.length === 0 && <div className="py-10 text-center text-slate-500">No categories found.</div>}
-                    {!loading && filteredCategories.map((item) => (
+                    {!loading && filteredCategories.map((item, index) => (
                         <div key={item._id} className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm flex items-center justify-between">
                             <div className="flex items-center gap-4">
+                                <div className="flex flex-col items-center" onDoubleClick={() => handleOrderDoubleClick(item)}>
+                                    {editingOrder === item._id ? (
+                                        <input
+                                            type="number"
+                                            autoFocus
+                                            value={orderInput}
+                                            onChange={(e) => setOrderInput(e.target.value)}
+                                            onKeyDown={(e) => handleOrderKeyDown(e, item)}
+                                            onBlur={() => handleOrderSubmit(item)}
+                                            className="w-12 rounded bg-[#08111F] p-1 text-white text-center border border-sky-500 outline-none text-sm"
+                                        />
+                                    ) : (
+                                        <div className="w-8 h-8 flex items-center justify-center cursor-pointer font-bold text-sky-400 bg-sky-500/10 rounded-full mb-1">
+                                            {item.order || index + 1}
+                                        </div>
+                                    )}
+                                </div>
                                 {getSrcFromMap(item.image) ? (
                                     <img src={getSrcFromMap(item.image)} alt={item.name} className="h-16 w-16 rounded-xl object-contain bg-white/5 border border-white/10 p-1 shrink-0" />
                                 ) : item.image && !getSrcFromMap(item.image) ? (

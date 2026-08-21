@@ -6,7 +6,6 @@ import ManufacturingCapabilities from "../../components/about/ManufacturingCapab
 import IndustriesSection from "../../components/about/IndustriesSection";
 import WhyChooseSection from "../../components/about/WhyChooseSection";
 
-import ContactCTA from "../../components/contact/ContactCTA";
 
 import Categories from "../../components/home/Categories";
 import CategoryProductShowcase from "../../components/home/CategoryProductShowcase";
@@ -39,9 +38,6 @@ const Home = () => {
       <WhyChooseSection />
 
       <NewsletterSection />
-
-      {/* 8. CTA */}
-      <ContactCTA />
 
 
     </>

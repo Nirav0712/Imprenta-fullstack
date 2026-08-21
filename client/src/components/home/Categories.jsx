@@ -74,14 +74,7 @@ const Categories = () => {
     return () => clearInterval(timer);
   }, [categories, isHovering]);
 
-  useEffect(() => {
-    if (activeCategory && scrollContainerRef.current) {
-      const activeBtn = scrollContainerRef.current.querySelector('[data-active="true"]');
-      if (activeBtn && window.innerWidth < 1024) {
-        activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-      }
-    }
-  }, [activeCategory]);
+
 
   return (
     <section
@@ -101,11 +94,9 @@ const Categories = () => {
         </h2>
       </div>
 
-      {/* Category Pills Slider */}
       <div
         ref={scrollContainerRef}
-        className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory scroll-smooth items-center justify-start lg:justify-center gap-3 sm:gap-4 lg:gap-3 xl:gap-5 mb-12 w-full pb-4 scrollbar-hide"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="grid grid-cols-2 min-[480px]:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-3 xl:gap-5 mb-12 w-full"
       >
         {categories.map(cat => {
           const isActive = (activeCategory?._id && activeCategory._id === cat._id) ||
@@ -117,12 +108,12 @@ const Categories = () => {
               data-active={isActive}
               onMouseEnter={() => window.innerWidth >= 1024 && setActiveCategory(cat)}
               onClick={() => setActiveCategory(cat)}
-              className={`snap-center whitespace-nowrap shrink-0 px-5 py-2.5 sm:px-6 sm:py-3 lg:px-5 lg:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 border shadow-lg ${isActive
+              className={`w-full text-center whitespace-normal break-words px-3 py-2.5 sm:px-4 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 border shadow-lg flex items-center justify-center min-h-[48px] ${isActive
                 ? 'bg-sky-500 border-sky-400 text-white shadow-sky-500/30 scale-105'
                 : 'bg-white/5 border-white/10 text-slate-300 backdrop-blur-md hover:bg-white/10 hover:border-sky-400/50 hover:text-white'
                 }`}
             >
-              {cat.name}
+              <span className="line-clamp-2">{cat.name}</span>
             </button>
           );
         })}

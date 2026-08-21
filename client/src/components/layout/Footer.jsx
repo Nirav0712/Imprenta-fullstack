@@ -129,8 +129,16 @@ const Footer = () => {
                       <FiMail className="text-cyan-400 group-hover:text-white transition-colors" size={16} />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1">Email Address</span>
-                      <span className="font-semibold text-slate-300 text-sm break-all group-hover:text-cyan-300 transition-colors">{settings?.email || "info@imprenta.com"}</span>
+                      <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1">
+                        Email Address
+                      </span>
+
+                      <a
+                        href="mailto:contact@imprenta.in"
+                        className="font-semibold text-slate-300 text-sm break-all group-hover:text-cyan-300 transition-colors"
+                      >
+                        contact@imprenta.in
+                      </a>
                     </div>
                   </a>
                 </li>

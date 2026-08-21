@@ -172,3 +172,64 @@ export const deleteCategory = async (req, res) => {
 
   }
 };
+
+// Reorder Categories
+export const reorderCategories = async (req, res) => {
+  try {
+    console.log("=== BACKEND ENDPOINT REACHED: /api/categories/reorder ===");
+    console.log("Req Body:", req.body);
+
+    const { categoryId, newOrder } = req.body;
+
+    if (!categoryId || newOrder === undefined) {
+      return res.status(400).json({ success: false, message: "categoryId and newOrder are required" });
+    }
+
+    const targetCat = await Category.findById(categoryId);
+    if (!targetCat) {
+      return res.status(404).json({ success: false, message: "Category not found" });
+    }
+
+    const currentOrder = targetCat.order || 0;
+    const destOrder = parseInt(newOrder, 10);
+
+    if (isNaN(destOrder)) {
+      return res.status(400).json({ success: false, message: "newOrder must be a valid integer" });
+    }
+
+    if (currentOrder !== destOrder) {
+      if (currentOrder < destOrder) {
+        // Shifting items up to make room
+        await Category.updateMany(
+          { order: { $gt: currentOrder, $lte: destOrder } },
+          { $inc: { order: -1 } }
+        );
+      } else {
+        // Shifting items down to make room
+        await Category.updateMany(
+          { order: { $gte: destOrder, $lt: currentOrder } },
+          { $inc: { order: 1 } }
+        );
+      }
+
+      targetCat.order = destOrder;
+      await targetCat.save();
+    }
+
+    const categories = await Category.find()
+      .populate("createdBy", "name email")
+      .sort({ order: 1, createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: "Categories reordered successfully",
+      categories
+    });
+  } catch (error) {
+    console.error("Reorder Backend Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
