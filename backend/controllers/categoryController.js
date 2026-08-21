@@ -27,12 +27,16 @@ export const createCategory = async (req, res) => {
       });
     }
 
+    const lastCategory = await Category.findOne().sort({ order: -1 });
+    const nextOrder = lastCategory ? (lastCategory.order || 0) + 1 : 1;
+
     const category = await Category.create({
       name,
       slug: slugify(name),
       description,
       image,
       status,
+      order: nextOrder,
       createdBy: req.user._id,
     });
 
@@ -56,7 +60,7 @@ export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find()
       .populate("createdBy", "name email")
-      .sort({ createdAt: -1 });
+      .sort({ order: 1, createdAt: -1 });
 
     res.status(200).json({
       success: true,
