@@ -127,7 +127,7 @@ const InquiryDetailsModal = ({ inquiry, onClose, onUpdateStatus, loadingStatus }
                                 <p className="text-sm text-white font-medium">{inquiry.quantity || "Not specified"}</p>
                             </div>
                             {/* Optional extended fields if present */}
-                            {(inquiry.material || inquiry.finish || inquiry.size || inquiry.lamination || inquiry.foil || inquiry.designOption) && (
+                            {(inquiry.material || inquiry.finish || inquiry.size || inquiry.lamination || inquiry.foil || inquiry.designOption || (inquiry.configuration && Object.keys(inquiry.configuration).length > 0)) && (
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pb-4 border-b border-white/5">
                                     {inquiry.sku && <div>
                                         <p className="text-xs text-slate-500 font-semibold mb-1">SKU</p>
@@ -137,6 +137,8 @@ const InquiryDetailsModal = ({ inquiry, onClose, onUpdateStatus, loadingStatus }
                                         <p className="text-xs text-slate-500 font-semibold mb-1">Size</p>
                                         <p className="text-sm text-white">{inquiry.size}</p>
                                     </div>}
+
+                                    {/* Legacy Flat Map */}
                                     {inquiry.material && <div>
                                         <p className="text-xs text-slate-500 font-semibold mb-1">Material</p>
                                         <p className="text-sm text-white">{inquiry.material}</p>
@@ -153,6 +155,27 @@ const InquiryDetailsModal = ({ inquiry, onClose, onUpdateStatus, loadingStatus }
                                         <p className="text-xs text-slate-500 font-semibold mb-1">Design Need</p>
                                         <p className="text-sm text-white">{inquiry.designOption}</p>
                                     </div>}
+
+                                    {/* Dynamic Configurations */}
+                                    {inquiry.configuration && Object.entries(inquiry.configuration).map(([key, value]) => {
+                                        let displayVal = "";
+                                        if (typeof value === "string") {
+                                            displayVal = value;
+                                        } else if (Array.isArray(value)) {
+                                            displayVal = value.map(v => typeof v === "object" ? v.label || v.name : v).join(", ");
+                                        } else if (typeof value === "object") {
+                                            displayVal = value.label || value.name || JSON.stringify(value);
+                                        }
+
+                                        if (!displayVal) return null;
+
+                                        return (
+                                            <div key={key}>
+                                                <p className="text-xs text-slate-500 font-semibold mb-1">{key}</p>
+                                                <p className="text-sm text-white break-words">{displayVal}</p>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             )}
                             <div>

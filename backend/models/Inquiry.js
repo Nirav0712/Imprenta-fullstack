@@ -31,6 +31,13 @@ const inquirySchema = new mongoose.Schema(
             ref: "Product",
             default: null,
         },
+        productName: { type: String, default: "" },
+        categoryId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
+            default: null,
+        },
+        categoryName: { type: String, default: "" },
         message: {
             type: String,
             default: "",

@@ -2,8 +2,8 @@ import API from "../config/axios";
 
 export const productApi = {
   // Get All Products
-  getAll: async () => {
-    const { data } = await API.get("/products");
+  getAll: async (params = {}) => {
+    const { data } = await API.get("/products", { params });
     return data;
   },
 

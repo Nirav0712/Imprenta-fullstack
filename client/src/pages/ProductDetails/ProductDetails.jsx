@@ -27,13 +27,12 @@ const ProductDetails = () => {
   const [error, setError] = useState(false);
   const [activeImage, setActiveImage] = useState("");
 
-  // Configurator States
-  const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedMaterial, setSelectedMaterial] = useState(null);
-  const [selectedLamination, setSelectedLamination] = useState(null);
-  const [selectedFoil, setSelectedFoil] = useState(null);
-  const [selectedSplit, setSelectedSplit] = useState(null);
-  const [selectedDesign, setSelectedDesign] = useState(null);
+  // Dynamic Category Configurator States
+  const [selectedDynamicOptions, setSelectedDynamicOptions] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
+  const [activeEngine, setActiveEngine] = useState("none"); // "category", "legacy", or "none"
+
+
   const [selectedQuantity, setSelectedQuantity] = useState(0);
 
   // Custom Dimensions
@@ -69,39 +68,28 @@ const ProductDetails = () => {
             setActiveImage(p.image);
           }
 
-          // Set Initial Configurations if available
-          if (p.configuration?.enabled) {
-            if (p.configuration.sizes?.length > 0) {
-              const activeSizes = p.configuration.sizes.filter(s => s.enabled);
-              if (activeSizes.length > 0) setSelectedSize(activeSizes[0]);
+          // Configurator Initialization Logic
+          if (p.category?.configurator?.enabled && p.category.configurator.sections?.filter(s => s.enabled).length > 0) {
+            setActiveEngine("category");
+            const conf = p.category.configurator;
+            let initialDynamics = {};
+
+            if (conf.sections?.length > 0) {
+              conf.sections.forEach(sec => {
+                const prodMapping = p.configuratorSections?.find(c => c.sectionId === sec.id);
+                if (sec.enabled && prodMapping?.enabled === true && sec.options?.length > 0) {
+                  const activeOpts = sec.options.filter(o => o.enabled).sort((a, b) => a.order - b.order);
+                  if (activeOpts.length > 0) {
+                    initialDynamics[sec.id] = activeOpts[0];
+                  }
+                }
+              });
             }
-            if (p.configuration.materials?.length > 0) {
-              const activeMats = p.configuration.materials.filter(m => m.enabled);
-              if (activeMats.length > 0) setSelectedMaterial(activeMats[0]);
-            }
-            if (p.configuration.laminations?.length > 0) {
-              const activeLams = p.configuration.laminations.filter(l => l.enabled);
-              if (activeLams.length > 0) setSelectedLamination(activeLams[0]);
-            }
-            if (p.configuration.foils?.length > 0) {
-              const activeFoils = p.configuration.foils.filter(f => f.enabled);
-              if (activeFoils.length > 0) setSelectedFoil(activeFoils[0]);
-            }
-            if (p.configuration.splitOnBackPapers?.length > 0) {
-              const activeSplits = p.configuration.splitOnBackPapers.filter(s => s.enabled);
-              if (activeSplits.length > 0) setSelectedSplit(activeSplits[0]);
-            }
-            if (p.configuration.designOptions?.length > 0) {
-              const activeDesigns = p.configuration.designOptions.filter(d => d.enabled);
-              if (activeDesigns.length > 0) setSelectedDesign(activeDesigns[0]);
-            }
-            if (p.configuration.quantityOptions?.length > 0) {
-              const activeQty = p.configuration.quantityOptions.filter(q => q.enabled);
-              if (activeQty.length > 0) setSelectedQuantity(activeQty[0].quantity);
-            } else {
-              setSelectedQuantity(p.configuration.minimumQuantity || 100);
-            }
+            setSelectedDynamicOptions(initialDynamics);
+            setSelectedQuantity(conf.baseMinQuantity || 100);
+
           } else {
+            setActiveEngine("none");
             setSelectedQuantity(1);
           }
 
@@ -124,27 +112,36 @@ const ProductDetails = () => {
 
     let basePrice = product.salePrice && product.salePrice > 0 ? product.salePrice : product.price || 0;
     let qty = parseInt(selectedQuantity) || 1;
+    let addons = 0;
 
-    if (product.configuration?.enabled) {
-      // Check if there is a specific quantity tier price override
-      const qtyTier = product.configuration.quantityOptions?.find(q => q.quantity === qty && q.enabled);
-      if (qtyTier && qtyTier.price > 0) {
-        basePrice = qtyTier.price; // Admin specifies per unit price for this exact quantity tier
-      }
+    if (activeEngine === "category") {
+      const conf = product.category.configurator;
 
-      // Add Extras
-      let addons = 0;
-      if (selectedSize && selectedSize.additionalPrice) addons += selectedSize.additionalPrice;
-      if (selectedMaterial && selectedMaterial.additionalPrice) addons += selectedMaterial.additionalPrice;
-      if (selectedLamination && selectedLamination.additionalPrice) addons += Number(selectedLamination.additionalPrice) || 0;
-      if (selectedFoil && selectedFoil.additionalPrice) addons += Number(selectedFoil.additionalPrice) || 0;
-      if (selectedSplit && selectedSplit.additionalPrice) addons += Number(selectedSplit.additionalPrice) || 0;
-      if (selectedDesign && selectedDesign.additionalPrice) addons += Number(selectedDesign.additionalPrice) || 0;
+      // Look for custom quantity tier override if applicable by scanning for an option labeled as quantity? 
+      // Nah, currently in requirements Category Configurator quantity tiers aren't specifically overriding basePrice cleanly yet unless mapped as options. We'll simply sum options.
 
-      basePrice += addons;
+      Object.keys(selectedDynamicOptions).forEach(secId => {
+        // Enforce mappings on pricing calculation explicitly
+        const secDef = conf.sections.find(s => s.id === secId);
+        const prodMapping = product.configuratorSections?.find(c => c.sectionId === secId);
+        if (!secDef || !secDef.enabled || prodMapping?.enabled !== true) return;
+
+        const val = selectedDynamicOptions[secId];
+        if (Array.isArray(val)) {
+          val.forEach(v => {
+            if (v && v.priceAdjustment) addons += Number(v.priceAdjustment);
+          });
+        } else if (val && val.priceAdjustment) {
+          addons += Number(val.priceAdjustment);
+        }
+      });
+      // Legacy custom size? No, `allowCustomSize` handled on custom engine later.
+
     }
 
-    // Ensure we don't return NaN by defaulting bad math to 0 before we render it!
+    basePrice += addons;
+
+    // Ensure we don't return NaN
     if (isNaN(basePrice)) basePrice = 0;
     let computedTotal = basePrice * qty;
     if (isNaN(computedTotal)) computedTotal = 0;
@@ -154,7 +151,7 @@ const ProductDetails = () => {
       total: computedTotal,
       showPrice: product.showPrice
     };
-  }, [product, selectedQuantity, selectedSize, selectedMaterial, selectedLamination, selectedFoil, selectedSplit, selectedDesign]);
+  }, [product, selectedQuantity, selectedDynamicOptions, activeEngine]);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -164,15 +161,54 @@ const ProductDetails = () => {
       return;
     }
 
+    if (activeEngine === "category") {
+      const conf = product.category.configurator;
+      let errors = {};
+      for (const sec of conf.sections) {
+        if (sec.enabled && sec.required) {
+          const val = selectedDynamicOptions[sec.id];
+          if (!val || (Array.isArray(val) && val.length === 0) || val === '') {
+            errors[sec.id] = `Please select ${sec.title}.`;
+          }
+        }
+      }
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+        return;
+      }
+      setValidationErrors({});
+    }
+
     // Bundle up the configuration
-    const configSelection = {
-      size: selectedSize?.name || (customWidth && customHeight ? `${customWidth}x${customHeight} ${customUnit}` : null),
-      material: selectedMaterial?.name,
-      lamination: selectedLamination?.name,
-      foil: selectedFoil?.name,
-      splitOnBackPaper: selectedSplit?.name,
-      design: selectedDesign?.name,
-    };
+    let configSelection = {};
+
+    if (activeEngine === "category") {
+      const conf = product.category.configurator;
+      conf.sections.forEach(sec => {
+        const prodMapping = product.configuratorSections?.find(c => c.sectionId === sec.id);
+        if (!sec.enabled || prodMapping?.enabled !== true) return;
+
+        const val = selectedDynamicOptions[sec.id];
+        if (Array.isArray(val) && val.length > 0) {
+          configSelection[sec.title] = val.map(opt => ({
+            optionId: opt.id,
+            label: opt.name,
+            priceAdjustment: opt.priceAdjustment
+          }));
+        } else if (val && !Array.isArray(val)) {
+          configSelection[sec.title] = {
+            optionId: val.id,
+            label: val.name,
+            priceAdjustment: val.priceAdjustment
+          };
+        }
+      });
+      if (conf.allowCustomSize && customWidth && customHeight) {
+        configSelection["Custom Dimensions"] = {
+          label: `${customWidth}x${customHeight} ${customUnit}`,
+        };
+      }
+    }
 
     const cartItem = {
       _id: product._id,
@@ -190,34 +226,69 @@ const ProductDetails = () => {
 
   const handleQuoteSubmit = async (e) => {
     e.preventDefault();
+    if (activeEngine === "category") {
+      const conf = product.category.configurator;
+      let errors = {};
+      for (const sec of conf.sections) {
+        const prodMapping = product.configuratorSections?.find(c => c.sectionId === sec.id);
+        if (sec.enabled && prodMapping?.enabled === true && sec.required) {
+          const val = selectedDynamicOptions[sec.id];
+          if (!val || (Array.isArray(val) && val.length === 0) || val === '') {
+            errors[sec.id] = `Please select ${sec.title}.`;
+          }
+        }
+      }
+      if (Object.keys(errors).length > 0) {
+        setValidationErrors(errors);
+        return;
+      }
+      setValidationErrors({});
+    }
+
     try {
       setQuoteLoading(true);
+
+      let configSelection = {};
+      if (activeEngine === "category") {
+        const conf = product.category.configurator;
+        conf.sections.forEach(sec => {
+          const prodMapping = product.configuratorSections?.find(c => c.sectionId === sec.id);
+          if (!sec.enabled || prodMapping?.enabled !== true) return;
+
+          const val = selectedDynamicOptions[sec.id];
+          if (Array.isArray(val) && val.length > 0) {
+            configSelection[sec.title] = val.map(opt => ({
+              optionId: opt.id,
+              label: opt.name,
+              priceAdjustment: opt.priceAdjustment
+            }));
+          } else if (val && !Array.isArray(val)) {
+            configSelection[sec.title] = {
+              optionId: val.id,
+              label: val.name,
+              priceAdjustment: val.priceAdjustment
+            };
+          }
+        });
+      }
+
       const payload = {
         ...quoteForm,
         productId: product._id,
+        productName: product.name,
+        categoryId: product.category?._id,
+        categoryName: product.category?.name,
         product: product.name,
         sku: product.sku,
         quantity: selectedQuantity.toString(),
-        size: selectedSize?.name === "Custom Size" ? `${customWidth}x${customHeight} ${customUnit}` : selectedSize?.name || "",
+        size: `${customWidth}x${customHeight} ${customUnit}`,
         customWidth,
         customHeight,
         unit: customUnit,
-        material: selectedMaterial?.name || "",
-        lamination: selectedLamination?.name || "",
-        foil: selectedFoil?.name || "",
-        splitOnBackPaper: selectedSplit?.name || "",
-        designOption: selectedDesign?.name || "",
         company: quoteForm.company,
         message: quoteForm.message,
         additionalRequirements: quoteForm.additionalRequirements,
-        configuration: {
-          size: selectedSize?.name,
-          material: selectedMaterial?.name,
-          lamination: selectedLamination?.name,
-          foil: selectedFoil?.name,
-          splitOnBackPaper: selectedSplit?.name,
-          design: selectedDesign?.name
-        }
+        configuration: configSelection
       };
 
       await submitInquiry(payload);
@@ -358,204 +429,154 @@ const ProductDetails = () => {
             </div>
 
             {/* CONFIGURATOR ENGINE */}
-            {product.configuration?.enabled && (
+            {activeEngine === "category" && (
               <div className="bg-[#050B14]/40 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 mb-8 space-y-7 ring-1 ring-white/5">
+                <div className="space-y-6">
+                  {product.category.configurator.sections.filter(s => {
+                    if (!s.enabled) return false;
+                    const map = product.configuratorSections?.find(c => c.sectionId === s.id);
+                    return map?.enabled === true;
+                  }).sort((a, b) => a.order - b.order).map(section => {
+                    const fieldType = String(section.fieldType || section.type || "").toLowerCase();
 
-                {/* Sizes */}
-                {product.configuration.sizes?.filter(s => s.enabled).length > 0 && (
-                  <div>
-                    <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-3">Dimensions / Size</label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {product.configuration.sizes.filter(s => s.enabled).map((size, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setSelectedSize(size)}
-                          className={`relative px-4 py-3 rounded-xl border text-sm font-semibold transition-all ${selectedSize?.name === size.name
-                            ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
-                            : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'
-                            }`}
-                        >
-                          {size.name}
-                        </button>
-                      ))}
-                      {product.configuration.allowCustomSize && (
-                        <button
-                          onClick={() => setSelectedSize({ name: "Custom Size", additionalPrice: 0 })}
-                          className={`relative px-4 py-3 rounded-xl border text-sm font-semibold transition-all ${selectedSize?.name === "Custom Size"
-                            ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
-                            : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'
-                            }`}
-                        >
-                          Custom Size
-                        </button>
-                      )}
+                    return (
+                      <div key={section.id}>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest">
+                            {section.title} {section.required && <span className="text-rose-500">*</span>}
+                          </label>
+                          {validationErrors[section.id] && (
+                            <span className="text-[10px] text-rose-400 font-bold bg-rose-500/10 px-2 py-0.5 rounded animate-pulse">{validationErrors[section.id]}</span>
+                          )}
+                        </div>
+
+                        {(fieldType === "dropdown" || fieldType === "select") && (
+                          <select
+                            value={selectedDynamicOptions[section.id]?.id || ''}
+                            onChange={e => {
+                              const opt = section.options.find(o => o.id === e.target.value);
+                              setSelectedDynamicOptions(prev => ({ ...prev, [section.id]: opt }));
+                            }}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
+                          >
+                            {!section.required && <option value="">Select optional {section.title.toLowerCase()}</option>}
+                            {section.options.filter(o => o.enabled).sort((a, b) => a.order - b.order).map(opt => (
+                              <option key={opt.id} value={opt.id} className="bg-[#0A1220]">
+                                {opt.name} {opt.priceAdjustment > 0 ? `(+₹${opt.priceAdjustment})` : ''}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+
+                        {fieldType === "radio" && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {section.options.filter(o => o.enabled).sort((a, b) => a.order - b.order).map(opt => (
+                              <button
+                                key={opt.id}
+                                onClick={() => setSelectedDynamicOptions(prev => ({ ...prev, [section.id]: opt }))}
+                                className={`relative px-4 py-3 rounded-xl border text-sm font-semibold transition-all text-left flex justify-between items-center ${selectedDynamicOptions[section.id]?.id === opt.id ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]' : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'}`}
+                              >
+                                <span>{opt.name}</span>
+                                {opt.priceAdjustment > 0 && <span className="text-xs text-slate-500 font-bold">+₹{opt.priceAdjustment}</span>}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {fieldType === "checkbox" && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {section.options.filter(o => o.enabled).sort((a, b) => a.order - b.order).map(opt => {
+                              const isSelected = Array.isArray(selectedDynamicOptions[section.id])
+                                ? selectedDynamicOptions[section.id].some(v => v.id === opt.id)
+                                : false;
+
+                              return (<button
+                                key={opt.id}
+                                onClick={() => {
+                                  setSelectedDynamicOptions(prev => {
+                                    const current = Array.isArray(prev[section.id]) ? prev[section.id] : [];
+                                    const exists = current.some(v => v.id === opt.id);
+                                    return {
+                                      ...prev,
+                                      [section.id]: exists ? current.filter(v => v.id !== opt.id) : [...current, opt]
+                                    };
+                                  });
+                                }}
+                                className={`relative px-4 py-3 rounded-xl border text-sm font-semibold transition-all text-left flex justify-between items-center ${isSelected ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]' : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'}`}
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className={`w-4 h-4 rounded border flex items-center justify-center ${isSelected ? 'border-sky-400 bg-sky-400 text-black' : 'border-slate-500'}`}>
+                                    {isSelected && <svg width="10" height="8" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5L4.5 8.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                  </div>
+                                  <span>{opt.name}</span>
+                                </div>
+                                {opt.priceAdjustment > 0 && <span className="text-xs text-slate-500 font-bold">+₹{opt.priceAdjustment}</span>}
+                              </button>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        {(fieldType === "text" || fieldType === "number") && (
+                          <input
+                            type={fieldType}
+                            value={selectedDynamicOptions[section.id]?.name || ''}
+                            onChange={(e) => {
+                              setSelectedDynamicOptions(prev => ({
+                                ...prev,
+                                [section.id]: { id: section.id, name: e.target.value, priceAdjustment: 0 }
+                              }));
+                            }}
+                            placeholder={`Enter ${section.title}...`}
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-sky-400 transition text-sm"
+                          />
+                        )}
+
+                      </div>
+                    );
+                  })}
+
+                  {/* Custom Size Check */}
+                  {product.category.configurator.allowCustomSize && (
+                    <div className="pt-4 mt-4 border-t border-white/10">
+                      <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-3">Custom Dimensions</label>
+                      <div className="grid grid-cols-3 gap-3 animate-fade-in bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-md">
+                        <div>
+                          <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Width</span>
+                          <input type="number" value={customWidth} onChange={(e) => setCustomWidth(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Height</span>
+                          <input type="number" value={customHeight} onChange={(e) => setCustomHeight(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
+                        </div>
+                        <div>
+                          <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Unit</span>
+                          <select value={customUnit} onChange={(e) => setCustomUnit(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm appearance-none">
+                            <option value="inches">Inches</option>
+                            <option value="cm">cm</option>
+                            <option value="mm">mm</option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
+                  )}
+
+                  {/* Quantity Logic inherited securely base requirements */}
+                  <div className="pt-6 mt-6 border-t border-white/10">
+                    <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-2">Total Quantity</label>
+                    <input
+                      type="number"
+                      min={product.category.configurator.baseMinQuantity || 1}
+                      value={selectedQuantity}
+                      onChange={(e) => setSelectedQuantity(parseInt(e.target.value) || 0)}
+                      className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-sky-400 focus:outline-none transition shadow-inner font-black text-xl"
+                    />
                   </div>
-                )}
-
-                {/* Custom Size Inputs */}
-                {selectedSize?.name === "Custom Size" && (
-                  <div className="grid grid-cols-3 gap-3 animate-fade-in bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-md">
-                    <div>
-                      <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Width</span>
-                      <input
-                        type="number"
-                        value={customWidth}
-                        onChange={(e) => setCustomWidth(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm"
-                        placeholder="0.0"
-                      />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Height</span>
-                      <input
-                        type="number"
-                        value={customHeight}
-                        onChange={(e) => setCustomHeight(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm"
-                        placeholder="0.0"
-                      />
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Unit</span>
-                      <select
-                        value={customUnit}
-                        onChange={(e) => setCustomUnit(e.target.value)}
-                        className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm appearance-none"
-                      >
-                        <option value="inches">Inches</option>
-                        <option value="cm">cm</option>
-                        <option value="mm">mm</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {/* Material */}
-                  {product.configuration.materials?.filter(m => m.enabled).length > 0 && (
-                    <div>
-                      <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-2">Material</label>
-                      <select
-                        value={selectedMaterial?.name || ''}
-                        onChange={(e) => setSelectedMaterial(product.configuration.materials.find(m => m.name === e.target.value))}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
-                      >
-                        {product.configuration.materials.filter(m => m.enabled).map((mat, idx) => (
-                          <option key={idx} value={mat.name} className="bg-[#0A1220]">{mat.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Lamination */}
-                  {product.configuration.laminations?.filter(l => l.enabled).length > 0 && (
-                    <div>
-                      <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-2">Lamination</label>
-                      <select
-                        value={selectedLamination?.name || ''}
-                        onChange={(e) => setSelectedLamination(product.configuration.laminations.find(l => l.name === e.target.value))}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
-                      >
-                        {product.configuration.laminations.filter(l => l.enabled).map((lam, idx) => (
-                          <option key={idx} value={lam.name} className="bg-[#0A1220]">{lam.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Foil */}
-                  {product.configuration.foils?.filter(f => f.enabled).length > 0 && (
-                    <div>
-                      <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-2">Foil Stamping</label>
-                      <select
-                        value={selectedFoil?.name || ''}
-                        onChange={(e) => setSelectedFoil(product.configuration.foils.find(f => f.name === e.target.value))}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
-                      >
-                        {product.configuration.foils.filter(f => f.enabled).map((foil, idx) => (
-                          <option key={idx} value={foil.name} className="bg-[#0A1220]">{foil.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Split on Back Paper */}
-                  {product.configuration.splitOnBackPapers?.filter(s => s.enabled).length > 0 && (
-                    <div>
-                      <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-2">Split on Back Paper</label>
-                      <select
-                        value={selectedSplit?.name || ''}
-                        onChange={(e) => setSelectedSplit(product.configuration.splitOnBackPapers.find(s => s.name === e.target.value))}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
-                      >
-                        {product.configuration.splitOnBackPapers.filter(s => s.enabled).map((split, idx) => (
-                          <option key={idx} value={split.name} className="bg-[#0A1220]">{split.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Design Options */}
-                  {product.configuration.designOptions?.filter(d => d.enabled).length > 0 && (
-                    <div className="sm:col-span-2">
-                      <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-2">Design Services</label>
-                      <select
-                        value={selectedDesign?.name || ''}
-                        onChange={(e) => setSelectedDesign(product.configuration.designOptions.find(d => d.name === e.target.value))}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
-                      >
-                        {product.configuration.designOptions.filter(d => d.enabled).map((design, idx) => (
-                          <option key={idx} value={design.name} className="bg-[#0A1220]">{design.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
                 </div>
-
-                {/* Quantity */}
-                <div className="pt-6 mt-6 border-t border-white/10">
-                  <div className="flex items-end justify-between mb-4">
-                    <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest">Total Quantity</label>
-                    {product.configuration.allowCustomQuantity && (
-                      <span className="text-[10px] text-sky-400 font-bold tracking-widest uppercase">Custom Quantities Allowed</span>
-                    )}
-                  </div>
-
-                  {product.configuration.quantityOptions?.filter(q => q.enabled).length > 0 ? (
-                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                      {product.configuration.quantityOptions.filter(q => q.enabled).map((q, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setSelectedQuantity(q.quantity)}
-                          className={`py-2.5 rounded-xl border text-sm font-black transition-all ${Number(selectedQuantity) === Number(q.quantity)
-                            ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]'
-                            : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'
-                            }`}
-                        >
-                          {q.quantity}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
-
-                  {product.configuration.allowCustomQuantity && (
-                    <div className="mt-4">
-                      <input
-                        type="number"
-                        min={product.configuration.minimumQuantity || 1}
-                        value={selectedQuantity}
-                        onChange={(e) => setSelectedQuantity(parseInt(e.target.value) || 0)}
-                        className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-sky-400 focus:outline-none transition shadow-inner font-black text-xl"
-                      />
-                    </div>
-                  )}
-                </div>
-
               </div>
             )}
 
-            {!product.configuration?.enabled && (
+            {activeEngine === "none" && (
               <div className="pt-8 mb-8">
                 <label className="block text-sm font-bold text-slate-300 mb-3">Quantity</label>
                 <div className="flex items-center gap-4 max-w-xs">
@@ -669,112 +690,133 @@ const ProductDetails = () => {
       </div>
 
       {/* REQUEST QUOTE MODAL OVERLAY */}
-      {quoteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in custom-scrollbar overflow-y-auto">
-          <div className="bg-[#0A1220] border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl mt-auto mb-auto">
-            <div className="p-6 border-b border-white/10 flex items-center justify-between sticky top-0 bg-[#0A1220] z-10">
-              <div>
-                <h3 className="text-xl font-black text-white uppercase tracking-widest">Request Custom Quote</h3>
-                <p className="text-sm text-[#00D4FF] mt-1">{product.name}</p>
+      {
+        quoteOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in custom-scrollbar overflow-y-auto">
+            <div className="bg-[#0A1220] border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl mt-auto mb-auto">
+              <div className="p-6 border-b border-white/10 flex items-center justify-between sticky top-0 bg-[#0A1220] z-10">
+                <div>
+                  <h3 className="text-xl font-black text-white uppercase tracking-widest">Request Custom Quote</h3>
+                  <p className="text-sm text-[#00D4FF] mt-1">{product.name}</p>
+                </div>
+                <button onClick={() => setQuoteOpen(false)} className="p-2 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-colors">
+                  <FiX size={24} />
+                </button>
               </div>
-              <button onClick={() => setQuoteOpen(false)} className="p-2 rounded-full hover:bg-white/5 text-slate-400 hover:text-white transition-colors">
-                <FiX size={24} />
-              </button>
+
+              <form onSubmit={handleQuoteSubmit} className="p-6 space-y-5">
+                {/* Product Configuration Details */}
+                <div className="bg-[#101B2D] p-5 rounded-xl border border-white/5 space-y-3 mb-6">
+                  <h4 className="text-[10px] uppercase tracking-widest text-[#6E8098] font-bold mb-3">Selected Configuration</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div><span className="text-slate-500 mr-2">Quantity:</span> {selectedQuantity}</div>
+
+                    {activeEngine === "category" && Object.entries(selectedDynamicOptions).map(([secId, val]) => {
+                      const secDef = product.category.configurator.sections.find(s => s.id === secId);
+                      const prodMapping = product.configuratorSections?.find(c => c.sectionId === secId);
+                      if (!secDef || !secDef.enabled || prodMapping?.enabled !== true) return null;
+
+                      let displayVal = "";
+                      if (Array.isArray(val)) {
+                        displayVal = val.map(v => v.name).join(", ");
+                      } else if (val && val.name) {
+                        displayVal = val.name;
+                      }
+
+                      if (!displayVal) return null;
+
+                      return (
+                        <div key={secId}><span className="text-slate-500 mr-2">{secDef.title}:</span> {displayVal}</div>
+                      );
+                    })}
+
+                    {activeEngine === "category" && product.category.configurator.allowCustomSize && customWidth && customHeight && (
+                      <div><span className="text-slate-500 mr-2">Size:</span> {customWidth}x{customHeight} {customUnit}</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Full Name *</label>
+                    <input required value={quoteForm.name} onChange={e => setQuoteForm({ ...quoteForm, name: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Email Address *</label>
+                    <input required type="email" value={quoteForm.email} onChange={e => setQuoteForm({ ...quoteForm, email: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Phone Number *</label>
+                    <input required type="tel" value={quoteForm.phone} onChange={e => setQuoteForm({ ...quoteForm, phone: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Company Name</label>
+                    <input value={quoteForm.company} onChange={e => setQuoteForm({ ...quoteForm, company: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Additional Requirements / Specific Details</label>
+                  <textarea rows="4" value={quoteForm.additionalRequirements} onChange={e => setQuoteForm({ ...quoteForm, additionalRequirements: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF] resize-none" placeholder="Let us know if you need any specific customization..." />
+                </div>
+
+                <div className="pt-4 border-t border-white/10 flex justify-end gap-3 sticky bottom-0 bg-[#0A1220]">
+                  <button type="button" onClick={() => setQuoteOpen(false)} className="px-6 py-3 rounded-lg font-bold text-slate-300 hover:text-white transition-colors">
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={quoteLoading} className="px-8 py-3 rounded-lg font-black text-[#0A1220] bg-[#00D4FF] hover:bg-sky-400 disabled:opacity-50 transition-colors">
+                    {quoteLoading ? "Submitting..." : "Send Request"}
+                  </button>
+                </div>
+              </form>
             </div>
-
-            <form onSubmit={handleQuoteSubmit} className="p-6 space-y-5">
-              {/* Product Configuration Details */}
-              <div className="bg-[#101B2D] p-5 rounded-xl border border-white/5 space-y-3 mb-6">
-                <h4 className="text-[10px] uppercase tracking-widest text-[#6E8098] font-bold mb-3">Selected Configuration</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div><span className="text-slate-500 mr-2">Quantity:</span> {selectedQuantity}</div>
-                  {(selectedSize?.name || customWidth) && <div><span className="text-slate-500 mr-2">Size:</span> {selectedSize?.name === "Custom Size" ? `${customWidth}x${customHeight} ${customUnit}` : selectedSize?.name}</div>}
-                  {selectedMaterial?.name && <div><span className="text-slate-500 mr-2">Material:</span> {selectedMaterial.name}</div>}
-                  {selectedLamination?.name && <div><span className="text-slate-500 mr-2">Lamination:</span> {selectedLamination.name}</div>}
-                  {selectedFoil?.name && <div><span className="text-slate-500 mr-2">Foil:</span> {selectedFoil.name}</div>}
-                  {selectedDesign?.name && <div><span className="text-slate-500 mr-2">Design:</span> {selectedDesign.name}</div>}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Full Name *</label>
-                  <input required value={quoteForm.name} onChange={e => setQuoteForm({ ...quoteForm, name: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Email Address *</label>
-                  <input required type="email" value={quoteForm.email} onChange={e => setQuoteForm({ ...quoteForm, email: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Phone Number *</label>
-                  <input required type="tel" value={quoteForm.phone} onChange={e => setQuoteForm({ ...quoteForm, phone: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Company Name</label>
-                  <input value={quoteForm.company} onChange={e => setQuoteForm({ ...quoteForm, company: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF]" />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-300 mb-2 uppercase tracking-widest">Additional Requirements / Specific Details</label>
-                <textarea rows="4" value={quoteForm.additionalRequirements} onChange={e => setQuoteForm({ ...quoteForm, additionalRequirements: e.target.value })} className="w-full bg-[#101B2D] border border-white/10 rounded-lg px-4 py-3 text-white outline-none focus:border-[#00D4FF] resize-none" placeholder="Let us know if you need any specific customization..." />
-              </div>
-
-              <div className="pt-4 border-t border-white/10 flex justify-end gap-3 sticky bottom-0 bg-[#0A1220]">
-                <button type="button" onClick={() => setQuoteOpen(false)} className="px-6 py-3 rounded-lg font-bold text-slate-300 hover:text-white transition-colors">
-                  Cancel
-                </button>
-                <button type="submit" disabled={quoteLoading} className="px-8 py-3 rounded-lg font-black text-[#0A1220] bg-[#00D4FF] hover:bg-sky-400 disabled:opacity-50 transition-colors">
-                  {quoteLoading ? "Submitting..." : "Send Request"}
-                </button>
-              </div>
-            </form>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* AUTH REQUIRED MODAL OVERLAY */}
-      {showAuthModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#050B14]/80 backdrop-blur-xl animate-fade-in">
-          <div className="relative bg-[#0A1220]/80 backdrop-blur-2xl border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] ring-1 ring-white/5 p-8 text-center">
-            {/* Ambient Modal Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-sky-500/20 blur-[60px] rounded-full pointer-events-none"></div>
+      {
+        showAuthModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#050B14]/80 backdrop-blur-xl animate-fade-in">
+            <div className="relative bg-[#0A1220]/80 backdrop-blur-2xl border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] ring-1 ring-white/5 p-8 text-center">
+              {/* Ambient Modal Glow */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-sky-500/20 blur-[60px] rounded-full pointer-events-none"></div>
 
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-sky-400 mb-6 shadow-lg shadow-sky-500/10">
-                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-              </div>
-              <h3 className="text-2xl font-black text-white tracking-widest uppercase mb-2">Login Required</h3>
-              <p className="text-slate-400 text-sm mb-8 leading-relaxed">
-                You must have an authenticated account to add items to your cart or retain saved designs.
-              </p>
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-sky-400 mb-6 shadow-lg shadow-sky-500/10">
+                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 className="text-2xl font-black text-white tracking-widest uppercase mb-2">Login Required</h3>
+                <p className="text-slate-400 text-sm mb-8 leading-relaxed">
+                  You must have an authenticated account to add items to your cart or retain saved designs.
+                </p>
 
-              <div className="flex flex-col w-full gap-3">
-                <button
-                  onClick={() => navigate("/login")}
-                  className="w-full py-4 rounded-xl bg-sky-500 text-white font-black hover:bg-sky-400 transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]"
-                >
-                  Log In Securely
-                </button>
-                <button
-                  onClick={() => navigate("/signup")}
-                  className="w-full py-4 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-bold hover:bg-white/10 hover:text-white transition-all shadow-md"
-                >
-                  Create an Account
-                </button>
-                <button
-                  onClick={() => setShowAuthModal(false)}
-                  className="w-full mt-2 py-2 text-xs font-bold text-slate-500 tracking-widest uppercase hover:text-white transition-colors"
-                >
-                  Cancel
-                </button>
+                <div className="flex flex-col w-full gap-3">
+                  <button
+                    onClick={() => navigate("/login")}
+                    className="w-full py-4 rounded-xl bg-sky-500 text-white font-black hover:bg-sky-400 transition-all shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)]"
+                  >
+                    Log In Securely
+                  </button>
+                  <button
+                    onClick={() => navigate("/signup")}
+                    className="w-full py-4 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-bold hover:bg-white/10 hover:text-white transition-all shadow-md"
+                  >
+                    Create an Account
+                  </button>
+                  <button
+                    onClick={() => setShowAuthModal(false)}
+                    className="w-full mt-2 py-2 text-xs font-bold text-slate-500 tracking-widest uppercase hover:text-white transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-    </section>
+        )
+      }
+    </section >
   );
 };
 

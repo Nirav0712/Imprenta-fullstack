@@ -10,7 +10,7 @@ import PricingInventory from "./PricingInventory";
 import ProductImages from "./ProductImages";
 import SeoSettings from "./SeoSettings";
 import PublishSettings from "./PublishSettings";
-import ProductConfiguration from "./ProductConfiguration";
+import CategoryConfiguratorMapping from "./CategoryConfiguratorMapping";
 import { useNavigate } from "react-router-dom";
 
 const ProductForm = ({ isEdit = false, initialData = null, productId = null }) => {
@@ -65,7 +65,7 @@ const ProductForm = ({ isEdit = false, initialData = null, productId = null }) =
 
           <PricingInventory />
 
-          <ProductConfiguration />
+          <CategoryConfiguratorMapping />
 
           <SeoSettings />
         </div>

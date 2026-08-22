@@ -98,43 +98,10 @@ export const productSchema = z.object({
 
   showPrice: z.boolean().default(true),
 
-  configuration: z.object({
-    enabled: z.boolean().default(false),
-    minimumQuantity: z.coerce.number().default(1),
-    allowCustomQuantity: z.boolean().default(false),
-    allowCustomSize: z.boolean().default(false),
-    sizes: z.array(z.object({
-      name: z.string(),
-      additionalPrice: z.coerce.number().default(0),
-      enabled: z.boolean().default(true),
-    })).optional(),
-    materials: z.array(z.object({
-      name: z.string(),
-      additionalPrice: z.coerce.number().default(0),
-      enabled: z.boolean().default(true),
-    })).optional(),
-    laminations: z.array(z.object({
-      name: z.string(),
-      additionalPrice: z.coerce.number().default(0),
-      enabled: z.boolean().default(true),
-    })).optional(),
-    foils: z.array(z.object({
-      name: z.string(),
-      additionalPrice: z.coerce.number().default(0),
-      enabled: z.boolean().default(true),
-    })).optional(),
-    designOptions: z.array(z.object({
-      name: z.string(),
-      additionalPrice: z.coerce.number().default(0),
-      enabled: z.boolean().default(true),
-    })).optional(),
-    splitOnBackPapers: z.array(z.object({
-      name: z.string(),
-      additionalPrice: z.coerce.number().default(0),
-      enabled: z.boolean().default(true),
-    })).optional(),
-    quantityOptions: z.array(z.any()).optional(),
-  }).optional(),
+  configuratorSections: z.array(z.object({
+    sectionId: z.string(),
+    enabled: z.boolean()
+  })).optional().default([]),
 
 });
 

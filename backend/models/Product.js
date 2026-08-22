@@ -119,42 +119,6 @@ const productSchema = new mongoose.Schema(
       }
     ],
 
-    // Configurator options
-    configuration: {
-      enabled: { type: Boolean, default: false },
-      minimumQuantity: { type: Number, default: 100 },
-      allowCustomQuantity: { type: Boolean, default: true },
-      allowCustomSize: { type: Boolean, default: true },
-      sizes: [
-        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
-      ],
-      materials: [
-        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
-      ],
-      laminations: [
-        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
-      ],
-      foils: [
-        { name: String, additionalPrice: Number, enabled: { type: Boolean, default: true } }
-      ],
-      designOptions: [
-        {
-          name: String,
-          additionalPrice: { type: Number, default: 0 },
-          enabled: { type: Boolean, default: true },
-        },
-      ],
-      splitOnBackPapers: [
-        {
-          name: String,
-          additionalPrice: { type: Number, default: 0 },
-          enabled: { type: Boolean, default: true },
-        },
-      ],
-      quantityOptions: [
-        { quantity: Number, price: Number, enabled: { type: Boolean, default: true } }
-      ]
-    },
 
     // Inventory
     stock: {
@@ -173,6 +137,14 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    // Mapping Category Configurator Sections (ON/OFF natively per product)
+    configuratorSections: [
+      {
+        sectionId: { type: String, required: true },
+        enabled: { type: Boolean, default: false }
+      }
+    ],
 
     // Product Flags
     featured: {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
-import { FiEdit2, FiTrash2, FiSearch, FiPlus, FiX, FiImage, FiUploadCloud } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiSearch, FiPlus, FiImage } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import { categoryService } from "../../services/categoryService";
-import { uploadApi } from "../../api/uploadApi";
 import DeleteModal from "../../components/common/modal/DeleteModal";
 
 import category1 from "../../assets/images/categories/category-1.png";
@@ -27,20 +27,14 @@ const getSrcFromMap = (path) => {
 };
 
 const Categories = () => {
+    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
 
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
-
-    const [modalOpen, setModalOpen] = useState(false);
     const [formLoading, setFormLoading] = useState(false);
-    const [form, setForm] = useState({ name: "", description: "", image: "", status: "active" });
-    const [isEdit, setIsEdit] = useState(false);
-
-    const [imageFile, setImageFile] = useState(null);
-    const [previewImage, setPreviewImage] = useState("");
 
     const [editingOrder, setEditingOrder] = useState(null);
     const [orderInput, setOrderInput] = useState("");
@@ -72,79 +66,16 @@ const Categories = () => {
     }, [categories, search]);
 
     const handleOpenAdd = () => {
-        setForm({ name: "", description: "", image: "", status: "active" });
-        setImageFile(null);
-        setPreviewImage("");
-        setIsEdit(false);
-        setModalOpen(true);
+        navigate("/categories/add");
     };
 
     const handleOpenEdit = (cat) => {
-        setForm({ name: cat.name, description: cat.description, image: cat.image, status: cat.status });
-        setImageFile(null);
-        setPreviewImage(getSrcFromMap(cat.image) || cat.image || "");
-        setSelectedCategory(cat);
-        setIsEdit(true);
-        setModalOpen(true);
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const validTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
-        if (!validTypes.includes(file.type)) {
-            alert("Unsupported file type. Please upload a PNG, JPG, or WEBP.");
-            return;
-        }
-
-        if (file.size > 5 * 1024 * 1024) {
-            alert("File too large. Maximum size is 5MB.");
-            return;
-        }
-
-        setImageFile(file);
-        setPreviewImage(URL.createObjectURL(file));
+        navigate(`/categories/edit/${cat._id}`);
     };
 
     const handleDeleteClick = (cat) => {
         setSelectedCategory(cat);
         setDeleteOpen(true);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            setFormLoading(true);
-
-            let finalImageUrl = form.image;
-
-            if (imageFile) {
-                const formData = new FormData();
-                formData.append("image", imageFile);
-                const uploadRes = await uploadApi.uploadImage(formData);
-                if (uploadRes.success) {
-                    finalImageUrl = uploadRes.image.url;
-                } else {
-                    throw new Error(uploadRes.message || "Failed to upload image.");
-                }
-            }
-
-            const payload = { ...form, image: finalImageUrl };
-
-            if (isEdit) {
-                await categoryService.updateCategory(selectedCategory._id, payload);
-            } else {
-                await categoryService.createCategory(payload);
-            }
-            setModalOpen(false);
-            fetchCategories();
-        } catch (error) {
-            console.error(error);
-            alert(error?.response?.data?.message || error.message || "Operation failed.");
-        } finally {
-            setFormLoading(false);
-        }
     };
 
     const handleDelete = async () => {
@@ -396,95 +327,6 @@ const Categories = () => {
                 onConfirm={handleDelete}
                 loading={formLoading}
             />
-
-            {/* Add/Edit Modal */}
-            {modalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-5">
-                    <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#101B2D] shadow-2xl">
-                        <div className="flex items-center justify-between border-b border-white/10 p-6">
-                            <h2 className="text-xl font-bold text-white">
-                                {isEdit ? "Edit Category" : "Add Category"}
-                            </h2>
-                            <button onClick={() => setModalOpen(false)} className="rounded-xl p-2 text-slate-400 hover:bg-white/10 hover:text-white">
-                                <FiX size={20} />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleSubmit} className="p-6 space-y-5">
-                            <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-400">Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={form.name}
-                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                    className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
-                                />
-                            </div>
-                            <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-400">Description</label>
-                                <textarea
-                                    rows="3"
-                                    value={form.description}
-                                    onChange={(e) => setForm({ ...form, description: e.target.value })}
-                                    className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
-                                ></textarea>
-                            </div>
-                            <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-400">Category Cover Image</label>
-                                <div className="mt-2 flex items-center gap-6">
-                                    <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-[#08111F]">
-                                        {previewImage ? (
-                                            <img
-                                                src={previewImage}
-                                                alt="Preview"
-                                                className="h-full w-full object-contain"
-                                            />
-                                        ) : (
-                                            <FiImage size={32} className="text-slate-500" />
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="cursor-pointer flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 py-3 px-5 text-sm font-semibold text-white transition hover:bg-white/10">
-                                            <FiUploadCloud size={18} />
-                                            <span>Choose Image</span>
-                                            <input
-                                                type="file"
-                                                accept="image/png, image/jpeg, image/jpg, image/webp"
-                                                className="hidden"
-                                                onChange={handleImageChange}
-                                            />
-                                        </label>
-                                        <p className="text-xs text-slate-500">
-                                            Recommended: Square. PNG, JPG, WEBP (Max 5MB)
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-400">Status</label>
-                                <select
-                                    value={form.status}
-                                    onChange={(e) => setForm({ ...form, status: e.target.value })}
-                                    className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
-                                >
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </select>
-                            </div>
-                            <div className="flex justify-end gap-4 mt-8 pt-4">
-                                <button
-                                    type="submit"
-                                    disabled={formLoading}
-                                    className="rounded-2xl bg-sky-500 px-6 py-3 font-semibold text-white hover:bg-sky-600 disabled:opacity-60"
-                                >
-                                    {formLoading ? "Saving..." : isEdit ? "Update Category" : "Add Category"}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

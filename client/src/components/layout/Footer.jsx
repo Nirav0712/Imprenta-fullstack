@@ -133,12 +133,11 @@ const Footer = () => {
                         Email Address
                       </span>
 
-                      <a
-                        href="mailto:contact@imprenta.in"
+                      <span
                         className="font-semibold text-slate-300 text-sm break-all group-hover:text-cyan-300 transition-colors"
                       >
-                        contact@imprenta.in
-                      </a>
+                        {settings?.email || "contact@imprenta.in"}
+                      </span>
                     </div>
                   </a>
                 </li>

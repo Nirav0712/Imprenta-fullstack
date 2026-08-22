@@ -36,6 +36,12 @@ router.get(
   getCategories
 );
 
+// Get Single Category
+router.get(
+  "/:id",
+  getCategoryById
+);
+
 // Reorder Categories
 router.patch(
   "/reorder",

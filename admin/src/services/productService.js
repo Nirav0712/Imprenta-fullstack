@@ -2,8 +2,8 @@ import { productApi } from "../api/productApi";
 
 export const productService = {
 
-  getProducts() {
-    return productApi.getAll();
+  getProducts(params = {}) {
+    return productApi.getAll(params);
   },
 
   getProduct(id) {

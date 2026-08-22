@@ -14,6 +14,8 @@ import EditProduct from "../pages/products/EditProduct";
 import ViewProduct from "../pages/products/ViewProduct";
 
 import Categories from "../pages/categories/Categories";
+import AddCategory from "../pages/categories/AddCategory";
+import EditCategory from "../pages/categories/EditCategory";
 
 import HomepageCMS from "../pages/homepage/HomepageCMS";
 import Orders from "../pages/orders/Orders";
@@ -78,6 +80,16 @@ const AppRoutes = () => {
           <Route
             path="/categories"
             element={<Categories />}
+          />
+
+          <Route
+            path="/categories/add"
+            element={<AddCategory />}
+          />
+
+          <Route
+            path="/categories/edit/:id"
+            element={<EditCategory />}
           />
 
           <Route

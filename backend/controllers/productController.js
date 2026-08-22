@@ -50,6 +50,7 @@ export const createProduct = async (req, res) => {
 
       images,
       configuration,
+      configuratorSections,
     } = req.body;
 
     // Validation
@@ -135,6 +136,7 @@ export const createProduct = async (req, res) => {
       showOnHome,
 
       status,
+      configuratorSections: configuratorSections || [],
 
       metaTitle,
       metaDescription,
@@ -186,7 +188,9 @@ export const getProducts = async (req, res) => {
 
     let filter = {};
 
-    if (categorySlug) {
+    if (req.query.category) {
+      filter.category = req.query.category;
+    } else if (categorySlug) {
       const categoryDoc = await Category.findOne({ slug: categorySlug });
       if (categoryDoc) {
         filter.category = categoryDoc._id;
@@ -200,7 +204,7 @@ export const getProducts = async (req, res) => {
     }
 
     const products = await Product.find(filter)
-      .populate("category", "name slug description")
+      .populate("category", "name slug description configurator")
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
 
@@ -227,7 +231,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
-      .populate("category", "name slug")
+      .populate("category", "name slug configurator")
       .populate("createdBy", "name email");
 
     if (!product) {
@@ -258,7 +262,7 @@ export const getProductById = async (req, res) => {
 export const getProductBySlug = async (req, res) => {
   try {
     const product = await Product.findOne({ slug: req.params.slug })
-      .populate("category", "name slug")
+      .populate("category", "name slug configurator")
       .populate("createdBy", "name email");
 
     if (!product) {
@@ -327,6 +331,7 @@ export const updateProduct = async (req, res) => {
 
       images,
       configuration,
+      configuratorSections,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -433,14 +438,14 @@ export const updateProduct = async (req, res) => {
     product.bestSeller =
       bestSeller ?? product.bestSeller;
 
-    product.newArrival =
-      newArrival ?? product.newArrival;
+    product.newArrival = newArrival !== undefined ? newArrival : product.newArrival;
+    product.showOnHome = showOnHome !== undefined ? showOnHome : product.showOnHome;
 
-    product.showOnHome =
-      showOnHome ?? product.showOnHome;
+    if (configuratorSections !== undefined) {
+      product.configuratorSections = configuratorSections;
+    }
 
-    product.status =
-      status ?? product.status;
+    product.status = status || product.status;
 
     product.metaTitle =
       metaTitle ?? product.metaTitle;

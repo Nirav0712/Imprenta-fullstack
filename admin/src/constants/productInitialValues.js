@@ -33,4 +33,5 @@ export const productInitialValues = {
   keywords: "",
 
   images: [],
+  configuratorSections: [],
 };

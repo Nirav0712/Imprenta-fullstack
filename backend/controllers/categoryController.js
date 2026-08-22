@@ -9,7 +9,7 @@ import slugify from "../utils/slugify.js";
 
 export const createCategory = async (req, res) => {
   try {
-    const { name, description, image, status } = req.body;
+    const { name, description, image, status, configurator } = req.body;
 
     if (!name) {
       return res.status(400).json({
@@ -36,6 +36,7 @@ export const createCategory = async (req, res) => {
       description,
       image,
       status,
+      configurator: configurator || undefined,
       order: nextOrder,
       createdBy: req.user._id,
     });
@@ -109,7 +110,7 @@ export const getCategoryById = async (req, res) => {
 // Update Category
 export const updateCategory = async (req, res) => {
   try {
-    const { name, description, image, status } = req.body;
+    const { name, description, image, status, configurator } = req.body;
 
     let category = await Category.findById(req.params.id);
 
@@ -122,9 +123,12 @@ export const updateCategory = async (req, res) => {
 
     category.name = name || category.name;
     category.slug = name ? slugify(name) : category.slug;
-    category.description = description || category.description;
-    category.image = image || category.image;
+    category.description = description !== undefined ? description : category.description;
+    category.image = image !== undefined ? image : category.image;
     category.status = status || category.status;
+    if (configurator) {
+      category.configurator = configurator;
+    }
 
     await category.save();
 
