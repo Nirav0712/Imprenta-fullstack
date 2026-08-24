@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const settingSchema = new mongoose.Schema(
     {
         companyName: { type: String, default: "Imprenta" },
-        email: { type: String, default: "contact@imprenta.com" },
+        email: { type: String, default: "contact@imprenta.in" },
         phone: { type: String, default: "+91 9876543210" },
         address: {
             type: String,
