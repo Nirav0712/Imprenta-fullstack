@@ -5,7 +5,10 @@ const settingSchema = new mongoose.Schema(
         companyName: { type: String, default: "Imprenta" },
         email: { type: String, default: "contact@imprenta.com" },
         phone: { type: String, default: "+91 9876543210" },
-        address: { type: String, default: "Mumbai, India" },
+        address: {
+            type: String,
+            default: "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721",
+        },
         whatsapp: { type: String, default: "+91 9876543210" },
         facebook: { type: String, default: "" },
         instagram: { type: String, default: "" },
