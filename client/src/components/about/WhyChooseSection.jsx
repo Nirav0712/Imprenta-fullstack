@@ -56,17 +56,17 @@ const WhyChooseSection = () => {
       <div className="w-full px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 relative z-10 mx-auto max-w-[1920px]">
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center mb-7 lg:mb-15">
-          {/* <span className="inline-flex rounded-full border border-sky-400/20 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-300 backdrop-blur-xl">
+        {/* <div className="flex flex-col items-center text-center mb-7 lg:mb-15"> */}
+        {/* <span className="inline-flex rounded-full border border-sky-400/20 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-300 backdrop-blur-xl">
             Why Imprenta
           </span> */}
-          <h2 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight max-w-4xl">
+        {/* <h2 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight max-w-4xl">
             Why Leading Brands <span className="text-sky-400 block sm:inline">Choose Imprenta</span>
           </h2>
-        </div>
+        </div> */}
 
         {/* Desktop Radial/Orbital Layout */}
-        <div className="hidden lg:flex relative items-center justify-center min-h-[650px] w-full">
+        <div className="hidden lg:flex relative items-center justify-center min-h-[620px] w-full">
 
           {/* Central Core Graphic */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center justify-center pointer-events-none">

@@ -373,7 +373,7 @@ const ProductDetails = () => {
       {/* Ambient Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-sky-500/10 blur-[150px] rounded-full pointer-events-none"></div>
 
-      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 box-border">
 
         {/* Breadcrumbs */}
         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-400 mb-8 font-medium">
@@ -383,16 +383,16 @@ const ProductDetails = () => {
           {product.category?.name && (
             <>
               <FiChevronRight />
-              <span className="text-sky-400">{product.category.name}</span>
+              <span className="text-sky-400 break-words whitespace-normal min-w-0 overflow-hidden">{product.category.name}</span>
             </>
           )}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 min-w-0 w-full max-w-full box-border">
 
           {/* L: IMAGE PREVIEW */}
-          <div className="flex flex-col gap-5 lg:sticky lg:top-24 max-h-[calc(100vh-100px)]">
-            <div className="relative rounded-2xl bg-white/5 backdrop-blur-md p-4 lg:p-10 overflow-hidden group flex items-center justify-center aspect-square w-full shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] border border-white/10 ring-1 ring-white/5">
+          <div className="flex flex-col gap-5 lg:sticky lg:top-24 max-h-[calc(100vh-100px)] lg:max-h-none min-w-0 max-w-full w-full box-border">
+            <div className="relative rounded-2xl bg-white/5 backdrop-blur-md p-4 lg:p-10 overflow-hidden group flex items-center justify-center aspect-square w-full max-w-full box-border shadow-[0_8px_32px_0_rgba(0,0,0,0.36)] border border-white/10 ring-1 ring-white/5">
 
               {/* Overlay Top Icons */}
               <div className="absolute top-5 right-5 flex flex-col gap-4 z-10 hidden sm:flex">
@@ -426,7 +426,7 @@ const ProductDetails = () => {
 
             {/* Thumbnail Gallery */}
             {galleryImages.length > 1 && (
-              <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar">
+              <div className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar w-full max-w-full box-border">
                 {galleryImages.map((img, idx) => (
                   <button
                     key={idx}
@@ -441,7 +441,7 @@ const ProductDetails = () => {
           </div>
 
           {/* R: PRODUCT CONFIGURATION & DETAILS */}
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0 max-w-full w-full box-border">
 
             <div className="border-b border-white/10 pb-6 mb-6">
               <h1 className="text-3xl sm:text-4xl font-black leading-tight text-white mb-3">
@@ -458,7 +458,7 @@ const ProductDetails = () => {
 
             {/* CONFIGURATOR ENGINE */}
             {activeEngine === "category" && (
-              <div className="bg-[#050B14]/40 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 mb-8 space-y-7 ring-1 ring-white/5">
+              <div className="bg-[#050B14]/40 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/5 mb-8 space-y-7 ring-1 ring-white/5 w-full max-w-full box-border">
                 <div className="space-y-6">
                   {product.category.configurator.sections.filter(s => {
                     if (!s.enabled) return false;
@@ -485,7 +485,7 @@ const ProductDetails = () => {
                               const opt = section.options.find(o => o.id === e.target.value);
                               setSelectedDynamicOptions(prev => ({ ...prev, [section.id]: opt }));
                             }}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition"
+                            className="w-full block max-w-full min-w-0 box-border bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm font-semibold outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 cursor-pointer backdrop-blur-sm transition overflow-hidden text-ellipsis whitespace-nowrap"
                           >
                             {!section.required && <option value="">Select optional {section.title.toLowerCase()}</option>}
                             {section.options.filter(o => o.enabled).sort((a, b) => a.order - b.order).map(opt => (
@@ -502,10 +502,10 @@ const ProductDetails = () => {
                               <button
                                 key={opt.id}
                                 onClick={() => setSelectedDynamicOptions(prev => ({ ...prev, [section.id]: opt }))}
-                                className={`relative px-4 py-3 rounded-xl border text-sm font-semibold transition-all text-left flex justify-between items-center ${selectedDynamicOptions[section.id]?.id === opt.id ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]' : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'}`}
+                                className={`relative w-full min-w-0 max-w-full box-border overflow-hidden px-4 py-3 rounded-xl border text-sm font-semibold transition-all text-left flex justify-between items-center gap-3 whitespace-normal break-words ${selectedDynamicOptions[section.id]?.id === opt.id ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]' : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'}`}
                               >
-                                <span>{opt.name}</span>
-                                {opt.priceAdjustment > 0 && <span className="text-xs text-slate-500 font-bold">+₹{opt.priceAdjustment}</span>}
+                                <span className="min-w-0 flex-1 break-words">{opt.name}</span>
+                                {opt.priceAdjustment > 0 && <span className="text-xs text-slate-500 font-bold shrink-0">+₹{opt.priceAdjustment}</span>}
                               </button>
                             ))}
                           </div>
@@ -530,15 +530,15 @@ const ProductDetails = () => {
                                     };
                                   });
                                 }}
-                                className={`relative px-4 py-3 rounded-xl border text-sm font-semibold transition-all text-left flex justify-between items-center ${isSelected ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]' : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'}`}
+                                className={`relative w-full min-w-0 max-w-full box-border overflow-hidden px-3 sm:px-4 py-3 rounded-xl border text-sm font-semibold transition-all text-left flex justify-between items-center gap-3 whitespace-normal break-words ${isSelected ? 'border-sky-400 bg-sky-500/10 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]' : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10'}`}
                               >
-                                <div className="flex items-center gap-3">
-                                  <div className={`w-4 h-4 rounded border flex items-center justify-center ${isSelected ? 'border-sky-400 bg-sky-400 text-black' : 'border-slate-500'}`}>
+                                <div className="flex items-center gap-3 min-w-0 flex-1">
+                                  <div className={`w-4 h-4 shrink-0 rounded border flex items-center justify-center ${isSelected ? 'border-sky-400 bg-sky-400 text-black' : 'border-slate-500'}`}>
                                     {isSelected && <svg width="10" height="8" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5L4.5 8.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                                   </div>
-                                  <span>{opt.name}</span>
+                                  <span className="min-w-0 break-words flex-1">{opt.name}</span>
                                 </div>
-                                {opt.priceAdjustment > 0 && <span className="text-xs text-slate-500 font-bold">+₹{opt.priceAdjustment}</span>}
+                                {opt.priceAdjustment > 0 && <span className="text-xs text-slate-500 font-bold shrink-0">+₹{opt.priceAdjustment}</span>}
                               </button>
                               );
                             })}
@@ -556,7 +556,7 @@ const ProductDetails = () => {
                               }));
                             }}
                             placeholder={`Enter ${section.title}...`}
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-sky-400 transition text-sm"
+                            className="w-full max-w-full box-border bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-sky-400 transition text-sm"
                           />
                         )}
 
@@ -569,17 +569,17 @@ const ProductDetails = () => {
                     <div className="pt-4 mt-4 border-t border-white/10">
                       <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-3">Custom Dimensions</label>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 animate-fade-in bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-md">
-                        <div>
+                        <div className="min-w-0 w-full overflow-hidden">
                           <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Width</span>
-                          <input type="number" value={customWidth} onChange={(e) => setCustomWidth(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
+                          <input type="number" value={customWidth} onChange={(e) => setCustomWidth(e.target.value)} className="w-full max-w-full box-border bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
                         </div>
-                        <div>
+                        <div className="min-w-0 w-full overflow-hidden">
                           <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Height</span>
-                          <input type="number" value={customHeight} onChange={(e) => setCustomHeight(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
+                          <input type="number" value={customHeight} onChange={(e) => setCustomHeight(e.target.value)} className="w-full max-w-full box-border bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
                         </div>
-                        <div>
+                        <div className="min-w-0 w-full overflow-hidden">
                           <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Unit</span>
-                          <select value={customUnit} onChange={(e) => setCustomUnit(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm appearance-none">
+                          <select value={customUnit} onChange={(e) => setCustomUnit(e.target.value)} className="w-full max-w-full box-border bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm appearance-none min-w-0 text-ellipsis">
                             <option value="inches">Inches</option>
                             <option value="cm">cm</option>
                             <option value="mm">mm</option>
@@ -597,7 +597,7 @@ const ProductDetails = () => {
                       min={product.category.configurator.baseMinQuantity || 1}
                       value={selectedQuantity}
                       onChange={(e) => setSelectedQuantity(parseInt(e.target.value) || 0)}
-                      className="w-full bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-sky-400 focus:outline-none transition shadow-inner font-black text-xl"
+                      className="w-full max-w-full box-border bg-black/40 border border-white/10 rounded-xl px-5 py-4 text-white outline-none focus:border-sky-400 focus:outline-none transition shadow-inner font-black text-xl"
                     />
                   </div>
                 </div>
@@ -621,7 +621,7 @@ const ProductDetails = () => {
 
             {/* ACTION FOOTER */}
             {pricing.showPrice !== false ? (
-              <div className="bg-[#050B14]/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 sm:p-8 mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] ring-1 ring-white/5">
+              <div className="bg-[#050B14]/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 sm:p-8 mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] ring-1 ring-white/5 w-full max-w-full box-border">
                 <div className="flex flex-col xl:flex-row items-center justify-between gap-6">
                   <div className="w-full xl:w-auto text-center xl:text-left">
                     <p className="text-[10px] uppercase font-black text-[#6E8098] mb-1 tracking-widest">Final Price</p>
@@ -659,16 +659,16 @@ const ProductDetails = () => {
 
                 <button
                   onClick={() => setQuoteOpen(true)}
-                  className="w-full h-auto min-h-[56px] flex flex-wrap items-center justify-center gap-2 bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-white font-black px-4 sm:px-8 py-3 sm:py-4 rounded-xl transition-all shadow-md border border-sky-500/50 text-center leading-normal text-sm sm:text-base"
+                  className="w-full max-w-full box-border h-auto min-h-[56px] flex flex-wrap items-center justify-center gap-2 bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-white font-black px-4 sm:px-8 py-3 sm:py-4 rounded-xl transition-all shadow-md border border-sky-500/50 text-center leading-normal text-sm sm:text-base"
                 >
                   Submit Configuration for Quote
                 </button>
               </div>
             )}
 
-            <div className="pt-4 border-t border-white/5 flex gap-6 text-[#6E8098] text-xs font-bold uppercase tracking-wider justify-center">
-              <div className="flex items-center gap-1.5"><FiTruck className="text-[#00D4FF]" size={14} /> Global Shipping</div>
-              <div className="flex items-center gap-1.5"><FiShield className="text-[#00D4FF]" size={14} /> Secure Processing</div>
+            <div className="pt-4 border-t border-white/5 flex flex-col sm:flex-row gap-4 sm:gap-6 text-[#6E8098] text-xs font-bold uppercase tracking-wider justify-center items-center">
+              <div className="flex items-center gap-1.5 whitespace-nowrap"><FiTruck className="text-[#00D4FF]" size={14} /> Global Shipping</div>
+              <div className="flex items-center gap-1.5 whitespace-nowrap"><FiShield className="text-[#00D4FF]" size={14} /> Secure Processing</div>
             </div>
           </div>
 
