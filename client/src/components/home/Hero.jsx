@@ -188,20 +188,44 @@ const Hero = () => {
               key={activeSlide + "img"}
               className="relative animate-fadeRight"
             >
-              <img
-                src={slide.image}
-                alt={slide.title1}
-                className="
-    w-full
-    h-full
-    rounded-[30px]
-    object-cover
-    animate-floating
-    animate-zoom
-    transition-all
-    duration-700
-  "
-              />
+              {slide.image ? (
+                <img
+                  src={slide.image}
+                  alt={slide.title1}
+                  className="
+                    w-full
+                    h-full
+                    rounded-[30px]
+                    object-cover
+                    animate-floating
+                    animate-zoom
+                    transition-all
+                    duration-700
+                  "
+                />
+              ) : (
+                <div className="
+                  w-full
+                  h-full
+                  min-h-[350px]
+                  lg:min-h-[500px]
+                  rounded-[30px]
+                  bg-white/5
+                  border border-white/10
+                  backdrop-blur-xl
+                  flex flex-col items-center justify-center
+                  animate-floating
+                  animate-zoom
+                  transition-all
+                  duration-700
+                  text-center
+                  p-8
+                ">
+                  <span className="text-2xl sm:text-3xl font-bold text-sky-200/60 tracking-wider uppercase">
+                    {slide.placeholder}
+                  </span>
+                </div>
+              )}
 
             </div>
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   FiArrowRight,
   FiPhoneCall,
+  FiCheckCircle,
 } from "react-icons/fi";
 import { fetchSettings } from "../../services/api";
 
@@ -113,6 +114,30 @@ const ContactCTA = () => {
                 branding solutions tailored specifically for
                 your business.
               </p>
+
+              {/* Trust Points */}
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 max-w-lg">
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3 text-white font-medium">
+                    <FiCheckCircle className="text-sky-400 text-xl shrink-0" />
+                    Premium Quality
+                  </div>
+                  <div className="flex items-center gap-3 text-white font-medium">
+                    <FiCheckCircle className="text-sky-400 text-xl shrink-0" />
+                    Secure Payments
+                  </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3 text-white font-medium">
+                    <FiCheckCircle className="text-sky-400 text-xl shrink-0" />
+                    Fast Delivery
+                  </div>
+                  <div className="flex items-center gap-3 text-white font-medium">
+                    <FiCheckCircle className="text-sky-400 text-xl shrink-0" />
+                    24×7 Support
+                  </div>
+                </div>
+              </div>
 
             </div>
 

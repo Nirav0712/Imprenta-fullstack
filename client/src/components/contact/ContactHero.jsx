@@ -7,9 +7,9 @@ import {
 const ContactHero = () => {
   return (
     <section
-  id="contact-hero"
-  className="relative overflow-hidden py-24 lg:py-32"
->
+      id="contact-hero"
+      className="relative overflow-hidden py-24 lg:py-32"
+    >
       {/* Background Glow */}
 
       <div className="absolute -left-32 top-10 h-80 w-80 rounded-full bg-sky-500/15 blur-[120px]" />
@@ -123,15 +123,15 @@ const ContactHero = () => {
 
                     <p className="leading-7 text-slate-300">
 
-                      Gala No. C-2, Dungra Park
+                      Plot No:- 822/1, Block No:- 2024/1
 
                       <br />
 
-                      Vapi, Gujarat
+                      Rakanpur-Santej Rd, nr. Leo Polymers
 
                       <br />
 
-                      India
+                      Rakanpur, Gujarat 382721
 
                     </p>
 

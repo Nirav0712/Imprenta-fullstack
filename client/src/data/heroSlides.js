@@ -6,51 +6,54 @@ import hero4 from "../assets/images/hero/hero-4.png";
 const heroSlides = [
   {
     image: hero1,
-    badge: "Food & FMCG Packaging",
-
-    title1: "Packaging That",
-    title2: "Makes Every",
-    title3: "Product Appetizing",
-
-    description:
-      "Imprenta transforms food packaging into a powerful brand statement with vibrant designs, quality printing, and finishing solutions that help products stand out on the shelf.",
+    badge: "Flexible & Premium Packaging",
+    title1: "Premium Packaging Solutions",
+    title2: "That Wrap",
+    title3: "Your Brand",
+    description: "Create a powerful shelf presence with high-quality shrink sleeve packaging designed for standout branding.",
   },
-
   {
     image: hero2,
-    badge: "Premium Skincare Packaging",
-
-    title1: "Packaging That Looks",
-    title2: "As Premium As",
-    title3: "Your Skincare",
-
-    description:
-      "Imprenta delivers sophisticated packaging solutions for skincare products, creating clean, modern designs that communicate quality, trust, and a premium brand experience.",
+    badge: "Premium Paper Packaging Scodix",
+    title1: "Premium Packaging Solutions",
+    title2: "That Elevate",
+    title3: "Every Product",
+    description: "Give your products a premium identity with custom-designed mono cartons built for protection and presentation.",
   },
-
   {
     image: hero3,
-    badge: "Premium Beauty Packaging",
-
-    title1: "Packaging That Gives",
-    title2: "Beauty Products",
-    title3: "A Natural Edge",
-
-    description:
-      "Powered by Flexographic, Offset, Gravure and Digital printing technologies delivering exceptional print quality and dependable production capacity.",
+    badge: "Seamless Tube Packaging",
+    title1: "Premium Tube Solutions",
+    title2: "Made for",
+    title3: "Modern Brands",
+    description: "Deliver quality, convenience, and visual appeal with seamless plastic tubes customized for your product.",
   },
-
   {
     image: hero4,
-    badge: "Beverage Packaging Solutions",
-
-    title1: "Packaging That",
-    title2: "Captures The Essence",
-    title3: "Of Pure",
-
-    description:
-      "Imprenta creates distinctive beverage packaging that brings freshness, clarity, and brand identity together from eye-catching labels to high-quality printed solutions.",
+    badge: "Corporate Branding Solutions",
+    title1: "Powerful Branding Solutions",
+    title2: "That Make You",
+    title3: "Stand Out",
+    description: "Build a consistent and memorable brand identity with customized corporate branding solutions.",
   },
+  {
+    image: null,
+    placeholder: "Creative Design Services",
+    badge: "Creative Design Services",
+    title1: "Creative Design Solutions",
+    title2: "That Bring Brands",
+    title3: "to Life",
+    description: "From concept to final artwork, we create impactful designs that communicate your brand with clarity.",
+  },
+  {
+    image: null,
+    placeholder: "Premium Label Solutions",
+    badge: "Premium Label Solutions",
+    title1: "Premium Labels",
+    title2: "That Make Products",
+    title3: "Unforgettable",
+    description: "Make every product stand out with high-quality custom labels designed for impact, clarity, and shelf appeal.",
+  }
 ];
 
 export default heroSlides;

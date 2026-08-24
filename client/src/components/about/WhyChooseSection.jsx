@@ -57,9 +57,9 @@ const WhyChooseSection = () => {
 
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-7 lg:mb-15">
-          <span className="inline-flex rounded-full border border-sky-400/20 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-300 backdrop-blur-xl">
+          {/* <span className="inline-flex rounded-full border border-sky-400/20 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-300 backdrop-blur-xl">
             Why Imprenta
-          </span>
+          </span> */}
           <h2 className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight max-w-4xl">
             Why Leading Brands <span className="text-sky-400 block sm:inline">Choose Imprenta</span>
           </h2>
@@ -75,7 +75,7 @@ const WhyChooseSection = () => {
               <div className="absolute inset-4 rounded-full border border-dotted border-cyan-400/30 animate-[spin_20s_linear_infinite_reverse]"></div>
               <div className="absolute inset-10 rounded-full border border-sky-500/30 bg-sky-950/40 backdrop-blur-md shadow-[0_0_40px_rgba(56,189,248,0.15)] flex items-center justify-center">
                 <div className="relative z-10 flex flex-col items-center justify-center text-center w-full h-full">
-                  <span className="font-bold text-white tracking-[0.2em] text-sm uppercase opacity-90 relative z-10">Imprenta</span>
+                  <span className="font-bold text-white tracking-[0.1em] text-sm uppercase opacity-90 relative z-10">Why Imprenta</span>
                 </div>
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-cyan-400/20 blur-md animate-pulse"></div>
               </div>

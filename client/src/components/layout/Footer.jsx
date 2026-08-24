@@ -10,7 +10,8 @@ import {
   FiYoutube,
   FiChevronRight
 } from "react-icons/fi";
-import FooterTop from "./FooterTop";
+import NewsletterSection from "../home/NewsletterSection";
+import ContactCTA from "../contact/ContactCTA";
 import { fetchSettings } from "../../services/api";
 import logo from "../../assets/logo/logo.png";
 
@@ -33,7 +34,8 @@ const Footer = () => {
 
   return (
     <>
-      <FooterTop />
+      <NewsletterSection />
+      <ContactCTA />
 
       <footer className="relative bg-[#050B14] border-t border-white/10 pt-20 pb-8 overflow-hidden z-20">
 
@@ -149,7 +151,7 @@ const Footer = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1">Head Office</span>
-                      <span className="leading-relaxed text-slate-300 text-sm group-hover:text-slate-200 transition-colors">{settings?.address || "Gala No. C-2, Dungra Park, Vapi, Gujarat-396195"}</span>
+                      <span className="leading-relaxed text-slate-300 text-sm group-hover:text-slate-200 transition-colors">{settings?.address || "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721"}</span>
                     </div>
                   </div>
                 </li>

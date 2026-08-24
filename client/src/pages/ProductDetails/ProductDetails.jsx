@@ -51,6 +51,34 @@ const ProductDetails = () => {
   // Tabs
   const [activeTab, setActiveTab] = useState("description"); // description, specs, features
 
+  // Auto Rotation Timer
+  useEffect(() => {
+    if (!product) return;
+    const gImages = [];
+    if (product.mainImage?.url) gImages.push(product.mainImage.url);
+    if (product.images?.length > 0) {
+      product.images.forEach(img => {
+        if (img.url && !gImages.includes(img.url)) gImages.push(img.url);
+      });
+    }
+    if (product.image && !gImages.includes(product.image)) {
+      gImages.push(product.image);
+    }
+
+    if (gImages.length <= 1) return;
+
+    const timer = setInterval(() => {
+      setActiveImage(currentVal => {
+        const idx = gImages.indexOf(currentVal);
+        if (idx === -1) return currentVal;
+        const nextIdx = (idx + 1) % gImages.length;
+        return gImages[nextIdx];
+      });
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, [product]);
+
   useEffect(() => {
     const getProduct = async () => {
       try {
@@ -348,8 +376,8 @@ const ProductDetails = () => {
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19">
 
         {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-sm text-slate-400 mb-8 font-medium">
-          <Link to="/" className="hover:text-white transition">Home</Link>
+        <div className="flex flex-wrap items-center gap-2 text-sm text-slate-400 mb-8 font-medium">
+          <Link to="/" className="hover:text-white transition whitespace-nowrap">Home</Link>
           <FiChevronRight />
           <Link to="/products" className="hover:text-white transition">Products</Link>
           {product.category?.name && (
@@ -540,7 +568,7 @@ const ProductDetails = () => {
                   {product.category.configurator.allowCustomSize && (
                     <div className="pt-4 mt-4 border-t border-white/10">
                       <label className="block text-[11px] font-black text-[#6E8098] uppercase tracking-widest mb-3">Custom Dimensions</label>
-                      <div className="grid grid-cols-3 gap-3 animate-fade-in bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-md">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 animate-fade-in bg-white/5 p-4 rounded-xl border border-white/10 backdrop-blur-md">
                         <div>
                           <span className="text-[10px] text-[#6E8098] font-bold block mb-1 uppercase tracking-widest">Width</span>
                           <input type="number" value={customWidth} onChange={(e) => setCustomWidth(e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 outline-none text-white focus:border-sky-400 transition text-sm" placeholder="0.0" />
@@ -631,7 +659,7 @@ const ProductDetails = () => {
 
                 <button
                   onClick={() => setQuoteOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-white font-black px-8 py-4 rounded-xl transition-all shadow-md border border-sky-500/50"
+                  className="w-full h-auto min-h-[56px] flex flex-wrap items-center justify-center gap-2 bg-sky-500/10 text-sky-400 hover:bg-sky-500 hover:text-white font-black px-4 sm:px-8 py-3 sm:py-4 rounded-xl transition-all shadow-md border border-sky-500/50 text-center leading-normal text-sm sm:text-base"
                 >
                   Submit Configuration for Quote
                 </button>
@@ -648,7 +676,7 @@ const ProductDetails = () => {
       </div>
 
       {/* BOTTOM CONTENT AREA */}
-      <div className="mt-20 xl:mt-32 border-t border-white/10 pt-16 max-w-5xl mx-auto">
+      <div className="mt-20 xl:mt-32 border-t border-white/10 pt-16 max-w-5xl mx-auto px-4 sm:px-7">
 
         {/* Tabs Navbar */}
         <div className="flex overflow-x-auto gap-8 border-b border-white/10 pb-4 mb-8 custom-scrollbar">
@@ -658,9 +686,9 @@ const ProductDetails = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="prose prose-invert max-w-none prose-a:text-[#00D4FF]">
+        <div className="prose prose-invert max-w-none prose-a:text-[#00D4FF] break-words">
           {activeTab === "description" && (
-            <div className="text-[#A0AEC0] text-sm leading-7 whitespace-pre-wrap">
+            <div className="text-[#A0AEC0] text-sm leading-7 whitespace-pre-wrap break-words">
               {product.description || product.shortDescription}
             </div>
           )}

@@ -26,6 +26,8 @@ import Process from "../pages/Process/Process";
 import Team from "../pages/Team/Team";
 import Blog from "../pages/Blog/Blog";
 import BlogDetails from "../pages/Blog/BlogDetails";
+import PrivacyPolicy from "../pages/Legal/PrivacyPolicy";
+import Terms from "../pages/Legal/Terms";
 
 import PageTransition from "../components/common/PageTransition";
 import ScrollToTop from "../components/common/ScrollToTop";
@@ -224,6 +226,28 @@ const AnimatedRoutes = () => {
               <PageTransition>
                 <Signup />
               </PageTransition>
+            }
+          />
+
+          <Route
+            path="/privacy-policy"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <PrivacyPolicy />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/terms"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <Terms />
+                </PageTransition>
+              </MainLayout>
             }
           />
 

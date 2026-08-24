@@ -9,7 +9,7 @@ import WhyChooseSection from "../../components/about/WhyChooseSection";
 
 import Categories from "../../components/home/Categories";
 import CategoryProductShowcase from "../../components/home/CategoryProductShowcase";
-import NewsletterSection from "../../components/home/NewsletterSection";
+
 
 const Home = () => {
   return (
@@ -37,7 +37,7 @@ const Home = () => {
       {/* 7. Why Imprenta */}
       <WhyChooseSection />
 
-      <NewsletterSection />
+
 
 
     </>

@@ -17,13 +17,13 @@ const contactCards = [
   {
     icon: <FiMail size={26} />,
     title: "Email Us",
-    value: "info@imprenta.com",
+    value: "info@imprenta.in",
     sub: "We'll reply within 24 hours",
   },
   {
     icon: <FiMapPin size={26} />,
     title: "Visit Office",
-    value: "Gala No. C-2, Dungra Park, Vapi, Gujarat-396195",
+    value: "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721",
     sub: "India",
   },
   {
@@ -31,6 +31,12 @@ const contactCards = [
     title: "Working Hours",
     value: "Mon - Sat",
     sub: "09:00 AM - 07:00 PM",
+  },
+  {
+    icon: <FiMapPin size={26} />,
+    title: "Manufacturing & Factory",
+    value: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
+    sub: "India",
   },
 ];
 
@@ -62,13 +68,13 @@ const ContactInfo = () => {
       {
         icon: <FiMail size={26} />,
         title: "Email Us",
-        value: settings?.email || "info@imprenta.com",
+        value: settings?.email || "contact@imprenta.in",
         sub: "We'll reply within 24 hours",
       },
       {
         icon: <FiMapPin size={26} />,
         title: "Visit Office",
-        value: settings?.address || "Gala No. C-2, Dungra Park, Vapi, Gujarat-396195",
+        value: settings?.address || "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721",
         sub: "India",
       },
       {
@@ -76,6 +82,12 @@ const ContactInfo = () => {
         title: "Working Hours",
         value: "Mon - Sat",
         sub: "09:00 AM - 07:00 PM",
+      },
+      {
+        icon: <FiMapPin size={26} />,
+        title: "Manufacturing & Factory",
+        value: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
+        sub: "India",
       },
     ];
   };

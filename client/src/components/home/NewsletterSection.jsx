@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchHomepage, getImageUrl } from "../../services/api";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiCheckCircle } from "react-icons/fi";
 import defaultNewsletterImage from "../../assets/images/newsletter/newsletter.png";
 
 const NewsletterSection = () => {
