@@ -22,9 +22,8 @@ const contactCards = [
   },
   {
     icon: <FiMapPin size={26} />,
-    title: "Visit Office",
-    value: "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721",
-    sub: "India",
+    title: "Registered Office",
+    value: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
   },
   {
     icon: <FiClock size={26} />,
@@ -35,8 +34,7 @@ const contactCards = [
   {
     icon: <FiMapPin size={26} />,
     title: "Manufacturing & Factory",
-    value: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
-    sub: "India",
+    value: "Plot No: - 822/1, Block No:- 2024/1, Rakanpur Gam Road, Nr. Leo Polymers, Rakanpur, Tal:- Kalol, Dist.:- Gandhinagar Gujarat:- 382 721",
   },
 ];
 
@@ -73,9 +71,8 @@ const ContactInfo = () => {
       },
       {
         icon: <FiMapPin size={26} />,
-        title: "Visit Office",
-        value: settings?.address || "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721",
-        sub: "India",
+        title: "Registered Office",
+        value: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
       },
       {
         icon: <FiClock size={26} />,
@@ -86,8 +83,7 @@ const ContactInfo = () => {
       {
         icon: <FiMapPin size={26} />,
         title: "Manufacturing & Factory",
-        value: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
-        sub: "India",
+        value: "Plot No: - 822/1, Block No:- 2024/1, Rakanpur Gam Road, Nr. Leo Polymers, Rakanpur, Tal:- Kalol, Dist.:- Gandhinagar Gujarat:- 382 721",
       },
     ];
   };
@@ -121,7 +117,7 @@ const ContactInfo = () => {
 
         </div>
 
-        <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-16 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:gap-8">
 
           {getDynamicCards().map((card) => (
 
@@ -135,12 +131,15 @@ const ContactInfo = () => {
                 border
                 border-white/10
                 bg-white/5
-                p-8
+                p-6
+                xl:p-8
                 backdrop-blur-2xl
                 transition-all
                 duration-500
                 hover:-translate-y-2
                 hover:border-sky-400/40
+                flex
+                flex-col
               "
             >
 
@@ -167,23 +166,23 @@ const ContactInfo = () => {
                 {card.icon}
               </div>
 
-              <h3 className="mt-8 text-2xl font-bold text-white">
+              <h3 className="mt-8 text-xl xl:text-2xl font-bold text-white">
 
                 {card.title}
 
               </h3>
 
-              <p className="mt-4 text-lg font-semibold text-sky-300 break-words">
+              <p className="mt-4 text-base xl:text-lg font-semibold text-sky-300 break-words">
 
                 {card.value}
 
               </p>
 
-              <p className="mt-3 leading-7 text-slate-400">
-
-                {card.sub}
-
-              </p>
+              {card.sub && (
+                <p className="mt-3 leading-7 text-slate-400">
+                  {card.sub}
+                </p>
+              )}
 
             </div>
 

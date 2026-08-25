@@ -8,20 +8,22 @@ const mapLocations = [
   {
     id: 1,
     title: "Corporate Office",
-    address: "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721",
+    address: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
     hours: "Monday - Saturday | 09:00 AM - 07:00 PM",
-    iframe: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3669.8320600476895!2d72.47980157600966!3d23.103242813311645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e9dacfd05b723%3A0x7f18ea5dc570ffcb!2sImprenta%20Private%20Limited!5e0!3m2!1sen!2sin!4v1787551996425!5m2!1sen!2sin",
+    iframe: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.8341654159053!2d72.93628567595752!3d20.348468410794897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0cf9b0b7f9ebb%3A0xad1acd77551106dc!2sScancode%20Auto%20ID%20Technology%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1786100899592!5m2!1sen!2sin",
     query: "Imprenta+Private+Limited,+Rakanpur",
   },
   {
     id: 2,
     title: "Manufacturing & Factory",
-    address: "Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195",
+    address: "Plot No: - 822/1, Block No:- 2024/1, Rakanpur Gam Road, Nr. Leo Polymers, Rakanpur, Tal:- Kalol, Dist.:- Gandhinagar Gujarat:- 382 721",
+    iframe: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3669.8320600476895!2d72.47980157600966!3d23.103242813311645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e9dacfd05b723%3A0x7f18ea5dc570ffcb!2sImprenta%20Private%20Limited!5e0!3m2!1sen!2sin!4v1787551996425!5m2!1sen!2sin",
     hours: "Monday - Saturday | 09:00 AM - 07:00 PM",
-    iframe: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.8341654159053!2d72.93628567595752!3d20.348468410794897!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0cf9b0b7f9ebb%3A0xad1acd77551106dc!2sScancode%20Auto%20ID%20Technology%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1786100899592!5m2!1sen!2sin",
     query: "Scancode+Auto+ID+Technology,+Vapi",
   }
 ];
+
+
 
 const ContactMap = () => {
   return (

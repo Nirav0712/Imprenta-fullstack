@@ -104,7 +104,7 @@ const PrivacyPolicy = () => {
                         <ul className="mt-2 list-none space-y-1 text-sky-300">
                             <li>Phone: +91 94270 61888</li>
                             <li>Email: contact@imprenta.in</li>
-                            <li>Address: Gala No :- C-2, Dungra Park, GIDC, Vapi, Gujarat 396195</li>
+                            <li>Address: Plot No: - 822/1, Block No:- 2024/1, Rakanpur Gam Road, Nr. Leo Polymers, Rakanpur, Tal:- Kalol, Dist.:- Gandhinagar Gujarat:- 382 721</li>
                         </ul>
                     </section>
                 </div>
