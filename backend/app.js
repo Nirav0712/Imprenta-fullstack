@@ -12,6 +12,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import themeRoutes from "./routes/themeRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
+import heroSlideRoutes from "./routes/heroSlideRoutes.js";
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/theme", themeRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/hero-slides", heroSlideRoutes);
 
 // Test Route
 

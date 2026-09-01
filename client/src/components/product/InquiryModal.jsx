@@ -70,7 +70,7 @@ const InquiryModal = ({ isOpen, onClose, product }) => {
                 ) : (
                     <>
                         <div className="mb-6">
-                            <h2 className="text-2xl font-bold text-white">Inquire for Price</h2>
+                            <h2 className="text-2xl font-bold text-white">Inquiry for Price</h2>
                             <p className="text-slate-400 mt-2 text-sm">
                                 Fill out the form below to get a custom quote for <span className="font-semibold text-sky-400">{product.title || product.name}</span>.
                             </p>

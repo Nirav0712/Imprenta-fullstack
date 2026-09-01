@@ -8,8 +8,10 @@ const HomepageCMS = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [form, setForm] = useState({
+        heroBadge: "",
         heroTitle: "",
         heroSubtitle: "",
+        heroImage: "",
         servicesTitle: "",
         servicesDescription: "",
         newsletterEnabled: true,
@@ -47,6 +49,22 @@ const HomepageCMS = () => {
             setSaving(true);
             const response = await uploadService.uploadImage(file);
             setForm((prev) => ({ ...prev, newsletterImage: response.image.url }));
+        } catch (error) {
+            console.error(error);
+            alert("Image upload failed");
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleHeroImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setSaving(true);
+            const response = await uploadService.uploadImage(file);
+            setForm((prev) => ({ ...prev, heroImage: response.image.url }));
         } catch (error) {
             console.error(error);
             alert("Image upload failed");
@@ -96,6 +114,45 @@ const HomepageCMS = () => {
                         <section className="rounded-3xl border border-white/10 bg-[#101B2D] p-6 lg:p-8">
                             <h2 className="text-2xl font-bold text-white mb-6">Hero Section</h2>
                             <div className="space-y-5">
+                                {/* Image Upload */}
+                                <div>
+                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Hero Image</label>
+                                    {form.heroImage ? (
+                                        <div className="relative w-full max-w-sm rounded-xl overflow-hidden border border-white/10">
+                                            <img src={form.heroImage} alt="Hero" className="w-full h-40 object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => setForm({ ...form, heroImage: "" })}
+                                                className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
+                                            >
+                                                <FiTrash2 />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="relative w-full max-w-sm border-2 border-dashed border-white/10 rounded-xl bg-[#08111F] hover:border-sky-500 transition-colors p-6 flex flex-col items-center justify-center cursor-pointer">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                onChange={handleHeroImageUpload}
+                                                disabled={saving}
+                                            />
+                                            <FiUploadCloud size={30} className="text-sky-400 mb-2" />
+                                            <span className="text-slate-400 text-sm font-semibold">Upload Image</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Badge / Eyebrow Text</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={form.heroBadge || ""}
+                                        onChange={(e) => setForm({ ...form, heroBadge: e.target.value })}
+                                        placeholder="Premium Paper Packaging Solutions"
+                                        className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
+                                    />
+                                </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-semibold text-slate-400">Hero Title / Tagline</label>
                                     <input
@@ -106,6 +163,7 @@ const HomepageCMS = () => {
                                         className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500"
                                     />
                                 </div>
+
                                 <div>
                                     <label className="mb-2 block text-sm font-semibold text-slate-400">Hero Subtitle</label>
                                     <textarea

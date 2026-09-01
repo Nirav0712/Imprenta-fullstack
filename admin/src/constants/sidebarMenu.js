@@ -34,6 +34,11 @@ export const sidebarMenu = [
     path: "/homepage",
   },
   {
+    title: "Hero Slider CMS",
+    icon: FiLayout,
+    path: "/hero-slider",
+  },
+  {
     title: "Orders",
     icon: FiShoppingBag,
     path: "/orders",

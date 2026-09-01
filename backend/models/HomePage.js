@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const homePageSchema = new mongoose.Schema(
     {
+        heroBadge: { type: String, default: "Premium Paper Packaging Solutions" },
         heroTitle: { type: String, default: "Premium Packaging Solutions" },
         heroSubtitle: { type: String, default: "Elevate your brand with our custom packaging." },
         heroImage: { type: String, default: "" },

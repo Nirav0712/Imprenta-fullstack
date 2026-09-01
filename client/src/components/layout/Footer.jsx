@@ -58,7 +58,7 @@ const Footer = () => {
               </p>
 
               {/* Social Icons */}
-              <div className="flex items-center gap-3 mt-2">
+              {/* <div className="flex items-center gap-3 mt-2">
                 <a href={settings?.facebook || "#"} className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-sky-500 hover:border-sky-500 transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.1)] hover:-translate-y-1">
                   <FiFacebook size={18} />
                 </a>
@@ -71,7 +71,7 @@ const Footer = () => {
                 <a href={settings?.youtube || "#"} className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:text-white hover:bg-red-600 hover:border-red-600 transition-all duration-300 shadow-[0_4px_15px_rgba(0,0,0,0.1)] hover:-translate-y-1">
                   <FiYoutube size={18} />
                 </a>
-              </div>
+              </div> */}
             </div>
 
             {/* COLUMN 2: QUICK LINKS */}

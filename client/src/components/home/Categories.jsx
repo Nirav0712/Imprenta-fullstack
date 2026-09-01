@@ -120,52 +120,102 @@ const Categories = () => {
       </div>
 
       {/* Preview Area */}
-      <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-[21/9] rounded-[32px] overflow-hidden border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.4)] group bg-[#0a1526]">
-        {categories.map(cat => {
+      <div className="relative w-full min-h-[550px] sm:min-h-[500px] lg:aspect-[21/9] rounded-[32px] overflow-hidden border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.4)] bg-[#0a1526]/80 backdrop-blur-xl group flex">
+        {categories.map((cat, index) => {
           const isActive = (activeCategory?._id && activeCategory._id === cat._id) ||
             (activeCategory?.id && activeCategory.id === cat.id) ||
             (activeCategory?.slug && activeCategory.slug === cat.slug);
+
+          // Front-end friendly copy enhancements based on category name
+          const categoryName = cat.name?.toLowerCase() || '';
+          let frontendFeatures = [];
+
+          if (categoryName.includes('shrink')) {
+            frontendFeatures = ["360° Custom Branding", "Tamper-Evident Security", "Vibrant Print Quality", "Conforms to Any Shape"];
+          } else if (categoryName.includes('mono carton') || categoryName.includes('carton')) {
+            frontendFeatures = ["Premium Die-Cut Precision", "Sustainable Materials", "High-Durability Finish", "Custom Embellishments"];
+          } else if (categoryName.includes('tube')) {
+            frontendFeatures = ["Leak-Proof Sealing", "Gloss & Matte Finishes", "Food-Grade Compliant", "Multi-Layer Protection"];
+          } else if (categoryName.includes('label') || categoryName.includes('sticker')) {
+            frontendFeatures = ["Water-Resistant Coating", "Strong Adhesive Bond", "UV Protected Inks", "Roll or Sheet Formats"];
+          } else if (categoryName.includes('pouch') || categoryName.includes('flexible')) {
+            frontendFeatures = ["High Barrier Protection", "Resealable Zippers", "Stand-Up Capabilities", "Extended Shelf Life"];
+          } else {
+            frontendFeatures = ["Premium Quality Output", "Customizable Dimensions", "Fast Turnaround Time", "Dedicated Support"];
+          }
+
+          const defaultDesc = `Discover our premium ${cat.name} packaging solutions designed to elevate your brand presence and ensure structural integrity. Crafted with precision and state-of-the-art technology to meet your exact specifications.`;
+
           return (
             <div
-              key={cat._id || cat.id || cat.slug}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+              key={cat._id || cat.id || cat.slug || index}
+              className={`absolute inset-0 flex flex-col-reverse lg:flex-row transition-all duration-700 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
             >
-              {/* Image Source resolution */}
-              {(() => {
-                const mappedSrc = getSrcFromMap(cat.image);
-                const finalSrc = mappedSrc || cat.image;
-                if (finalSrc) {
-                  return (
-                    <img
-                      src={finalSrc}
-                      alt={cat.name}
-                      className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
-                      onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                  );
-                }
-                return <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500">No Image Available</div>;
-              })()}
+              {/* Left Side: Content */}
+              <div className="w-full lg:w-[55%] flex flex-col justify-center p-6 sm:p-10 lg:p-14 z-20 bg-[#0a1526] lg:bg-transparent lg:bg-gradient-to-r lg:from-[#0a1526] lg:via-[#0a1526]/95 lg:to-transparent">
+                <div className={`transform transition-all duration-700 ease-out delay-100 ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+                  <div className="mb-4 inline-flex items-center">
+                    <span className="inline-flex rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-300 backdrop-blur-xl uppercase tracking-wider">
+                      Product Showcase
+                    </span>
+                  </div>
+                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight leading-tight">
+                    {cat.name}
+                  </h3>
+                  <p className="text-slate-300 sm:text-lg leading-relaxed mb-8 max-w-xl line-clamp-3">
+                    {cat.description || defaultDesc}
+                  </p>
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020813] via-[#020813]/60 to-transparent"></div>
+                  {/* Features / Supporting Info */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-10 max-w-lg">
+                    {frontendFeatures.map((feature, i) => (
+                      <div key={i} className="flex items-center gap-3">
+                        <div className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-sky-500/20 border border-sky-400/30">
+                          <div className="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]"></div>
+                        </div>
+                        <span className="text-sm flex-1 sm:text-base text-slate-300 font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
 
-              {/* Content Block */}
-              <div className="absolute bottom-0 left-0 right-0 p-8 sm:p-10 lg:p-14 flex flex-col md:flex-row md:items-end justify-between gap-6 transform transition-all duration-700 translate-y-0 opacity-100">
-                <div className="flex-1 max-w-3xl">
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight">{cat.name}</h3>
-                  {cat.description && (
-                    <p className="text-slate-300 lg:text-lg leading-relaxed line-clamp-2 md:line-clamp-3">
-                      {cat.description}
-                    </p>
-                  )}
+                  <Link
+                    to={`/products?category=${cat.slug}`}
+                    className="inline-flex items-center gap-3 rounded-full bg-sky-500 hover:bg-sky-400 text-white px-7 py-3.5 font-bold transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_rgba(56,189,248,0.4)] border border-sky-400/50 group/btn"
+                  >
+                    <span>Explore Product</span>
+                    <svg className="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </Link>
                 </div>
-                <Link
-                  to={`/products?category=${cat.slug}`}
-                  className="shrink-0 inline-flex items-center gap-2 rounded-full bg-sky-500 hover:bg-sky-400 text-white px-8 py-4 font-bold transition-all duration-300 hover:scale-105 shadow-[0_0_15px_rgba(56,189,248,0.3)] hover:shadow-[0_0_25px_rgba(56,189,248,0.5)]"
-                >
-                  Explore Products <span className="text-lg">&rarr;</span>
-                </Link>
+              </div>
+
+              {/* Right Side: Image */}
+              <div
+                className={`relative w-full lg:w-[45%] h-[280px] sm:h-[400px] lg:h-full shrink-0 overflow-hidden transform transition-all duration-[1000ms] ease-out origin-right ${isActive ? 'scale-100 opacity-100' : 'scale-105 opacity-0'}`}
+              >
+                {/* Image Source resolution */}
+                {(() => {
+                  const mappedSrc = getSrcFromMap(cat.image);
+                  const finalSrc = mappedSrc || cat.image;
+                  if (finalSrc) {
+                    return (
+                      <img
+                        src={finalSrc}
+                        alt={cat.name}
+                        className="w-full h-full object-cover object-center transition-transform duration-[2000ms] ease-out group-hover:scale-105"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    );
+                  }
+                  return <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500">No Image Available</div>;
+                })()}
+
+                {/* Depth / Shadows overlay for image */}
+                <div className="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-transparent via-transparent to-[#0a1526]/40 pointer-events-none"></div>
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a1526] to-transparent lg:hidden pointer-events-none"></div>
+                <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0a1526] to-transparent hidden lg:block pointer-events-none"></div>
+                <div className="absolute inset-0 lg:border-l border-white/10 pointer-events-none"></div>
               </div>
             </div>
           );

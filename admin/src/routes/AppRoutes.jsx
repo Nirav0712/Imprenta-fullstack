@@ -18,6 +18,7 @@ import AddCategory from "../pages/categories/AddCategory";
 import EditCategory from "../pages/categories/EditCategory";
 
 import HomepageCMS from "../pages/homepage/HomepageCMS";
+import HeroSliderCMS from "../pages/homepage/HeroSliderCMS";
 import Orders from "../pages/orders/Orders";
 import RequestSamples from "../pages/requestSamples/RequestSamples";
 import Contact from "../pages/contact/Contact";
@@ -95,6 +96,11 @@ const AppRoutes = () => {
           <Route
             path="/homepage"
             element={<HomepageCMS />}
+          />
+
+          <Route
+            path="/hero-slider"
+            element={<HeroSliderCMS />}
           />
 
           <Route

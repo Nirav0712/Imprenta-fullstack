@@ -77,7 +77,7 @@ const ProductCard = ({ product, hidePrice = false }) => {
                 onClick={handleInquireClick}
                 className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-white/10 px-3 py-2 text-xs sm:text-sm font-semibold text-white transition-all hover:bg-sky-500 hover:text-white"
               >
-                Inquire for Price
+                Inquiry for Price
               </button>
             </div>
           )}

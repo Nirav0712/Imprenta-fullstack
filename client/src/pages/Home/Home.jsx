@@ -21,7 +21,7 @@ const Home = () => {
       <AboutHero />
 
       {/* 3. Manufacturing */}
-      <ManufacturingCapabilities />
+      {/* <ManufacturingCapabilities /> */}
 
       {/* 4. What We Offer */}
       {/* <WhatWeOffer /> */}

@@ -132,6 +132,11 @@ export const fetchHomepage = async () => {
     return response.data;
 };
 
+export const fetchHeroSlides = async () => {
+    const response = await api.get("/hero-slides");
+    return response.data;
+};
+
 export const fetchOrders = async () => (await api.get("/orders")).data;
 export const fetchOrderById = async (id) => (await api.get(`/orders/${id}`)).data;
 
