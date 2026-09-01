@@ -39,14 +39,11 @@ const Contact = () => {
     <>
       <ContactHero />
 
-      <ContactInfo />
-
       <ContactForm />
 
+      <ContactInfo />
+
       <ContactMap />
-
-      <FAQ />
-
 
     </>
   );

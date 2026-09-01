@@ -80,7 +80,7 @@ const AnimatedRoutes = () => {
             }
           />
 
-          <Route
+          {/* <Route
             path="/team"
             element={
               <MainLayout>
@@ -89,7 +89,7 @@ const AnimatedRoutes = () => {
                 </PageTransition>
               </MainLayout>
             }
-          />
+          /> */}
 
           <Route
             path="/blog"

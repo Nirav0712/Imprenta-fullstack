@@ -201,7 +201,7 @@ const Navbar = () => {
                 <div className="p-3">
                   <Link to="/about" className="block px-4 py-3 text-slate-700 hover:bg-sky-50 hover:text-sky-500 rounded-xl transition-all font-medium">Who We Are</Link>
                   <Link to="/process" className="block px-4 py-3 text-slate-700 hover:bg-sky-50 hover:text-sky-500 rounded-xl transition-all font-medium">Our Process</Link>
-                  <Link to="/team" className="block px-4 py-3 text-slate-700 hover:bg-sky-50 hover:text-sky-500 rounded-xl transition-all font-medium">Our Team</Link>
+                  {/* <Link to="/team" className="block px-4 py-3 text-slate-700 hover:bg-sky-50 hover:text-sky-500 rounded-xl transition-all font-medium">Our Team</Link> */}
                 </div>
               </div>
             </div>
@@ -685,7 +685,7 @@ const Navbar = () => {
                     <div className="px-5 pb-4 pt-1 space-y-2 border-t border-white/5 bg-black/20">
                       <Link to="/about" onClick={() => setMobileMenu(false)} className="block py-2 text-sm text-slate-300 hover:text-sky-400">Who We Are</Link>
                       <Link to="/process" onClick={() => setMobileMenu(false)} className="block py-2 text-sm text-slate-300 hover:text-sky-400">Our Process</Link>
-                      <Link to="/team" onClick={() => setMobileMenu(false)} className="block py-2 text-sm text-slate-300 hover:text-sky-400">Our Team</Link>
+                      {/* <Link to="/team" onClick={() => setMobileMenu(false)} className="block py-2 text-sm text-slate-300 hover:text-sky-400">Our Team</Link> */}
                     </div>
                   )}
                 </div>

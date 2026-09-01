@@ -11,11 +11,11 @@ const About = () => {
 
       <ManufacturingCapabilities />
 
-      <IndustriesSection />
+      {/* <IndustriesSection /> */}
 
       <WorkflowSection />
 
-      <WhyChooseSection />
+      {/* <WhyChooseSection /> */}
     </>
   );
 };

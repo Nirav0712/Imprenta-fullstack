@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FiPhone,
   FiMail,
@@ -32,10 +32,17 @@ const Footer = () => {
     getSettings();
   }, []);
 
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
+  const isContactPage = location.pathname === "/contact";
+
+  const showNewsletter = isHomePage;
+  const showContactCTA = isHomePage || isContactPage;
+
   return (
     <>
-      <NewsletterSection />
-      <ContactCTA />
+      {showNewsletter && <NewsletterSection />}
+      {showContactCTA && <ContactCTA />}
 
       <footer className="relative bg-[#050B14] border-t border-white/10 pt-20 pb-8 overflow-hidden z-20">
 

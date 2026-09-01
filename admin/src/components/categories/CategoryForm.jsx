@@ -38,6 +38,7 @@ const CategoryForm = ({ isEdit = false, initialData = null, categoryId = null })
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!name) return alert("Category Name is required");
+        if (description && description.length > 500) return alert("Description cannot exceed 500 characters.");
 
         try {
             setFormLoading(true);

@@ -52,7 +52,7 @@ const ProductCard = ({ product, hidePrice = false }) => {
 
         <div className="mt-4 px-1">
 
-          <h3 className="line-clamp-2 text-[15px] sm:text-[16px] leading-[1.3] font-semibold text-white transition duration-300 group-hover:text-sky-400">
+          <h3 className="whitespace-nowrap overflow-hidden text-ellipsis block w-full text-[15px] sm:text-[16px] leading-[1.3] font-semibold text-white transition duration-300 group-hover:text-sky-400">
             {product.title}
           </h3>
 

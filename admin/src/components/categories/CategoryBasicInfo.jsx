@@ -48,12 +48,24 @@ const CategoryBasicInfo = ({
                 </div>
 
                 <div>
-                    <label className="mb-2 block text-sm font-semibold text-slate-400">Description</label>
+                    <div className="mb-2 flex items-center justify-between">
+                        <label className="block text-sm font-semibold text-slate-400">Description</label>
+                        <span className={`text-xs font-bold ${description?.length >= 500 ? 'text-red-500' : 'text-slate-500'}`}>
+                            {(description || "").length} / 500
+                        </span>
+                    </div>
                     <textarea
                         rows="3"
                         value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="w-full rounded-xl border border-white/10 bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500 resize-none"
+                        onChange={(e) => {
+                            const val = e.target.value;
+                            if (val.length <= 500) {
+                                setDescription(val);
+                            } else {
+                                setDescription(val.substring(0, 500));
+                            }
+                        }}
+                        className={`w-full rounded-xl border bg-[#08111F] px-4 py-3 text-white outline-none focus:border-sky-500 resize-none ${description?.length >= 500 ? 'border-red-500/50' : 'border-white/10'}`}
                         placeholder="Describe what goes inside this category..."
                     ></textarea>
                 </div>
