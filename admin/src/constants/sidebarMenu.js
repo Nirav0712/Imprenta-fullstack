@@ -10,6 +10,8 @@ import {
   FiFileText,
   FiLayout,
   FiMessageCircle,
+  FiMonitor,
+  FiTrendingUp,
 } from "react-icons/fi";
 
 export const sidebarMenu = [
@@ -19,34 +21,67 @@ export const sidebarMenu = [
     path: "/dashboard",
   },
   {
-    title: "Products",
+    title: "Website Management",
+    icon: FiMonitor,
+    children: [
+      {
+        title: "Homepage CMS",
+        icon: FiHome,
+        path: "/homepage",
+      },
+      {
+        title: "Home Slider CMS",
+        icon: FiLayout,
+        path: "/hero-slider",
+      },
+      {
+        title: "Theme Customization",
+        icon: FiLayout,
+        path: "/theme-customization",
+      },
+      {
+        title: "Blog",
+        icon: FiFileText,
+        path: "/blogs",
+      },
+    ]
+  },
+  {
+    title: "Catalog Management",
     icon: FiBox,
-    path: "/products",
+    children: [
+      {
+        title: "Categories",
+        icon: FiLayers,
+        path: "/categories",
+      },
+      {
+        title: "Products",
+        icon: FiBox,
+        path: "/products",
+      },
+    ]
   },
   {
-    title: "Categories",
-    icon: FiLayers,
-    path: "/categories",
-  },
-  {
-    title: "Homepage CMS",
-    icon: FiHome,
-    path: "/homepage",
-  },
-  {
-    title: "Hero Slider CMS",
-    icon: FiLayout,
-    path: "/hero-slider",
-  },
-  {
-    title: "Orders",
-    icon: FiShoppingBag,
-    path: "/orders",
-  },
-  {
-    title: "Request Sample",
-    icon: FiFileText,
-    path: "/request-sample",
+    title: "Sales & Enquiries",
+    icon: FiTrendingUp,
+    children: [
+      {
+        title: "Orders",
+        icon: FiShoppingBag,
+        path: "/orders",
+      },
+      {
+        title: "Inquiries",
+        icon: FiMessageCircle,
+        path: "/inquiries",
+      },
+      {
+        title: "Request Samples",
+        icon: FiFileText,
+        path: "/request-sample",
+      },
+    ]
   },
   {
     title: "Contact",
@@ -57,16 +92,6 @@ export const sidebarMenu = [
     title: "Users",
     icon: FiUsers,
     path: "/users",
-  },
-  {
-    title: "Theme Customization",
-    icon: FiLayout,
-    path: "/theme-customization",
-  },
-  {
-    title: "Inquiries",
-    icon: FiMessageCircle,
-    path: "/inquiries",
   },
   {
     title: "Settings",

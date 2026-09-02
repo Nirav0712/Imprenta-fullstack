@@ -28,6 +28,10 @@ import Settings from "../pages/settings/Settings";
 import Notifications from "../pages/notifications/Notifications";
 import Inquiries from "../pages/inquiries/Inquiries";
 
+import Blogs from "../pages/blogs/Blogs";
+import AddBlog from "../pages/blogs/AddBlog";
+import EditBlog from "../pages/blogs/EditBlog";
+
 import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -56,6 +60,19 @@ const AppRoutes = () => {
           <Route
             path="/dashboard"
             element={<Dashboard />}
+          />
+
+          <Route
+            path="/blogs"
+            element={<Blogs />}
+          />
+          <Route
+            path="/blogs/add"
+            element={<AddBlog />}
+          />
+          <Route
+            path="/blogs/edit/:id"
+            element={<EditBlog />}
           />
 
           <Route

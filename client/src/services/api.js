@@ -140,6 +140,27 @@ export const fetchHeroSlides = async () => {
 export const fetchOrders = async () => (await api.get("/orders")).data;
 export const fetchOrderById = async (id) => (await api.get(`/orders/${id}`)).data;
 
+// Blogs
+export const fetchBlogs = async (params = {}) => {
+    const response = await api.get("/blogs", { params });
+    // Process image URLs if needed
+    if (response.data?.blogs) {
+        response.data.blogs = response.data.blogs.map(b => ({
+            ...b,
+            image: getImageUrl(b.image)
+        }));
+    }
+    return response.data;
+};
+
+export const fetchBlogBySlug = async (slug) => {
+    const response = await api.get(`/blogs/slug/${slug}`);
+    if (response.data?.blog) {
+        response.data.blog.image = getImageUrl(response.data.blog.image);
+    }
+    return response.data;
+};
+
 // USER CART
 export const fetchCart = async () => (await api.get("/auth/cart")).data;
 export const saveCart = async (cart) => (await api.put("/auth/cart", { cart })).data;
