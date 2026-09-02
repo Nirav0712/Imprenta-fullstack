@@ -300,14 +300,14 @@ const Navbar = () => {
               </button>
 
               <div
-                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-[400px] bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden transition-all duration-300 transform ${activeDropdown === "blog" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
+                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-[400px] bg-[#0F1F38] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transition-all duration-300 transform ${activeDropdown === "blog" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
                   }`}
               >
                 <div className="p-4">
                   <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-3 px-1">Latest Insights</h3>
 
                   {blogsList.length === 0 ? (
-                    <div className="text-center py-6 text-sm text-slate-500">
+                    <div className="text-center py-6 text-sm text-slate-400">
                       No articles available.
                     </div>
                   ) : (
@@ -316,18 +316,18 @@ const Navbar = () => {
                         const date = new Date(blog.publishedAt || blog.createdAt);
                         const dateString = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                         return (
-                          <Link to={`/blog/${blog.slug}`} key={blog._id} className="flex gap-4 group/item p-2 rounded-xl hover:bg-slate-50 transition-colors items-center">
+                          <Link to={`/blog/${blog.slug}`} key={blog._id} className="flex gap-4 group/item p-2 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all items-center">
                             {blog.image ? (
-                              <div className="w-[72px] h-[72px] bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+                              <div className="w-[72px] h-[72px] bg-[#0A1220] rounded-lg overflow-hidden flex-shrink-0 border border-white/5">
                                 <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500" />
                               </div>
                             ) : (
-                              <div className="w-[72px] h-[72px] bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                <FiFileText className="text-slate-400" size={24} />
+                              <div className="w-[72px] h-[72px] bg-[#0A1220] rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center border border-white/5">
+                                <FiFileText className="text-slate-500" size={24} />
                               </div>
                             )}
                             <div className="flex-1 min-w-0 flex flex-col justify-center py-1">
-                              <h4 className="text-[13px] font-bold text-slate-800 group-hover/item:text-sky-500 transition-colors leading-snug break-words">{blog.title}</h4>
+                              <h4 className="text-[13px] font-bold text-white group-hover/item:text-sky-400 transition-colors leading-snug break-words">{blog.title}</h4>
                               <span className="text-[11px] font-medium text-slate-400 mt-1 block">{dateString}</span>
                             </div>
                           </Link>
@@ -336,8 +336,8 @@ const Navbar = () => {
                     </div>
                   )}
 
-                  <div className="mt-2 text-center p-2 bg-sky-50/50 rounded-xl hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-colors">
-                    <Link to="/blog" className="text-[13px] font-bold text-sky-500 hover:text-sky-600 transition-colors flex items-center justify-center gap-1">
+                  <div className="mt-2 text-center p-2 bg-sky-500/10 rounded-xl hover:bg-sky-500/20 border border-sky-500/20 transition-colors">
+                    <Link to="/blog" className="text-[13px] font-bold text-sky-400 hover:text-sky-300 transition-colors flex items-center justify-center gap-1">
                       View All Articles <FiChevronRight size={14} />
                     </Link>
                   </div>
