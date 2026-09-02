@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchCategories, fetchProducts } from "../../services/api";
+import { fetchCategories, fetchProducts, fetchBlogs } from "../../services/api";
 import { Link } from "react-router-dom";
 import SearchBar from "../search/SearchBar";
 import { useCart } from "../../context/CartContext";
@@ -48,6 +48,7 @@ const Navbar = () => {
   const [categoryProducts, setCategoryProducts] = useState({});
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileDropdowns, setMobileDropdowns] = useState({});
+  const [blogsList, setBlogsList] = useState([]);
 
   const toggleMobileDropdown = (name) => {
     setMobileDropdowns(prev => ({ ...prev, [name]: !prev[name] }));
@@ -71,7 +72,20 @@ const Navbar = () => {
         console.error("Failed to load categories:", err);
       }
     };
+
+    const loadBlogs = async () => {
+      try {
+        const data = await fetchBlogs({ status: "published" });
+        if (data && data.blogs) {
+          setBlogsList(data.blogs.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Failed to load blogs:", err);
+      }
+    };
+
     loadCategories();
+    loadBlogs();
   }, []);
 
   useEffect(() => {
@@ -281,34 +295,51 @@ const Navbar = () => {
               onMouseEnter={() => setActiveDropdown("blog")}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center gap-1 text-[15px] font-medium text-slate-300 group-hover:text-sky-400 transition-colors">
+              <button onClick={() => window.location.href = '/blog'} className="flex items-center gap-1 text-[15px] font-medium text-slate-300 group-hover:text-sky-400 transition-colors">
                 Blog <FiChevronDown />
               </button>
 
               <div
-                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform ${activeDropdown === "blog" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
+                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-[400px] bg-white rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden transition-all duration-300 transform ${activeDropdown === "blog" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
                   }`}
               >
-                <div className="p-5">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Latest Insights</h3>
-                  <div className="space-y-4">
-                    <Link to="/blog" className="flex gap-4 group/item">
-                      <div className="w-16 h-16 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0"></div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-slate-700 group-hover/item:text-sky-500 transition-colors line-clamp-2">Latest Trends in Custom Packaging for 2026</h4>
-                        <span className="text-xs text-slate-400 mt-1 block">2 days ago</span>
-                      </div>
+                <div className="p-4">
+                  <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-3 px-1">Latest Insights</h3>
+
+                  {blogsList.length === 0 ? (
+                    <div className="text-center py-6 text-sm text-slate-500">
+                      No articles available.
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      {blogsList.map(blog => {
+                        const date = new Date(blog.publishedAt || blog.createdAt);
+                        const dateString = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                        return (
+                          <Link to={`/blog/${blog.slug}`} key={blog._id} className="flex gap-4 group/item p-2 rounded-xl hover:bg-slate-50 transition-colors items-center">
+                            {blog.image ? (
+                              <div className="w-[72px] h-[72px] bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+                                <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500" />
+                              </div>
+                            ) : (
+                              <div className="w-[72px] h-[72px] bg-slate-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                <FiFileText className="text-slate-400" size={24} />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center py-1">
+                              <h4 className="text-[13px] font-bold text-slate-800 group-hover/item:text-sky-500 transition-colors leading-snug break-words">{blog.title}</h4>
+                              <span className="text-[11px] font-medium text-slate-400 mt-1 block">{dateString}</span>
+                            </div>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  <div className="mt-2 text-center p-2 bg-sky-50/50 rounded-xl hover:bg-sky-50 border border-transparent hover:border-sky-100 transition-colors">
+                    <Link to="/blog" className="text-[13px] font-bold text-sky-500 hover:text-sky-600 transition-colors flex items-center justify-center gap-1">
+                      View All Articles <FiChevronRight size={14} />
                     </Link>
-                    <Link to="/blog" className="flex gap-4 group/item">
-                      <div className="w-16 h-16 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0"></div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-slate-700 group-hover/item:text-sky-500 transition-colors line-clamp-2">How to Choose the Right Paper Stock for Business Cards</h4>
-                        <span className="text-xs text-slate-400 mt-1 block">5 days ago</span>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-slate-100 text-center">
-                    <Link to="/blog" className="text-sm font-semibold text-sky-500 hover:text-sky-600 transition-colors">View All Articles</Link>
                   </div>
                 </div>
               </div>
