@@ -157,8 +157,13 @@ const Footer = () => {
                       <FiMapPin className="text-sky-400" size={16} />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1">Head Office</span>
-                      <span className="leading-relaxed text-slate-300 text-sm group-hover:text-slate-200 transition-colors">{settings?.address || "Plot No:- 822/1, Block No:- 2024/1, Rakanpur-Santej Rd, nr. Leo Polymers, Rakanpur, Gujarat 382721"}</span>
+                      <span className="text-[11px] uppercase tracking-wider text-slate-500 font-bold mb-1">
+                        Head Office
+                      </span>
+
+                      <span className="leading-relaxed text-slate-300 text-sm group-hover:text-slate-200 transition-colors">
+                        GALA NO C-2 DUNGRA PARK MAHAVIR NAGAR 100 SHED AREA VAPI GIDC VALSAD GUJARAT, Vapi, 396195, India
+                      </span>
                     </div>
                   </div>
                 </li>

@@ -66,10 +66,10 @@ const Shop = () => {
 
                 <div className="relative max-w-[900px] mx-auto flex flex-col items-center text-center z-10 w-full">
                     {/* Category Label */}
-                    <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/20 bg-sky-500/10 px-3 py-1 text-[11px] font-bold tracking-[0.2em] text-sky-400 uppercase">
+                    {/* <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-400/20 bg-sky-500/10 px-3 py-1 text-[11px] font-bold tracking-[0.2em] text-sky-400 uppercase">
                         <FiBox size={14} className="shrink-0" />
                         <span>{activeCategory ? "Category Filter" : "Our Collection"}</span>
-                    </div>
+                    </div> */}
 
                     {/* Title */}
                     <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black tracking-tight text-white leading-[1.15] break-words max-w-full">
