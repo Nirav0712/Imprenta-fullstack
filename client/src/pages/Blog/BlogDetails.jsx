@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiClock, FiTag, FiShare2 } from 'react-icons/fi';
 import { fetchBlogBySlug } from '../../services/api';
+import BlogContentRenderer from '../../components/blog/BlogContentRenderer';
 
 const BlogDetails = () => {
     // We treat the matching parameter in URL /blog/:id as a slug or id
@@ -78,8 +79,8 @@ const BlogDetails = () => {
                     <img src={post.image || "https://placehold.co/1200x600/0F1F38/38BDF8?text=Image+Not+Found"} alt={post.title} className="w-full h-full object-cover" />
                 </div>
 
-                <div className="prose prose-lg prose-invert prose-sky max-w-none">
-                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                <div className="max-w-4xl">
+                    <BlogContentRenderer content={post.content} />
                 </div>
 
                 <div className="mt-16 pt-8 border-t border-white/10 flex justify-between items-center">

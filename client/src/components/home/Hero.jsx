@@ -162,40 +162,44 @@ const Hero = () => {
           </div>
 
           {/* RIGHT IMAGE */}
-          <div className="relative">
+          <div className="relative flex items-center justify-center">
 
             {/* Static Glow */}
-            <div className="absolute -inset-8 rounded-[50px] bg-sky-500/20 blur-[90px]"></div>
+            <div className="absolute -inset-10 rounded-full bg-sky-500/20 blur-[100px] pointer-events-none"></div>
 
             <div
               key={activeSlide + "img"}
-              className="relative animate-fadeRight"
+              className="relative animate-fadeRight w-full max-w-xl lg:max-w-2xl mx-auto flex items-center justify-center"
             >
               {slide.image ? (
                 <img
                   src={slide.image}
-                  alt={heading1}
+                  alt={heading1 || "Hero Slide"}
+                  loading="eager"
                   className="
                     w-full
-                    h-full
-                    rounded-[30px]
-                    object-cover
+                    h-auto
+                    max-h-[460px]
+                    sm:max-h-[500px]
+                    lg:max-h-[560px]
+                    aspect-[4/3]
+                    object-contain
                     animate-floating
                     animate-zoom
                     transition-all
                     duration-700
+                    drop-shadow-[0_25px_35px_rgba(0,0,0,0.55)]
                   "
                 />
               ) : (
                 <div className="
                   w-full
-                  h-full
-                  min-h-[350px]
-                  lg:min-h-[500px]
-                  rounded-[30px]
-                  bg-white/5
+                  aspect-[4/3]
+                  max-h-[460px]
+                  rounded-3xl
                   border border-white/10
-                  backdrop-blur-xl
+                  bg-white/5
+                  backdrop-blur-md
                   flex flex-col items-center justify-center
                   animate-floating
                   animate-zoom
@@ -205,7 +209,7 @@ const Hero = () => {
                   p-8
                 ">
                   <span className="text-2xl sm:text-3xl font-bold text-sky-200/60 tracking-wider uppercase">
-                    {slide.placeholder || "Image"}
+                    {slide.placeholder || "Imprenta Packaging"}
                   </span>
                 </div>
               )}

@@ -93,6 +93,7 @@ const Footer = () => {
                 <li><Link to="/process" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Services</Link></li>
                 <li><Link to="/products" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Products</Link></li>
                 <li><Link to="/blog" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Blog</Link></li>
+                <li><Link to="/expo" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Expo</Link></li>
                 <li><Link to="/contact" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Contact Us</Link></li>
               </ul>
             </div>

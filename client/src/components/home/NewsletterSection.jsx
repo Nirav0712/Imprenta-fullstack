@@ -47,14 +47,13 @@ const NewsletterSection = () => {
           <div className="absolute inset-0 bg-sky-400/5 opacity-0 group-hover:opacity-100 transition duration-700 pointer-events-none"></div>
 
           {/* Left: Dynamic Image */}
-          <div className="relative z-10">
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <div className="relative z-10 flex items-center justify-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
               <img
                 src={image}
                 alt="Newsletter"
-                className="w-full h-full object-cover max-h-[500px] transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-auto object-contain rounded-2xl transition-transform duration-500 hover:scale-[1.02]"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-sky-900/30 to-transparent mix-blend-overlay"></div>
             </div>
           </div>
 

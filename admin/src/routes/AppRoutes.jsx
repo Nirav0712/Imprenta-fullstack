@@ -32,6 +32,11 @@ import Blogs from "../pages/blogs/Blogs";
 import AddBlog from "../pages/blogs/AddBlog";
 import EditBlog from "../pages/blogs/EditBlog";
 
+import Expos from "../pages/expos/Expos";
+import AddExpo from "../pages/expos/AddExpo";
+import EditExpo from "../pages/expos/EditExpo";
+import ExpoLeads from "../pages/expos/ExpoLeads";
+
 import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -73,6 +78,24 @@ const AppRoutes = () => {
           <Route
             path="/blogs/edit/:id"
             element={<EditBlog />}
+          />
+
+          {/* Expo Management */}
+          <Route
+            path="/expos"
+            element={<Expos />}
+          />
+          <Route
+            path="/expos/add"
+            element={<AddExpo />}
+          />
+          <Route
+            path="/expos/edit/:id"
+            element={<EditExpo />}
+          />
+          <Route
+            path="/expo-leads"
+            element={<ExpoLeads />}
           />
 
           <Route

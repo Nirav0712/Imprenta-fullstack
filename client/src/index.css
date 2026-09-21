@@ -9,7 +9,7 @@ body,
 #root {
   width: 100%;
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
 }
 
@@ -263,3 +263,67 @@ body,
 .animate-glow {
   animation: glow 4s ease-in-out infinite alternate;
 }
+
+/* ---------- Blog Article Content Typography ---------- */
+.blog-article-content {
+  color: #cbd5e1;
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.blog-article-content p {
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+
+.blog-article-content h1,
+.blog-article-content h2,
+.blog-article-content h3,
+.blog-article-content h4 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.blog-article-content h1 { font-size: 2.25rem; }
+.blog-article-content h2 { font-size: 1.75rem; }
+.blog-article-content h3 { font-size: 1.375rem; }
+.blog-article-content h4 { font-size: 1.125rem; color: #38bdf8; }
+
+.blog-article-content ul,
+.blog-article-content ol {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  color: #cbd5e1;
+}
+
+.blog-article-content ul { list-style-type: disc; }
+.blog-article-content ol { list-style-type: decimal; }
+.blog-article-content li { margin-bottom: 0.5rem; line-height: 1.7; }
+
+.blog-article-content strong,
+.blog-article-content b {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.blog-article-content a {
+  color: #38bdf8;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.blog-article-content a:hover {
+  color: #7dd3fc;
+}
+
+.blog-article-content blockquote {
+  border-left: 4px solid #38bdf8;
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  color: #94a3b8;
+  font-style: italic;
+}

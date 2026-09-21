@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { FiSave } from "react-icons/fi";
 import { homeService } from "../../services/homeService";
 import { uploadService } from "../../services/uploadService";
-import { FiUploadCloud, FiTrash2 } from "react-icons/fi";
+import ImageUploadField from "../../components/common/ImageUploadField";
+
 
 const HomepageCMS = () => {
     const [loading, setLoading] = useState(true);
@@ -114,33 +115,15 @@ const HomepageCMS = () => {
                         <section className="rounded-3xl border border-white/10 bg-[#101B2D] p-6 lg:p-8">
                             <h2 className="text-2xl font-bold text-white mb-6">Hero Section</h2>
                             <div className="space-y-5">
-                                {/* Image Upload */}
+                                {/* Hero Image Upload */}
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Hero Image</label>
-                                    {form.heroImage ? (
-                                        <div className="relative w-full max-w-sm rounded-xl overflow-hidden border border-white/10">
-                                            <img src={form.heroImage} alt="Hero" className="w-full h-40 object-cover" />
-                                            <button
-                                                type="button"
-                                                onClick={() => setForm({ ...form, heroImage: "" })}
-                                                className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
-                                            >
-                                                <FiTrash2 />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="relative w-full max-w-sm border-2 border-dashed border-white/10 rounded-xl bg-[#08111F] hover:border-sky-500 transition-colors p-6 flex flex-col items-center justify-center cursor-pointer">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                                onChange={handleHeroImageUpload}
-                                                disabled={saving}
-                                            />
-                                            <FiUploadCloud size={30} className="text-sky-400 mb-2" />
-                                            <span className="text-slate-400 text-sm font-semibold">Upload Image</span>
-                                        </div>
-                                    )}
+                                    <ImageUploadField
+                                        slotKey="HOMEPAGE_HERO"
+                                        label="Hero Section Image"
+                                        value={form.heroImage}
+                                        autoUpload={true}
+                                        onChange={(url) => setForm((prev) => ({ ...prev, heroImage: url }))}
+                                    />
                                 </div>
                                 <div>
                                     <label className="mb-2 block text-sm font-semibold text-slate-400">Badge / Eyebrow Text</label>
@@ -219,33 +202,15 @@ const HomepageCMS = () => {
                             </div>
 
                             <div className="space-y-5">
-                                {/* Image Upload */}
+                                {/* Newsletter Image Upload */}
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-slate-400">Newsletter Image</label>
-                                    {form.newsletterImage ? (
-                                        <div className="relative w-full max-w-sm rounded-xl overflow-hidden border border-white/10">
-                                            <img src={form.newsletterImage} alt="Newsletter" className="w-full h-40 object-cover" />
-                                            <button
-                                                type="button"
-                                                onClick={() => setForm({ ...form, newsletterImage: "" })}
-                                                className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
-                                            >
-                                                <FiTrash2 />
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="relative w-full max-w-sm border-2 border-dashed border-white/10 rounded-xl bg-[#08111F] hover:border-sky-500 transition-colors p-6 flex flex-col items-center justify-center cursor-pointer">
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                                onChange={handleImageUpload}
-                                                disabled={saving}
-                                            />
-                                            <FiUploadCloud size={30} className="text-sky-400 mb-2" />
-                                            <span className="text-slate-400 text-sm font-semibold">Upload Image</span>
-                                        </div>
-                                    )}
+                                    <ImageUploadField
+                                        slotKey="NEWSLETTER_IMAGE"
+                                        label="Newsletter Section Image"
+                                        value={form.newsletterImage}
+                                        autoUpload={true}
+                                        onChange={(url) => setForm((prev) => ({ ...prev, newsletterImage: url }))}
+                                    />
                                 </div>
 
                                 <div>

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { FiPlus, FiSave, FiTrash2, FiEdit2, FiUploadCloud, FiCheckCircle } from "react-icons/fi";
+import { FiPlus, FiSave, FiTrash2, FiEdit2, FiCheckCircle } from "react-icons/fi";
 import { heroSlideService } from "../../services/heroSlideService";
 import { uploadService } from "../../services/uploadService";
+import ImageUploadField from "../../components/common/ImageUploadField";
+
 
 const HeroSliderCMS = () => {
     const [slides, setSlides] = useState([]);
@@ -187,33 +189,13 @@ const HeroSliderCMS = () => {
                         </div>
 
                         <div className="space-y-6">
-                            <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-400">Hero Image</label>
-                                {editingSlide.image ? (
-                                    <div className="relative w-full rounded-xl overflow-hidden border border-white/10">
-                                        <img src={editingSlide.image} alt="Hero" className="w-full h-48 object-cover" />
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditingSlide({ ...editingSlide, image: "" })}
-                                            className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition"
-                                        >
-                                            <FiTrash2 />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="relative w-full border-2 border-dashed border-white/10 rounded-xl bg-[#08111F] hover:border-sky-500 transition-colors p-10 flex flex-col items-center justify-center cursor-pointer">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                            onChange={handleImageUpload}
-                                            disabled={saving}
-                                        />
-                                        <FiUploadCloud size={32} className="text-sky-400 mb-2" />
-                                        <span className="text-slate-400 text-sm font-semibold">Upload Slide Image</span>
-                                    </div>
-                                )}
-                            </div>
+                            <ImageUploadField
+                                slotKey="HOMEPAGE_HERO"
+                                label="Hero Slide Image"
+                                value={editingSlide.image}
+                                autoUpload={true}
+                                onChange={(url) => setEditingSlide((prev) => ({ ...prev, image: url }))}
+                            />
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>

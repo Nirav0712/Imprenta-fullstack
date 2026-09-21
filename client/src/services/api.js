@@ -161,6 +161,40 @@ export const fetchBlogBySlug = async (slug) => {
     return response.data;
 };
 
+// Expos
+export const fetchExpos = async () => {
+    const response = await api.get("/expos/public");
+    if (response.data?.expos) {
+        response.data.expos = response.data.expos.map((e) => ({
+            ...e,
+            heroImage: getImageUrl(e.heroImage),
+            whyImage: getImageUrl(e.whyImage),
+        }));
+    }
+    return response.data;
+};
+
+export const fetchExpoBySlug = async (slug, preview = false) => {
+    const response = await api.get(`/expos/public/${slug}`, {
+        params: { preview: preview ? "true" : "false" },
+    });
+    if (response.data?.expo) {
+        response.data.expo.heroImage = getImageUrl(response.data.expo.heroImage);
+        if (response.data.expo.heroSlideImages) {
+            response.data.expo.heroSlideImages = response.data.expo.heroSlideImages.map(getImageUrl);
+        }
+        if (response.data.expo.whyImage) {
+            response.data.expo.whyImage = getImageUrl(response.data.expo.whyImage);
+        }
+    }
+    return response.data;
+};
+
+export const submitExpoLead = async (slug, leadData) => {
+    const response = await api.post(`/expos/public/${slug}/submit`, leadData);
+    return response.data;
+};
+
 // USER CART
 export const fetchCart = async () => (await api.get("/auth/cart")).data;
 export const saveCart = async (cart) => (await api.put("/auth/cart", { cart })).data;

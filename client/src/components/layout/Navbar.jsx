@@ -23,6 +23,7 @@ import {
   FiFileText,
   FiPhone,
   FiInfo,
+  FiCalendar,
 } from "react-icons/fi";
 
 const categories = [
@@ -344,6 +345,8 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
+
+            <Link to="/expo" className="text-[15px] font-medium text-slate-300 hover:text-sky-400 transition-colors">Expo</Link>
 
             <Link to="/contact" className="text-[15px] font-medium text-slate-300 hover:text-sky-400 transition-colors">Contact Us</Link>
           </nav>
@@ -760,6 +763,19 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
+
+                <Link
+                  to="/expo"
+                  onClick={() => setMobileMenu(false)}
+                  className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 transition-all duration-300 hover:border-sky-400 hover:bg-sky-500/10"
+                >
+                  <div className="flex items-center gap-4">
+                    <FiCalendar className="text-sky-400" size={20} />
+                    <span>Expo</span>
+                  </div>
+
+                  <FiChevronRight className="text-slate-500 group-hover:translate-x-1 transition" />
+                </Link>
 
                 <Link
                   to="/contact"

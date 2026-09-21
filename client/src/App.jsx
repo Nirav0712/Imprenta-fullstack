@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <div className="relative w-full max-w-[100vw] overflow-x-hidden">
+    <div className="relative w-full max-w-[100vw] overflow-x-clip min-h-screen">
       <ThemeProvider>
         <AuthProvider>
           <CartProvider>

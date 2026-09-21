@@ -12,6 +12,8 @@ import {
   FiMessageCircle,
   FiMonitor,
   FiTrendingUp,
+  FiCalendar,
+  FiGlobe,
 } from "react-icons/fi";
 
 export const sidebarMenu = [
@@ -43,6 +45,27 @@ export const sidebarMenu = [
         title: "Blog",
         icon: FiFileText,
         path: "/blogs",
+      },
+    ]
+  },
+  {
+    title: "Expo Management",
+    icon: FiCalendar,
+    children: [
+      {
+        title: "All Expos",
+        icon: FiCalendar,
+        path: "/expos",
+      },
+      {
+        title: "Add New Expo",
+        icon: FiLayout,
+        path: "/expos/add",
+      },
+      {
+        title: "Expo Leads & Forms",
+        icon: FiUsers,
+        path: "/expo-leads",
       },
     ]
   },
