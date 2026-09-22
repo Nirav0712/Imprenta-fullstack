@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchCategories, fetchProducts, fetchBlogs } from "../../services/api";
+import { fetchCategories, fetchProducts, fetchBlogs, fetchExpos } from "../../services/api";
 import { Link } from "react-router-dom";
 import SearchBar from "../search/SearchBar";
 import { useCart } from "../../context/CartContext";
@@ -50,6 +50,7 @@ const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileDropdowns, setMobileDropdowns] = useState({});
   const [blogsList, setBlogsList] = useState([]);
+  const [exposList, setExposList] = useState([]);
 
   const toggleMobileDropdown = (name) => {
     setMobileDropdowns(prev => ({ ...prev, [name]: !prev[name] }));
@@ -85,8 +86,20 @@ const Navbar = () => {
       }
     };
 
+    const loadExpos = async () => {
+      try {
+        const data = await fetchExpos();
+        if (data && data.expos) {
+          setExposList(data.expos.slice(0, 3));
+        }
+      } catch (err) {
+        console.error("Failed to load expos:", err);
+      }
+    };
+
     loadCategories();
     loadBlogs();
+    loadExpos();
   }, []);
 
   useEffect(() => {
@@ -346,7 +359,62 @@ const Navbar = () => {
               </div>
             </div>
 
-            <Link to="/expo" className="text-[15px] font-medium text-slate-300 hover:text-sky-400 transition-colors">Expo</Link>
+            {/* Expo Dropdown */}
+            <div
+              className="relative group h-full py-6"
+              onMouseEnter={() => setActiveDropdown("expo")}
+              onMouseLeave={() => setActiveDropdown(null)}
+            >
+              <button onClick={() => window.location.href = '/expo'} className="flex items-center gap-1 text-[15px] font-medium text-slate-300 group-hover:text-sky-400 transition-colors">
+                Expo <FiChevronDown />
+              </button>
+
+              <div
+                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-[400px] bg-[#0F1F38] rounded-2xl shadow-2xl border border-white/10 overflow-hidden transition-all duration-300 transform ${activeDropdown === "expo" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
+                  }`}
+              >
+                <div className="p-4">
+                  <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-3 px-1">Upcoming & Global Expos</h3>
+
+                  {exposList.length === 0 ? (
+                    <div className="text-center py-6 text-sm text-slate-400">
+                      No exhibitions scheduled.
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      {exposList.map(expo => {
+                        const image = expo.heroImage || (expo.heroSlideImages && expo.heroSlideImages[0]);
+                        return (
+                          <Link to={`/expo/${expo.slug}`} key={expo._id} className="flex gap-4 group/item p-2 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all items-center">
+                            {image ? (
+                              <div className="w-[72px] h-[72px] bg-[#0A1220] rounded-lg overflow-hidden flex-shrink-0 border border-white/5">
+                                <img src={image} alt={expo.name} className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500" />
+                              </div>
+                            ) : (
+                              <div className="w-[72px] h-[72px] bg-[#0A1220] rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center border border-white/5">
+                                <FiCalendar className="text-slate-500" size={24} />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0 flex flex-col justify-center py-1">
+                              <h4 className="text-[13px] font-bold text-white group-hover/item:text-sky-400 transition-colors leading-snug break-words">{expo.name}</h4>
+                              <span className="text-[11px] font-medium text-slate-400 mt-1 block truncate">
+                                {expo.eventDate || (expo.city ? `${expo.city} • ${expo.venue || ""}` : "Exhibition Details")}
+                              </span>
+                            </div>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  <div className="mt-2 text-center p-2 bg-sky-500/10 rounded-xl hover:bg-sky-500/20 border border-sky-500/20 transition-colors">
+                    <Link to="/expo" className="text-[13px] font-bold text-sky-400 hover:text-sky-300 transition-colors flex items-center justify-center gap-1">
+                      View All Expos <FiChevronRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <Link to="/contact" className="text-[15px] font-medium text-slate-300 hover:text-sky-400 transition-colors">Contact Us</Link>
           </nav>
@@ -764,18 +832,27 @@ const Navbar = () => {
                   )}
                 </div>
 
-                <Link
-                  to="/expo"
-                  onClick={() => setMobileMenu(false)}
-                  className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-5 py-4 transition-all duration-300 hover:border-sky-400 hover:bg-sky-500/10"
-                >
-                  <div className="flex items-center gap-4">
-                    <FiCalendar className="text-sky-400" size={20} />
-                    <span>Expo</span>
-                  </div>
-
-                  <FiChevronRight className="text-slate-500 group-hover:translate-x-1 transition" />
-                </Link>
+                {/* Mobile Expo Accordion */}
+                <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden transition-all duration-300">
+                  <button
+                    onClick={() => toggleMobileDropdown("expo")}
+                    className="w-full group flex items-center justify-between px-5 py-4 transition-all duration-300 hover:bg-sky-500/10"
+                  >
+                    <div className="flex items-center gap-4">
+                      <FiCalendar className="text-sky-400" size={20} />
+                      <span>Expo</span>
+                    </div>
+                    <FiChevronDown className={`text-slate-500 transition-transform duration-300 ${mobileDropdowns.expo ? "rotate-180" : ""}`} />
+                  </button>
+                  {mobileDropdowns.expo && (
+                    <div className="px-5 pb-4 pt-1 space-y-2 border-t border-white/5 bg-black/20">
+                      {exposList.map(expo => (
+                        <Link key={expo._id} to={`/expo/${expo.slug}`} onClick={() => setMobileMenu(false)} className="block py-2 text-sm text-slate-300 hover:text-sky-400">{expo.name}</Link>
+                      ))}
+                      <Link to="/expo" onClick={() => setMobileMenu(false)} className="block py-2 text-sm font-semibold text-sky-400 hover:text-sky-300 border-t border-white/5 pt-2">View All Expos →</Link>
+                    </div>
+                  )}
+                </div>
 
                 <Link
                   to="/contact"
