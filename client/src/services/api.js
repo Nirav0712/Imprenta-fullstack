@@ -168,6 +168,7 @@ export const fetchExpos = async () => {
         response.data.expos = response.data.expos.map((e) => ({
             ...e,
             heroImage: getImageUrl(e.heroImage),
+            heroSlideImages: e.heroSlideImages ? e.heroSlideImages.map(getImageUrl) : [],
             whyImage: getImageUrl(e.whyImage),
         }));
     }
