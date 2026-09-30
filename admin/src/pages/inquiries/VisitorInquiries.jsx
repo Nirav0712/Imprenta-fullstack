@@ -321,6 +321,12 @@ const VisitorInquiries = () => {
                       ) : (
                         <span className="text-xs text-slate-500 italic">None</span>
                       )}
+                      {inq.notes && (
+                        <div className="mt-1 flex items-center gap-1 text-[11px] text-amber-400/90 truncate" title={inq.notes}>
+                          <span className="font-semibold text-amber-400 shrink-0">Remark:</span>
+                          <span className="truncate text-slate-300">{inq.notes}</span>
+                        </div>
+                      )}
                     </td>
 
                     {/* Date */}
@@ -425,6 +431,11 @@ const VisitorInquiries = () => {
                   {inq.requirements && inq.requirements.length > 0 && (
                     <p className="text-sky-400 pt-1">
                       {inq.requirements.length} requirement line(s) specified
+                    </p>
+                  )}
+                  {inq.notes && (
+                    <p className="text-xs text-amber-300/90 pt-1 line-clamp-2">
+                      <span className="font-bold text-amber-400">Remark:</span> {inq.notes}
                     </p>
                   )}
                 </div>

@@ -14,6 +14,7 @@ import {
   FiFileText,
   FiImage,
   FiSend,
+  FiMessageSquare,
 } from "react-icons/fi";
 import { submitVisitorInquiry, uploadVisitingCard } from "../../services/api";
 import logo from "../../assets/logo/logo.png";
@@ -497,6 +498,24 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                   onChange={handleCardFileSelect}
                   className="hidden"
                 />
+              </div>
+
+              {/* SECTION 4: REMARKS / ADDITIONAL NOTES */}
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-sky-400 uppercase tracking-wider">
+                  <FiMessageSquare size={14} /> 4. Remark / Additional Notes (Optional)
+                </div>
+
+                <div>
+                  <textarea
+                    name="notes"
+                    rows={3}
+                    value={formData.notes}
+                    onChange={handleChange}
+                    placeholder="Enter any remarks, special instructions, sample requirements, or timeline..."
+                    className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500 transition resize-none"
+                  />
+                </div>
               </div>
 
               {/* Submit Action */}

@@ -15,6 +15,7 @@ import {
   FiCopy,
   FiCheck,
   FiExternalLink,
+  FiMessageSquare,
 } from "react-icons/fi";
 import { format } from "date-fns";
 
@@ -53,6 +54,8 @@ Address: ${fullAddress || "N/A"}
 Date: ${inquiry.createdAt ? format(new Date(inquiry.createdAt), "dd MMM yyyy, hh:mm a") : "N/A"}
 Requirements:
 ${inquiry.requirements && inquiry.requirements.length > 0 ? inquiry.requirements.map((r, i) => `${i + 1}. ${r}`).join("\n") : "None specified"}
+Remarks:
+${inquiry.notes || "None"}
 `;
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -311,6 +314,22 @@ ${inquiry.requirements && inquiry.requirements.length > 0 ? inquiry.requirements
                   ) : (
                     <div className="rounded-xl border border-white/5 bg-black/10 p-5 text-center text-xs text-slate-500">
                       No visiting card image was attached with this inquiry.
+                    </div>
+                  )}
+                </div>
+
+                {/* 4. Remarks / Notes Section */}
+                <div className="space-y-3 pt-2 border-t border-white/10">
+                  <span className="text-xs font-bold uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+                    <FiMessageSquare size={14} /> Remarks / Additional Notes
+                  </span>
+                  {inquiry.notes ? (
+                    <div className="rounded-xl border border-white/5 bg-black/20 p-4 text-sm text-slate-200 leading-relaxed whitespace-pre-wrap font-medium">
+                      {inquiry.notes}
+                    </div>
+                  ) : (
+                    <div className="rounded-xl border border-white/5 bg-black/10 p-4 text-center text-xs text-slate-500">
+                      No remarks or notes provided.
                     </div>
                   )}
                 </div>

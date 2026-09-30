@@ -109,6 +109,7 @@ export const getVisitorInquiries = async (req, res) => {
         { state: { $regex: search, $options: "i" } },
         { pincode: { $regex: search, $options: "i" } },
         { requirements: { $regex: search, $options: "i" } },
+        { notes: { $regex: search, $options: "i" } },
       ];
     }
 
