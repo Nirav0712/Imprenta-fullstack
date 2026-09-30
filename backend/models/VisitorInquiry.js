@@ -22,6 +22,21 @@ const visitorInquirySchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    city: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    state: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    pincode: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     contactNo: {
       type: String,
       required: [true, "Contact number is required"],

@@ -34,13 +34,22 @@ const VisitorInquiryDetailModal = ({
   if (!isOpen || !inquiry) return null;
 
   const handleCopy = () => {
+    const fullAddress = [
+      inquiry.address,
+      inquiry.city,
+      inquiry.state,
+      inquiry.pincode ? `- ${inquiry.pincode}` : "",
+    ]
+      .filter(Boolean)
+      .join(", ");
+
     const text = `VISITOR INQUIRY DETAILS
 Name: ${inquiry.name}
 Designation: ${inquiry.designation || "N/A"}
 Company: ${inquiry.companyName}
 Phone: ${inquiry.contactNo}
 Email: ${inquiry.email}
-Address: ${inquiry.address || "N/A"}
+Address: ${fullAddress || "N/A"}
 Date: ${inquiry.createdAt ? format(new Date(inquiry.createdAt), "dd MMM yyyy, hh:mm a") : "N/A"}
 Requirements:
 ${inquiry.requirements && inquiry.requirements.length > 0 ? inquiry.requirements.map((r, i) => `${i + 1}. ${r}`).join("\n") : "None specified"}
@@ -193,15 +202,36 @@ ${inquiry.requirements && inquiry.requirements.length > 0 ? inquiry.requirements
                       </a>
                     </div>
 
-                    {inquiry.address && (
-                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3 sm:col-span-2">
-                        <span className="text-xs text-slate-500 font-bold block uppercase tracking-wider mb-1">
-                          Address / Location
+                    {(inquiry.address || inquiry.city || inquiry.state || inquiry.pincode) && (
+                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3 sm:col-span-2 space-y-1.5">
+                        <span className="text-xs text-slate-500 font-bold block uppercase tracking-wider">
+                          Address Details
                         </span>
-                        <span className="text-slate-300 text-sm flex items-start gap-1.5">
-                          <FiMapPin size={14} className="text-sky-400 shrink-0 mt-0.5" />
-                          {inquiry.address}
-                        </span>
+                        {inquiry.address && (
+                          <span className="text-slate-200 text-sm flex items-start gap-1.5">
+                            <FiMapPin size={14} className="text-sky-400 shrink-0 mt-0.5" />
+                            {inquiry.address}
+                          </span>
+                        )}
+                        {(inquiry.city || inquiry.state || inquiry.pincode) && (
+                          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                            {inquiry.city && (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2.5 py-1 text-slate-300">
+                                <span className="text-slate-500 font-semibold">City:</span> {inquiry.city}
+                              </span>
+                            )}
+                            {inquiry.state && (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2.5 py-1 text-slate-300">
+                                <span className="text-slate-500 font-semibold">State:</span> {inquiry.state}
+                              </span>
+                            )}
+                            {inquiry.pincode && (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2.5 py-1 text-slate-300">
+                                <span className="text-slate-500 font-semibold">Pincode:</span> {inquiry.pincode}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

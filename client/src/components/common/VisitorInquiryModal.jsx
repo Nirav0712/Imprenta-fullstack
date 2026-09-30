@@ -24,6 +24,9 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
     designation: "",
     companyName: "",
     address: "",
+    city: "",
+    state: "",
+    pincode: "",
     contactNo: "",
     email: "",
     notes: "",
@@ -130,6 +133,9 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
         designation: formData.designation.trim(),
         companyName: formData.companyName.trim(),
         address: formData.address.trim(),
+        city: formData.city.trim(),
+        state: formData.state.trim(),
+        pincode: formData.pincode.trim(),
         contactNo: formData.contactNo.trim(),
         email: formData.email.trim(),
         requirements: activeReqs,
@@ -160,6 +166,9 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
       designation: "",
       companyName: "",
       address: "",
+      city: "",
+      state: "",
+      pincode: "",
       contactNo: "",
       email: "",
       notes: "",
@@ -330,9 +339,54 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      placeholder="e.g. GIDC Vapi / Ahmedabad / Mumbai"
+                      placeholder="e.g. Plot No. 45, Phase II, GIDC Industrial Estate"
                       className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
                     />
+                  </div>
+
+                  {/* City, State, Pincode Grid */}
+                  <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-300">
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        placeholder="e.g. Vapi / Mumbai"
+                        className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-300">
+                        State
+                      </label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleChange}
+                        placeholder="e.g. Gujarat"
+                        className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-300">
+                        Pincode
+                      </label>
+                      <input
+                        type="text"
+                        name="pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        placeholder="e.g. 396195"
+                        className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
