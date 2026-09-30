@@ -17,6 +17,7 @@ import {
   FiMessageSquare,
 } from "react-icons/fi";
 import { submitVisitorInquiry, uploadVisitingCard } from "../../services/api";
+import { COUNTRIES } from "../../constants/countries";
 import logo from "../../assets/logo/logo.png";
 
 const VisitorInquiryModal = ({ isOpen, onClose }) => {
@@ -27,6 +28,7 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
     address: "",
     city: "",
     state: "",
+    country: "India",
     pincode: "",
     contactNo: "",
     email: "",
@@ -136,6 +138,7 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
         address: formData.address.trim(),
         city: formData.city.trim(),
         state: formData.state.trim(),
+        country: formData.country.trim(),
         pincode: formData.pincode.trim(),
         contactNo: formData.contactNo.trim(),
         email: formData.email.trim(),
@@ -169,6 +172,7 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
       address: "",
       city: "",
       state: "",
+      country: "",
       pincode: "",
       contactNo: "",
       email: "",
@@ -233,7 +237,7 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                 <img src={logo} alt="Imprenta" className="h-9 sm:h-10 w-auto object-contain" />
               </div>
               <p className="text-[11px] uppercase tracking-widest font-mono text-sky-400 font-bold">
-                Imprenta Packaging & Commercial Printing
+                Imprenta Pvt. Ltd.
               </p>
               <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-white uppercase">
                 Visitor Inquiry Form
@@ -296,7 +300,7 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                       required
                       value={formData.companyName}
                       onChange={handleChange}
-                      placeholder="e.g. Scancode Auto Technology"
+                      placeholder="e.g. Imprenta Pvt. Ltd."
                       className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
                     />
                   </div>
@@ -345,8 +349,8 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                     />
                   </div>
 
-                  {/* City, State, Pincode Grid */}
-                  <div className="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* City, State, Country, Pincode Grid */}
+                  <div className="sm:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div>
                       <label className="mb-1.5 block text-xs font-semibold text-slate-300">
                         City
@@ -373,6 +377,25 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                         placeholder="e.g. Gujarat"
                         className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
                       />
+                    </div>
+
+                    <div>
+                      <label className="mb-1.5 block text-xs font-semibold text-slate-300">
+                        Country
+                      </label>
+                      <select
+                        name="country"
+                        value={formData.country || "India"}
+                        onChange={handleChange}
+                        className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3 py-2.5 text-sm text-white outline-none focus:border-sky-500 cursor-pointer"
+                      >
+                        <option value="" className="bg-[#0A1220] text-slate-400">Select Country</option>
+                        {COUNTRIES.map((c) => (
+                          <option key={c} value={c} className="bg-[#0A1220] text-white">
+                            {c}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     <div>

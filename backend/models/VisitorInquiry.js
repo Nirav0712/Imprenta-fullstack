@@ -32,6 +32,11 @@ const visitorInquirySchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    country: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     pincode: {
       type: String,
       default: "",

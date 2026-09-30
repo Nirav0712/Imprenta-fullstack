@@ -16,8 +16,11 @@ import {
   FiCheck,
   FiExternalLink,
   FiMessageSquare,
+  FiDownload,
 } from "react-icons/fi";
 import { format } from "date-fns";
+import { exportVisitorInquiryPDF } from "../../utils/visitorInquiryPdf";
+import { exportVisitorInquiriesToExcel } from "../../utils/visitorInquiryExcel";
 
 const STATUS_OPTIONS = ["New", "Contacted", "In Progress", "Completed", "Cancelled"];
 
@@ -31,14 +34,35 @@ const VisitorInquiryDetailModal = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   if (!isOpen || !inquiry) return null;
+
+  const handleExportPDF = async () => {
+    try {
+      setIsExporting(true);
+      await exportVisitorInquiryPDF(inquiry);
+    } catch (err) {
+      console.error("PDF Export error:", err);
+      alert("Failed to export PDF. Please try again.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleExportExcel = () => {
+    exportVisitorInquiriesToExcel(
+      [inquiry],
+      `Visitor_Inquiry_${(inquiry.name || "Visitor").replace(/[^a-zA-Z0-9_-]/g, "_")}.xlsx`
+    );
+  };
 
   const handleCopy = () => {
     const fullAddress = [
       inquiry.address,
       inquiry.city,
       inquiry.state,
+      inquiry.country,
       inquiry.pincode ? `- ${inquiry.pincode}` : "",
     ]
       .filter(Boolean)
@@ -91,6 +115,29 @@ ${inquiry.notes || "None"}
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Export Excel Button */}
+              <button
+                type="button"
+                onClick={handleExportExcel}
+                className="flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-3 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-500/25 hover:text-white transition shadow-sm"
+                title="Download Excel spreadsheet (.xlsx)"
+              >
+                <FiDownload />
+                <span>Export Excel</span>
+              </button>
+
+              {/* Export PDF Button */}
+              <button
+                type="button"
+                onClick={handleExportPDF}
+                disabled={isExporting}
+                className="flex items-center gap-1.5 rounded-xl border border-sky-400/30 bg-sky-500/15 px-3 py-2 text-xs font-bold text-sky-300 hover:bg-sky-500/25 hover:text-white transition shadow-[0_0_15px_rgba(56,189,248,0.2)]"
+                title="Download formatted PDF slip"
+              >
+                <FiDownload className={isExporting ? "animate-bounce" : ""} />
+                <span>{isExporting ? "Exporting..." : "Export PDF"}</span>
+              </button>
+
               <button
                 type="button"
                 onClick={handleCopy}
@@ -133,6 +180,14 @@ ${inquiry.notes || "None"}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
+                  onClick={handleExportPDF}
+                  disabled={isExporting}
+                  className="flex items-center gap-1.5 rounded-xl bg-sky-500/10 border border-sky-500/20 px-3.5 py-1.5 text-xs font-bold text-sky-400 hover:bg-sky-500/20 transition"
+                >
+                  <FiDownload size={13} /> Export PDF
+                </button>
+                <button
+                  type="button"
                   onClick={() => onDelete(inquiry._id, inquiry.name)}
                   className="flex items-center gap-1.5 rounded-xl bg-red-500/10 border border-red-500/20 px-3.5 py-1.5 text-xs font-bold text-red-400 hover:bg-red-500/20 transition"
                 >
@@ -146,7 +201,7 @@ ${inquiry.notes || "None"}
               {/* Slip Header */}
               <div className="bg-[#0A1626] border-b border-white/10 p-4 text-center">
                 <p className="text-[11px] font-mono uppercase tracking-widest text-sky-400 font-bold">
-                  IMPRENTA PACKAGING & COMMERCIAL PRINTING
+                  IMPRENTA PVT. LTD.
                 </p>
                 <h4 className="text-base sm:text-lg font-black uppercase text-white tracking-wider mt-0.5">
                   VISITOR INQUIRY FORM SLIP
@@ -205,7 +260,7 @@ ${inquiry.notes || "None"}
                       </a>
                     </div>
 
-                    {(inquiry.address || inquiry.city || inquiry.state || inquiry.pincode) && (
+                    {(inquiry.address || inquiry.city || inquiry.state || inquiry.country || inquiry.pincode) && (
                       <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3 sm:col-span-2 space-y-1.5">
                         <span className="text-xs text-slate-500 font-bold block uppercase tracking-wider">
                           Address Details
@@ -216,7 +271,7 @@ ${inquiry.notes || "None"}
                             {inquiry.address}
                           </span>
                         )}
-                        {(inquiry.city || inquiry.state || inquiry.pincode) && (
+                        {(inquiry.city || inquiry.state || inquiry.country || inquiry.pincode) && (
                           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
                             {inquiry.city && (
                               <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2.5 py-1 text-slate-300">
@@ -226,6 +281,11 @@ ${inquiry.notes || "None"}
                             {inquiry.state && (
                               <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2.5 py-1 text-slate-300">
                                 <span className="text-slate-500 font-semibold">State:</span> {inquiry.state}
+                              </span>
+                            )}
+                            {inquiry.country && (
+                              <span className="inline-flex items-center gap-1 rounded-md bg-white/5 border border-white/10 px-2.5 py-1 text-slate-300">
+                                <span className="text-slate-500 font-semibold">Country:</span> {inquiry.country}
                               </span>
                             )}
                             {inquiry.pincode && (

@@ -224,7 +224,7 @@ export const submitVisitorInquiry = async (inquiryData) => {
 export const uploadVisitingCard = async (file) => {
     const formData = new FormData();
     formData.append("image", file);
-    const response = await api.post("/upload", formData, {
+    const response = await api.post("/visitor-inquiries/upload-card", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },

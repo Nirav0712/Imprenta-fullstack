@@ -83,64 +83,66 @@ const Expo = () => {
           </div>
         ) : (
           <>
-            {/* Featured Expo Showcase Banner */}
+            {/* Featured Expo Showcase Banner (Pixel-Perfect Match with Reference SS 2) */}
             {featuredExpo && (
               <Link
                 to={`/expo/${featuredExpo.slug}`}
-                className="group block mb-16 bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:border-sky-400/50 transition-all duration-500 shadow-2xl"
+                className="group block mb-16 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-6 sm:p-8 lg:p-10 xl:p-12 hover:border-sky-400/50 transition-all duration-500 shadow-[0_20px_60px_rgba(0,0,0,0.5)] overflow-hidden relative"
               >
-                <div className="flex flex-col lg:flex-row">
-                  {/* Image */}
-                  <div className="w-full lg:w-3/5 aspect-video lg:aspect-auto lg:h-[480px] overflow-hidden bg-[#0A1220] relative">
-                    <img
-                      src={
-                        featuredExpo.heroImage ||
-                        "https://res.cloudinary.com/dkenmez3t/image/upload/v1788338383/imprenta/products/yop399ugb8snu2ye5i4s.png"
-                      }
-                      alt={featuredExpo.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1220]/80 via-transparent to-transparent lg:hidden"></div>
+                {/* Subtle Glow Overlay */}
+                <div className="absolute inset-0 bg-sky-400/5 opacity-0 group-hover:opacity-100 transition duration-700 pointer-events-none"></div>
+
+                <div className="grid lg:grid-cols-2 gap-8 lg:gap-10 xl:gap-12 items-center relative z-10">
+                  {/* Left: Featured Image (Landscape Aspect Ratio matching SS 2) */}
+                  <div className="w-full flex items-center justify-center">
+                    <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.35)] border border-white/10 bg-[#071120]">
+                      <img
+                        src={
+                          featuredExpo.heroImage ||
+                          "https://res.cloudinary.com/dkenmez3t/image/upload/v1788338383/imprenta/products/yop399ugb8snu2ye5i4s.png"
+                        }
+                        alt={featuredExpo.name}
+                        className="w-full h-full object-cover rounded-2xl transition-transform duration-700 group-hover:scale-[1.02]"
+                      />
+                    </div>
                   </div>
 
-                  {/* Content */}
-                  <div className="w-full lg:w-2/5 p-8 sm:p-10 lg:p-12 flex flex-col justify-center">
-                    <div className="flex flex-wrap items-center gap-3 mb-5 text-xs font-semibold">
-                      <span className="bg-sky-500/20 text-sky-400 px-3 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1.5 border border-sky-400/30">
-                        <FiTag size={12} /> Featured Event
-                      </span>
+                  {/* Right: Content details matching SS 2 */}
+                  <div className="flex flex-col justify-center text-left">
+                    {/* Meta Badges Row */}
+                    <div className="flex flex-wrap items-center gap-2 mb-4 text-xs font-semibold">
                       {featuredExpo.eventDate && (
-                        <span className="text-slate-300 flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 px-3 py-1 text-xs font-semibold text-sky-300">
                           <FiCalendar size={12} className="text-sky-400" /> {featuredExpo.eventDate}
+                        </span>
+                      )}
+                      {(featuredExpo.city || featuredExpo.venue) && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs font-semibold text-slate-300">
+                          <FiMapPin size={12} className="text-sky-400" /> {featuredExpo.city || featuredExpo.venue}
+                        </span>
+                      )}
+                      {featuredExpo.boothNumber && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-cyan-500/10 border border-cyan-400/20 px-3 py-1 text-xs font-bold text-cyan-300">
+                          {featuredExpo.boothNumber}
                         </span>
                       )}
                     </div>
 
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-4 group-hover:text-sky-400 transition-colors leading-tight">
-                      {featuredExpo.name}
+                      {featuredExpo.heroHeading
+                        ? featuredExpo.heroHeading.includes("🌎") || featuredExpo.heroHeading.includes("🌍")
+                          ? featuredExpo.heroHeading
+                          : `🌎 ${featuredExpo.heroHeading}`
+                        : `🌎 Meet Imprenta at ${featuredExpo.name}`}
                     </h2>
 
-                    <div className="flex items-center gap-2 text-slate-300 text-sm mb-4 font-medium">
-                      <FiMapPin className="text-sky-400 shrink-0" />
-                      <span>
-                        {featuredExpo.city ? `${featuredExpo.city} • ` : ""}
-                        {featuredExpo.venue || "Exhibition Center"}
-                      </span>
-                    </div>
-
-                    {featuredExpo.boothNumber && (
-                      <div className="text-xs font-bold text-sky-400 bg-sky-500/10 border border-sky-400/20 px-3 py-1.5 rounded-lg w-fit mb-5">
-                        {featuredExpo.boothNumber}
-                      </div>
-                    )}
-
-                    <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 line-clamp-3">
+                    <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-medium line-clamp-3">
                       {featuredExpo.heroDescription || featuredExpo.shortDescription}
                     </p>
 
-                    <div className="mt-auto">
-                      <span className="inline-flex items-center gap-2 text-sky-400 font-bold group-hover:gap-3 transition-all text-base">
-                        Explore Expo & Book Meeting <FiArrowRight />
+                    <div className="pt-2">
+                      <span className="inline-flex items-center gap-2.5 rounded-2xl bg-sky-500 px-8 py-3.5 text-base font-semibold text-white group-hover:bg-sky-400 group-hover:scale-[1.02] transition-all shadow-[0_0_25px_rgba(56,189,248,0.35)]">
+                        Schedule a Meeting <FiArrowRight />
                       </span>
                     </div>
                   </div>

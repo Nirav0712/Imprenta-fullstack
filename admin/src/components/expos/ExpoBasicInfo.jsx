@@ -57,15 +57,21 @@ const ExpoBasicInfo = ({ formData, handleChange, previewImage, handleImageChange
           </select>
         </div>
 
-        {/* Featured Image Upload Field - Same as Blog */}
-        <div className="md:col-span-2">
+        {/* Featured Image Upload Field */}
+        <div className="md:col-span-2 space-y-2">
           <ImageUploadField
             slotKey="EXPO_HERO_IMAGE"
-            label="Featured Expo Image"
+            label="Featured Expo Showcase Image"
             value={previewImage}
             onChange={handleImageChange}
             required={formData.status === "published"}
           />
+          <div className="flex items-start gap-2 rounded-xl bg-sky-500/10 border border-sky-500/20 p-3 text-xs text-slate-300">
+            <span className="font-bold text-sky-400 shrink-0">📐 Recommended Dimensions:</span>
+            <span>
+              <strong className="text-white font-mono">1200 × 800 px</strong> (or <strong className="text-white font-mono">800 × 530 px</strong>, Aspect Ratio ~3:2 / Landscape). Used on Homepage showcase and Expo list cards (displayed at max 460px height with rounded-2xl corners & 24–48px padding).
+            </span>
+          </div>
         </div>
 
         <div>

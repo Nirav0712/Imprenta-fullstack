@@ -58,7 +58,7 @@ const ExpoHeroConfig = ({ formData, handleChange, previewImage, handleImageChang
         </div>
 
         {/* Hero Image Upload */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 space-y-2">
           <ImageUploadField
             slotKey="EXPO_HERO_IMAGE"
             label="Hero Showcase Banner / Image"
@@ -66,6 +66,12 @@ const ExpoHeroConfig = ({ formData, handleChange, previewImage, handleImageChang
             value={previewImage}
             onChange={handleImageChange}
           />
+          <div className="flex items-start gap-2 rounded-xl bg-sky-500/10 border border-sky-500/20 p-3 text-xs text-slate-300">
+            <span className="font-bold text-sky-400 shrink-0">📐 Recommended Dimensions:</span>
+            <span>
+              <strong className="text-white font-mono">1200 × 800 px</strong> (Landscape 3:2 or 16:10 ratio, PNG/JPG/WebP). Used across hero showcase & exhibition cards.
+            </span>
+          </div>
         </div>
 
         {/* Action Buttons */}
