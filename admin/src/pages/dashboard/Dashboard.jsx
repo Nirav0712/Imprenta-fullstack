@@ -9,6 +9,7 @@ const Dashboard = () => {
     unreadCount: 0,
     orders: 0,
     inquiries: 0,
+    visitorInquiries: 0,
     samples: 0,
     inventory: 0,
   });
@@ -23,6 +24,7 @@ const Dashboard = () => {
             unreadCount: res.data.total,
             orders: notifs.filter(n => n.type === "new_order").length,
             inquiries: notifs.filter(n => n.type === "product_inquiry").length,
+            visitorInquiries: notifs.filter(n => n.type === "visitor_inquiry").length,
             samples: notifs.filter(n => n.type === "sample_request").length,
             inventory: notifs.filter(n => n.type === "low_stock" || n.type === "out_of_stock").length,
           });
@@ -47,6 +49,7 @@ const Dashboard = () => {
           unreadCount: prev.unreadCount + 1,
           orders: notif.type === "new_order" ? prev.orders + 1 : prev.orders,
           inquiries: notif.type === "product_inquiry" ? prev.inquiries + 1 : prev.inquiries,
+          visitorInquiries: notif.type === "visitor_inquiry" ? prev.visitorInquiries + 1 : prev.visitorInquiries,
           samples: notif.type === "sample_request" ? prev.samples + 1 : prev.samples,
           inventory: (notif.type === "low_stock" || notif.type === "out_of_stock") ? prev.inventory + 1 : prev.inventory,
         }));
@@ -104,6 +107,10 @@ const Dashboard = () => {
               <div className="flex justify-between items-center text-sm">
                 <span className="text-slate-400">Product Inquiries</span>
                 <span className="text-slate-200">{notificationSummary.inquiries}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-slate-400">Visitor Inquiries</span>
+                <span className="text-emerald-400 font-bold">{notificationSummary.visitorInquiries}</span>
               </div>
               <div className="flex justify-between items-center text-sm">
                 <span className="text-slate-400">Sample Requests</span>

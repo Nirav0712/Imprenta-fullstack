@@ -14,6 +14,7 @@ import {
   FiTrendingUp,
   FiCalendar,
   FiGlobe,
+  FiUserCheck,
 } from "react-icons/fi";
 
 export const sidebarMenu = [
@@ -98,6 +99,11 @@ export const sidebarMenu = [
         title: "Inquiries",
         icon: FiMessageCircle,
         path: "/inquiries",
+      },
+      {
+        title: "Visitor Inquiries",
+        icon: FiUserCheck,
+        path: "/visitor-inquiries",
       },
       {
         title: "Request Samples",

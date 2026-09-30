@@ -302,6 +302,7 @@ export const createExpo = async (req, res) => {
       boothNumber,
       city,
       country,
+      image,
       heroBadge,
       heroHeading,
       heroHighlightText,
@@ -364,11 +365,12 @@ export const createExpo = async (req, res) => {
       city: city || "",
       country: country || "",
 
+      image: image || heroImage || "",
       heroBadge: heroBadge || "IMPRENTA AT THE EXPO",
       heroHeading: heroHeading || `Meet Imprenta at ${name}`,
       heroHighlightText: heroHighlightText || (city || ""),
       heroDescription: heroDescription || "",
-      heroImage: heroImage || "",
+      heroImage: heroImage || image || "",
       heroSlideImages: heroSlideImages || [],
       primaryButtonText: primaryButtonText || "Schedule a Meeting",
       primaryButtonAction: primaryButtonAction || "scroll_to_form",
@@ -401,7 +403,7 @@ export const createExpo = async (req, res) => {
 
       seoTitle: seoTitle || `${name} | Imprenta Packaging Solutions`,
       seoDescription: seoDescription || shortDescription || `Meet Imprenta at ${name}. Discover multi-format packaging and printing capabilities.`,
-      ogImage: ogImage || heroImage || "",
+      ogImage: ogImage || image || heroImage || "",
       canonicalUrl: canonicalUrl || "",
 
       status: status || "draft",
@@ -439,6 +441,13 @@ export const updateExpo = async (req, res) => {
         return res.status(400).json({ success: false, message: "This URL slug is already in use by another Expo." });
       }
       req.body.slug = formattedSlug;
+    }
+
+    // Handle image & heroImage sync
+    if (req.body.image && !req.body.heroImage) {
+      req.body.heroImage = req.body.image;
+    } else if (req.body.heroImage && !req.body.image) {
+      req.body.image = req.body.heroImage;
     }
 
     // Handle published date

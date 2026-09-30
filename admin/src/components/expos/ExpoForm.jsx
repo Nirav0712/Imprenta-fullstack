@@ -46,6 +46,7 @@ const ExpoForm = ({ isEdit = false, initialData = null, expoId = null }) => {
       city: "",
       country: "",
       status: "draft",
+      image: "",
 
       heroBadge: "IMPRENTA AT THE EXPO",
       heroHeading: "",
@@ -86,8 +87,30 @@ const ExpoForm = ({ isEdit = false, initialData = null, expoId = null }) => {
     }
   );
 
-  // Hero Image file state for Cloudinary upload
-  const [heroImageFile, setHeroImageFile] = useState(null);
+  // Image handling (identical to BlogForm)
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(initialData?.image || initialData?.heroImage || "");
+  const [currentImageStr, setCurrentImageStr] = useState(initialData?.image || initialData?.heroImage || "");
+
+  const handleImageChange = (fileOrUrl, meta) => {
+    if (!fileOrUrl) {
+      setImageFile(null);
+      setPreviewImage("");
+      setCurrentImageStr("");
+      setFormData((prev) => ({ ...prev, image: "", heroImage: "" }));
+      return;
+    }
+
+    if (typeof fileOrUrl === "string") {
+      setPreviewImage(fileOrUrl);
+      setCurrentImageStr(fileOrUrl);
+      setFormData((prev) => ({ ...prev, image: fileOrUrl, heroImage: fileOrUrl }));
+    } else {
+      setImageFile(fileOrUrl);
+      const url = meta?.previewUrl || URL.createObjectURL(fileOrUrl);
+      setPreviewImage(url);
+    }
+  };
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({
@@ -107,24 +130,30 @@ const ExpoForm = ({ isEdit = false, initialData = null, expoId = null }) => {
     try {
       setFormLoading(true);
 
-      let finalHeroImageUrl = formData.heroImage;
+      let finalImageUrl = currentImageStr || formData.image || formData.heroImage || "";
 
-      // Handle hero image file upload if selected
-      if (heroImageFile) {
+      // Handle image file upload if new file selected
+      if (imageFile) {
         const uploadData = new FormData();
-        uploadData.append("image", heroImageFile);
+        uploadData.append("image", imageFile);
         const uploadRes = await uploadApi.uploadImage(uploadData);
         if (uploadRes.success) {
-          finalHeroImageUrl = uploadRes.image?.url || uploadRes.url || finalHeroImageUrl;
+          finalImageUrl = uploadRes.image?.url || uploadRes.url || finalImageUrl;
         } else {
-          throw new Error(uploadRes.message || "Failed to upload hero image.");
+          throw new Error(uploadRes.message || "Failed to upload image.");
         }
+      }
+
+      if (formData.status === "published" && !finalImageUrl) {
+        setActiveTab("basic");
+        return alert("Featured Expo Image is required for publishing.");
       }
 
       const payload = {
         ...formData,
-        heroImage: finalHeroImageUrl,
-        ogImage: formData.ogImage || finalHeroImageUrl,
+        image: finalImageUrl,
+        heroImage: finalImageUrl || formData.heroImage,
+        ogImage: formData.ogImage || finalImageUrl,
       };
 
       if (isEdit) {
@@ -195,15 +224,20 @@ const ExpoForm = ({ isEdit = false, initialData = null, expoId = null }) => {
       {/* Tab Panels */}
       <div>
         {activeTab === "basic" && (
-          <ExpoBasicInfo formData={formData} handleChange={handleChange} />
+          <ExpoBasicInfo
+            formData={formData}
+            handleChange={handleChange}
+            previewImage={previewImage}
+            handleImageChange={handleImageChange}
+          />
         )}
 
         {activeTab === "hero" && (
           <ExpoHeroConfig
             formData={formData}
             handleChange={handleChange}
-            heroImageFile={heroImageFile}
-            setHeroImageFile={setHeroImageFile}
+            previewImage={previewImage}
+            handleImageChange={handleImageChange}
           />
         )}
 

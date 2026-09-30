@@ -11,6 +11,7 @@ import {
   FiCalendar,
   FiMapPin,
   FiCheckCircle,
+  FiImage,
 } from "react-icons/fi";
 import { expoService } from "../../services/expoService";
 
@@ -149,6 +150,7 @@ const Expos = () => {
           <table className="w-full text-left text-sm text-slate-300">
             <thead className="bg-[#08111F] text-xs font-bold uppercase tracking-wider text-slate-400 border-b border-white/10">
               <tr>
+                <th className="px-6 py-4 w-20">Image</th>
                 <th className="px-6 py-4">Expo / Event Details</th>
                 <th className="px-6 py-4">Date & Venue</th>
                 <th className="px-6 py-4">Status</th>
@@ -160,19 +162,32 @@ const Expos = () => {
             <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-slate-400 animate-pulse">
+                  <td colSpan="6" className="px-6 py-12 text-center text-slate-400 animate-pulse">
                     Loading Expo pages...
                   </td>
                 </tr>
               ) : expos.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-12 text-center text-slate-400">
+                  <td colSpan="6" className="px-6 py-12 text-center text-slate-400">
                     No Expos found. Click "Create New Expo" to build your first dynamic landing page.
                   </td>
                 </tr>
               ) : (
                 expos.map((expo) => (
                   <tr key={expo._id} className="hover:bg-white/[0.02] transition">
+                    <td className="px-6 py-4">
+                      {expo.image || expo.heroImage ? (
+                        <img
+                          src={expo.image || expo.heroImage}
+                          alt={expo.name}
+                          className="h-12 w-12 rounded-xl object-cover bg-white/5 border border-white/10"
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-xl bg-white/5 flex flex-col items-center justify-center text-slate-500 border border-white/10">
+                          <FiImage size={16} className="mb-1 opacity-50" />
+                        </div>
+                      )}
+                    </td>
                     <td className="px-6 py-4">
                       <div>
                         <Link

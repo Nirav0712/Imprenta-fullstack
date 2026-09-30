@@ -27,6 +27,7 @@ import ThemeCustomization from "../pages/theme/ThemeCustomization";
 import Settings from "../pages/settings/Settings";
 import Notifications from "../pages/notifications/Notifications";
 import Inquiries from "../pages/inquiries/Inquiries";
+import VisitorInquiries from "../pages/inquiries/VisitorInquiries";
 
 import Blogs from "../pages/blogs/Blogs";
 import AddBlog from "../pages/blogs/AddBlog";
@@ -181,6 +182,11 @@ const AppRoutes = () => {
           <Route
             path="/inquiries"
             element={<Inquiries />}
+          />
+
+          <Route
+            path="/visitor-inquiries"
+            element={<VisitorInquiries />}
           />
         </Route>
 

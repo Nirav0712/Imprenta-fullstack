@@ -10,7 +10,8 @@ import {
     FiAlertTriangle,
     FiCheckCircle,
     FiBell,
-    FiTrash2
+    FiTrash2,
+    FiUserCheck
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
@@ -23,17 +24,18 @@ const Notifications = () => {
     const navigate = useNavigate();
 
     const filters = [
-        "All", "Unread", "Orders", "Product Inquiries", "Sample Requests",
+        "All", "Unread", "Orders", "Product Inquiries", "Visitor Inquiries", "Sample Requests",
         "Messages", "Users", "Inventory", "System"
     ];
 
     const typeMap = {
         "Orders": "new_order",
         "Product Inquiries": "product_inquiry",
+        "Visitor Inquiries": "visitor_inquiry",
         "Sample Requests": "sample_request",
         "Messages": "contact_message",
         "Users": "new_user",
-        "Inventory": "low_stock", // and out_of_stock mapping combined natively or handled separately
+        "Inventory": "low_stock",
         "System": "system",
     };
 
@@ -82,6 +84,7 @@ const Notifications = () => {
     const getIcon = (type, size = 20) => {
         switch (type) {
             case "product_inquiry": return <FiMessageCircle size={size} className="text-blue-400" />;
+            case "visitor_inquiry": return <FiUserCheck size={size} className="text-emerald-400" />;
             case "new_order": return <FiShoppingBag size={size} className="text-green-400" />;
             case "sample_request": return <FiPackage size={size} className="text-purple-400" />;
             case "contact_message": return <FiMail size={size} className="text-yellow-400" />;
@@ -95,8 +98,19 @@ const Notifications = () => {
 
     const handleNotificationClick = (notif) => {
         if (!notif.isRead) markAsRead(notif._id);
-        // Custom logic to navigate to relevant pages based on type could go here
-        // navigate(determineRoute(notif))
+        if (notif.type === "visitor_inquiry") {
+            navigate("/visitor-inquiries");
+        } else if (notif.type === "product_inquiry") {
+            navigate("/inquiries");
+        } else if (notif.type === "new_order") {
+            navigate("/orders");
+        } else if (notif.type === "sample_request") {
+            navigate("/request-sample");
+        } else if (notif.type === "contact_message") {
+            navigate("/contact");
+        } else if (notif.type === "new_user") {
+            navigate("/users");
+        }
     };
 
     return (

@@ -383,11 +383,11 @@ const Navbar = () => {
                   ) : (
                     <div className="space-y-1">
                       {exposList.map(expo => {
-                        const image = expo.heroImage || (expo.heroSlideImages && expo.heroSlideImages[0]);
+                        const image = expo.image || expo.heroImage || (expo.heroSlideImages && expo.heroSlideImages[0]) || expo.ogImage;
                         return (
                           <Link to={`/expo/${expo.slug}`} key={expo._id} className="flex gap-4 group/item p-2 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/5 transition-all items-center">
                             {image ? (
-                              <div className="w-[72px] h-[72px] bg-[#0A1220] rounded-lg overflow-hidden flex-shrink-0 border border-white/5">
+                              <div className="w-[72px] h-[72px] bg-[#0A1220] rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
                                 <img src={image} alt={expo.name} className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500" />
                               </div>
                             ) : (

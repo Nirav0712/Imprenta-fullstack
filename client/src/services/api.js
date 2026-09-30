@@ -165,12 +165,17 @@ export const fetchBlogBySlug = async (slug) => {
 export const fetchExpos = async () => {
     const response = await api.get("/expos/public");
     if (response.data?.expos) {
-        response.data.expos = response.data.expos.map((e) => ({
-            ...e,
-            heroImage: getImageUrl(e.heroImage),
-            heroSlideImages: e.heroSlideImages ? e.heroSlideImages.map(getImageUrl) : [],
-            whyImage: getImageUrl(e.whyImage),
-        }));
+        response.data.expos = response.data.expos.map((e) => {
+            const resolvedImg = getImageUrl(e.image || e.heroImage || "");
+            return {
+                ...e,
+                image: resolvedImg,
+                heroImage: resolvedImg,
+                heroSlideImages: e.heroSlideImages ? e.heroSlideImages.map(getImageUrl) : [],
+                whyImage: getImageUrl(e.whyImage),
+                ogImage: getImageUrl(e.ogImage),
+            };
+        });
     }
     return response.data;
 };
@@ -180,12 +185,17 @@ export const fetchExpoBySlug = async (slug, preview = false) => {
         params: { preview: preview ? "true" : "false" },
     });
     if (response.data?.expo) {
-        response.data.expo.heroImage = getImageUrl(response.data.expo.heroImage);
+        const resolvedImg = getImageUrl(response.data.expo.image || response.data.expo.heroImage || "");
+        response.data.expo.image = resolvedImg;
+        response.data.expo.heroImage = resolvedImg;
         if (response.data.expo.heroSlideImages) {
             response.data.expo.heroSlideImages = response.data.expo.heroSlideImages.map(getImageUrl);
         }
         if (response.data.expo.whyImage) {
             response.data.expo.whyImage = getImageUrl(response.data.expo.whyImage);
+        }
+        if (response.data.expo.ogImage) {
+            response.data.expo.ogImage = getImageUrl(response.data.expo.ogImage);
         }
     }
     return response.data;
@@ -204,5 +214,23 @@ export const fetchSettings = async () => {
     const response = await api.get("/settings");
     return response.data;
 };
+
+// VISITOR INQUIRY
+export const submitVisitorInquiry = async (inquiryData) => {
+    const response = await api.post("/visitor-inquiries", inquiryData);
+    return response.data;
+};
+
+export const uploadVisitingCard = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await api.post("/upload", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
 
 export default api;

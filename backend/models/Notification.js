@@ -7,6 +7,7 @@ const notificationSchema = new mongoose.Schema(
             required: true,
             enum: [
                 "product_inquiry",
+                "visitor_inquiry",
                 "new_order",
                 "order_status",
                 "sample_request",

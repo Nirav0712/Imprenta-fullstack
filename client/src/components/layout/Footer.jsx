@@ -8,15 +8,18 @@ import {
   FiInstagram,
   FiLinkedin,
   FiYoutube,
-  FiChevronRight
+  FiChevronRight,
+  FiUserCheck
 } from "react-icons/fi";
 import NewsletterSection from "../home/NewsletterSection";
 import ContactCTA from "../contact/ContactCTA";
+import VisitorInquiryModal from "../common/VisitorInquiryModal";
 import { fetchSettings } from "../../services/api";
 import logo from "../../assets/logo/logo.png";
 
 const Footer = () => {
   const [settings, setSettings] = useState(null);
+  const [isVisitorModalOpen, setIsVisitorModalOpen] = useState(false);
 
   useEffect(() => {
     const getSettings = async () => {
@@ -95,6 +98,19 @@ const Footer = () => {
                 <li><Link to="/blog" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Blog</Link></li>
                 <li><Link to="/expo" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Expo</Link></li>
                 <li><Link to="/contact" className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group"><FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" /> Contact Us</Link></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setIsVisitorModalOpen(true)}
+                    className="text-slate-400 hover:text-sky-400 transition-all text-sm font-medium flex items-center gap-2 group cursor-pointer text-left w-full"
+                  >
+                    <FiChevronRight size={14} className="text-sky-500/40 group-hover:text-sky-400 transition-transform group-hover:translate-x-1" />
+                    <span>Visitor Form</span>
+                    <span className="bg-sky-500/10 text-sky-400 border border-sky-500/20 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+                      Slip
+                    </span>
+                  </button>
+                </li>
               </ul>
             </div>
 
@@ -176,7 +192,14 @@ const Footer = () => {
           {/* COPYRIGHT BOTTOM */}
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-slate-400">
             <p className="text-center md:text-left">© {new Date().getFullYear()} Imprenta Pvt. Ltd. All Rights Reserved.</p>
-            <div className="flex flex-wrap justify-center items-center gap-6 font-medium">
+            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-medium">
+              <button
+                type="button"
+                onClick={() => setIsVisitorModalOpen(true)}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500/15 to-cyan-500/15 border border-sky-400/30 px-3.5 py-1.5 text-xs font-bold text-sky-300 hover:text-white hover:border-sky-400 transition shadow-[0_0_15px_rgba(56,189,248,0.15)] cursor-pointer"
+              >
+                <FiUserCheck size={14} className="text-sky-400" /> Visitor Inquiry Form
+              </button>
               <Link to="/privacy-policy" className="hover:text-sky-400 transition-colors">Privacy Policy</Link>
               <Link to="/terms" className="hover:text-sky-400 transition-colors">Terms & Conditions</Link>
             </div>
@@ -184,6 +207,12 @@ const Footer = () => {
 
         </div>
       </footer>
+
+      {/* Visitor Inquiry Form Modal */}
+      <VisitorInquiryModal
+        isOpen={isVisitorModalOpen}
+        onClose={() => setIsVisitorModalOpen(false)}
+      />
     </>
   );
 };

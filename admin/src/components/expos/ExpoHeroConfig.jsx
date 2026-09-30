@@ -2,7 +2,7 @@ import React from "react";
 import { FiLayout, FiImage, FiMousePointer } from "react-icons/fi";
 import ImageUploadField from "../common/ImageUploadField";
 
-const ExpoHeroConfig = ({ formData, handleChange, handleImageChange, heroImageFile, setHeroImageFile }) => {
+const ExpoHeroConfig = ({ formData, handleChange, previewImage, handleImageChange }) => {
   return (
     <section className="rounded-2xl border border-white/10 bg-[#101B2D] p-6 shadow-xl space-y-6">
       <div className="border-b border-white/10 pb-4">
@@ -60,14 +60,11 @@ const ExpoHeroConfig = ({ formData, handleChange, handleImageChange, heroImageFi
         {/* Hero Image Upload */}
         <div className="md:col-span-2">
           <ImageUploadField
-            specKey="EXPO_HERO_IMAGE"
+            slotKey="EXPO_HERO_IMAGE"
             label="Hero Showcase Banner / Image"
             required={false}
-            imageFile={heroImageFile}
-            setImageFile={setHeroImageFile}
-            previewUrl={formData.heroImage || ""}
-            onUrlChange={(url) => handleChange("heroImage", url)}
-            helpText="Recommended: 1200 × 800 px landscape image. Will be used as the hero visual banner and social share image."
+            value={previewImage}
+            onChange={handleImageChange}
           />
         </div>
 

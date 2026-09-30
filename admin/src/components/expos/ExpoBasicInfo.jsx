@@ -1,14 +1,15 @@
 import React from "react";
 import { FiCalendar, FiMapPin, FiGlobe, FiTag } from "react-icons/fi";
+import ImageUploadField from "../common/ImageUploadField";
 
-const ExpoBasicInfo = ({ formData, handleChange }) => {
+const ExpoBasicInfo = ({ formData, handleChange, previewImage, handleImageChange }) => {
   return (
     <section className="rounded-2xl border border-white/10 bg-[#101B2D] p-6 shadow-xl space-y-6">
       <div className="border-b border-white/10 pb-4">
         <h3 className="text-xl font-bold text-white flex items-center gap-2">
           <FiCalendar className="text-sky-400" /> Basic & Event Information
         </h3>
-        <p className="text-sm text-slate-400">Configure the primary details, dates, venue, and status of the Expo.</p>
+        <p className="text-sm text-slate-400">Configure the primary details, dates, venue, featured image, and status of the Expo.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -54,6 +55,17 @@ const ExpoBasicInfo = ({ formData, handleChange }) => {
             <option value="published">Published (Live at /expo/:slug)</option>
             <option value="archived">Archived</option>
           </select>
+        </div>
+
+        {/* Featured Image Upload Field - Same as Blog */}
+        <div className="md:col-span-2">
+          <ImageUploadField
+            slotKey="EXPO_HERO_IMAGE"
+            label="Featured Expo Image"
+            value={previewImage}
+            onChange={handleImageChange}
+            required={formData.status === "published"}
+          />
         </div>
 
         <div>

@@ -78,7 +78,8 @@ const expoSchema = new mongoose.Schema(
     city: { type: String, default: "", trim: true }, // e.g. "Chicago, Illinois"
     country: { type: String, default: "", trim: true }, // e.g. "USA"
 
-    // Hero Section
+    // Hero & Featured Image
+    image: { type: String, default: "" },
     heroBadge: { type: String, default: "IMPRENTA AT THE EXPO", trim: true },
     heroHeading: { type: String, default: "Meet Imprenta at the Expo", trim: true },
     heroHighlightText: { type: String, default: "", trim: true }, // e.g. "Chicago"

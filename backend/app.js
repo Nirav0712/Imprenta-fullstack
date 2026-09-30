@@ -16,6 +16,7 @@ import heroSlideRoutes from "./routes/heroSlideRoutes.js";
 import blogRoutes from "./routes/blogRoutes.js";
 import expoRoutes from "./routes/expoRoutes.js";
 import expoLeadRoutes from "./routes/expoLeadRoutes.js";
+import visitorInquiryRoutes from "./routes/visitorInquiryRoutes.js";
 
 const app = express();
 
@@ -50,6 +51,7 @@ app.use("/api/hero-slides", heroSlideRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/expos", expoRoutes);
 app.use("/api/expo-leads", expoLeadRoutes);
+app.use("/api/visitor-inquiries", visitorInquiryRoutes);
 
 // Test Route
 

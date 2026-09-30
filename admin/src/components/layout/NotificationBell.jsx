@@ -9,7 +9,8 @@ import {
     FiUserPlus,
     FiAlertTriangle,
     FiCheckCircle,
-    FiX
+    FiX,
+    FiUserCheck
 } from "react-icons/fi";
 import { formatDistanceToNow } from "date-fns";
 import axiosInstance from "../../config/axios";
@@ -141,9 +142,10 @@ const NotificationBell = () => {
     const determineRoute = (notification) => {
         const typeRoutes = {
             product_inquiry: "/inquiries",
+            visitor_inquiry: "/visitor-inquiries",
             new_order: "/orders",
             order_status: "/orders",
-            sample_request: "/inquiries", // Assuming samples are grouped with inquiries or contact
+            sample_request: "/request-sample",
             contact_message: "/contact",
             new_user: "/users",
             low_stock: "/products",
@@ -214,6 +216,7 @@ const NotificationBell = () => {
     const getIcon = (type, size = 18) => {
         switch (type) {
             case "product_inquiry": return <FiMessageCircle size={size} className="text-blue-400" />;
+            case "visitor_inquiry": return <FiUserCheck size={size} className="text-emerald-400" />;
             case "new_order": return <FiShoppingBag size={size} className="text-green-400" />;
             case "sample_request": return <FiPackage size={size} className="text-purple-400" />;
             case "contact_message": return <FiMail size={size} className="text-yellow-400" />;
