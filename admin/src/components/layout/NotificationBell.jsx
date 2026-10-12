@@ -41,7 +41,7 @@ const NotificationBell = () => {
         // Initialize Socket
         const token = localStorage.getItem("token");
         if (token) {
-            const BASE_URL = import.meta.env.VITE_API_URL || "https://darkgreen-lyrebird-159850.hostingersite.com/api";
+            const BASE_URL = import.meta.env.VITE_API_URL || "https://mediumslateblue-gull-568254.hostingersite.com/api";
             const SOCKET_URL = BASE_URL.replace("/api", "");
 
             socketRef.current = io(SOCKET_URL, {

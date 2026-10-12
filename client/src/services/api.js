@@ -3,7 +3,7 @@ import axios from "axios";
 // Use environment variable with fallback
 const API_URL =
     import.meta.env.VITE_API_URL ||
-    "https://darkgreen-lyrebird-159850.hostingersite.com/api";
+    "https://mediumslateblue-gull-568254.hostingersite.com/api";
 
 console.log("🔥 API URL:", API_URL);
 
