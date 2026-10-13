@@ -184,6 +184,28 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const handleReset = () => {
+    setIsSuccess(false);
+    setErrorMessage("");
+    setFormData({
+      name: "",
+      designation: "",
+      companyName: "",
+      address: "",
+      city: "",
+      state: "",
+      country: "India",
+      pincode: "",
+      contactNo: "",
+      email: "",
+      notes: "",
+    });
+    setRequirements(["", "", ""]);
+    setVisitingCardFile(null);
+    setVisitingCardPreview("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-black/80 backdrop-blur-md animate-fadeIn">
       {/* Modal Card */}
@@ -218,11 +240,18 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-xs text-slate-400 max-w-sm mx-auto">
               Our packaging specialist will connect with you via <span className="text-white font-medium">{formData.contactNo || formData.email}</span> shortly.
             </div>
-            <div className="pt-2">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={handleReset}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-6 py-3 font-bold text-white hover:bg-sky-400 transition shadow-[0_0_20px_rgba(56,189,248,0.3)] cursor-pointer"
+              >
+                <FiPlus size={16} /> Add New / Another Record
+              </button>
               <button
                 type="button"
                 onClick={handleClose}
-                className="rounded-xl bg-sky-500 px-8 py-3.5 font-bold text-white hover:bg-sky-400 transition shadow-[0_0_20px_rgba(56,189,248,0.3)]"
+                className="w-full sm:w-auto rounded-xl border border-white/10 bg-white/5 px-6 py-3 font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
               >
                 Done
               </button>

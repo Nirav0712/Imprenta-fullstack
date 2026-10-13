@@ -30,6 +30,7 @@ import Expo from "../pages/Expo/Expo";
 import ExpoLandingPage from "../pages/Expo/ExpoLandingPage";
 import PrivacyPolicy from "../pages/Legal/PrivacyPolicy";
 import Terms from "../pages/Legal/Terms";
+import VisitorInquiry from "../pages/VisitorInquiry/VisitorInquiry";
 
 import PageTransition from "../components/common/PageTransition";
 import ScrollToTop from "../components/common/ScrollToTop";
@@ -268,6 +269,28 @@ const AnimatedRoutes = () => {
               <MainLayout>
                 <PageTransition>
                   <Terms />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/visitor-inquiry"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <VisitorInquiry />
+                </PageTransition>
+              </MainLayout>
+            }
+          />
+
+          <Route
+            path="/visitor-form"
+            element={
+              <MainLayout>
+                <PageTransition>
+                  <VisitorInquiry />
                 </PageTransition>
               </MainLayout>
             }
