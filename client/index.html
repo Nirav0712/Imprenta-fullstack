@@ -8,39 +8,19 @@
   <title>Imprenta | Label, Printing & Packaging Manufacturer</title>
   <meta name="google-site-verification" content="Yyg5oeEY7-FI-PoA1HO7WB_a6yOgKZxa9FexVeoCElw" />
   <style>
-    /* Google Translate Top Banner and Offset Suppression */
+    /* Hide ONLY Google Translate Top Banner without blocking translation engine */
     .goog-te-banner-frame,
     .goog-te-banner-frame.skiptranslate,
     iframe.goog-te-banner-frame,
-    iframe.skiptranslate,
-    body > .skiptranslate,
-    div.skiptranslate,
-    .skiptranslate iframe,
-    #goog-gt-tt,
-    #goog-gt-vt,
-    .goog-te-balloon-frame,
-    .goog-tooltip,
-    .goog-tooltip:hover,
-    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
-    .VIpgJd-ZVi9od-aZ2wEe-OiiCO,
-    .VIpgJd-ZVi9od-aZ2wEe,
-    .VIpgJd-ZVi9od-ORHb-OiiCO,
-    .VIpgJd-ZVi9od-xl07Ob-OiiCO,
     .VIpgJd-ZVi9od-ORHb-OEVmcd,
-    .VIpgJd-ZVi9od-l4eHX-hSRGPd,
-    .VIpgJd-ZVi9od-xl07Ob-lTBxed {
+    .goog-tooltip,
+    .goog-tooltip:hover {
       display: none !important;
       visibility: hidden !important;
       opacity: 0 !important;
       height: 0px !important;
-      width: 0px !important;
       max-height: 0px !important;
-      max-width: 0px !important;
-      border: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
       pointer-events: none !important;
-      z-index: -99999 !important;
     }
 
     body {
@@ -54,9 +34,15 @@
       margin-top: 0px !important;
     }
 
-    #google_translate_element,
-    .goog-te-gadget {
-      display: none !important;
+    #google_translate_element {
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     .goog-text-highlight {
@@ -68,13 +54,33 @@
 </head>
 
 <body>
-  <div id="google_translate_element" style="display:none"></div>
+  <div id="google_translate_element" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none;"></div>
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new window.google.translate.TranslateElement({
         pageLanguage: 'en',
         autoDisplay: false
       }, 'google_translate_element');
+
+      // Ensure language sync with localStorage & cookies across all environments
+      try {
+        var saved = localStorage.getItem('selected_lang');
+        if (saved && saved !== 'en') {
+          var tries = 0;
+          var t = setInterval(function () {
+            tries++;
+            var combo = document.querySelector('.goog-te-combo');
+            if (combo) {
+              if (combo.value !== saved) {
+                combo.value = saved;
+                combo.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+              clearInterval(t);
+            }
+            if (tries > 40) clearInterval(t);
+          }, 100);
+        }
+      } catch (e) {}
     }
   </script>
   <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

@@ -97,19 +97,30 @@ const LanguageSelector = ({ isMobile = false }) => {
 
   const handleSelectLanguage = (code) => {
     const host = window.location.hostname;
+    const parts = host.split(".");
+    const rootDomain = parts.length >= 2 ? parts.slice(-2).join(".") : host;
+    const isIpOrLocal = host === "localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(host);
+
+    const domains = [
+      "",
+      host,
+      ...(isIpOrLocal ? [] : [rootDomain, `.${rootDomain}`, `.${host}`]),
+    ];
 
     if (code === "en") {
-      // Clear translation cookie for default English
-      document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=${host}; path=/;`;
-      document.cookie = "googtrans=/auto/en; path=/;";
-      document.cookie = `googtrans=/auto/en; domain=${host}; path=/;`;
+      domains.forEach((d) => {
+        const dStr = d ? `; domain=${d}` : "";
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/${dStr}`;
+        document.cookie = `googtrans=/auto/en; path=/${dStr}`;
+        document.cookie = `googtrans=/en/en; path=/${dStr}`;
+      });
       localStorage.setItem("selected_lang", "en");
     } else {
-      document.cookie = `googtrans=/auto/${code}; path=/;`;
-      document.cookie = `googtrans=/auto/${code}; domain=${host}; path=/;`;
-      document.cookie = `googtrans=/en/${code}; path=/;`;
-      document.cookie = `googtrans=/en/${code}; domain=${host}; path=/;`;
+      domains.forEach((d) => {
+        const dStr = d ? `; domain=${d}` : "";
+        document.cookie = `googtrans=/auto/${code}; path=/${dStr}`;
+        document.cookie = `googtrans=/en/${code}; path=/${dStr}`;
+      });
       localStorage.setItem("selected_lang", code);
     }
 
@@ -120,11 +131,15 @@ const LanguageSelector = ({ isMobile = false }) => {
     const combo = document.querySelector(".goog-te-combo");
     if (combo) {
       combo.value = code;
-      combo.dispatchEvent(new Event("change"));
+      combo.dispatchEvent(new Event("change", { bubbles: true }));
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    } else {
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     }
-
-    // Reload page to apply translation across the entire application cleanly
-    window.location.reload();
   };
 
   const currentLang = LANGUAGES.find((l) => l.code === currentCode) || LANGUAGES[0];

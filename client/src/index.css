@@ -338,36 +338,16 @@ body,
 .goog-te-banner-frame,
 .goog-te-banner-frame.skiptranslate,
 iframe.goog-te-banner-frame,
-iframe.skiptranslate,
-body > .skiptranslate,
-div.skiptranslate,
-.skiptranslate iframe,
 .goog-te-banner,
-#goog-gt-tt,
-#goog-gt-vt,
-.goog-te-balloon-frame,
-.goog-tooltip,
-.goog-tooltip:hover,
-.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
-.VIpgJd-ZVi9od-aZ2wEe-OiiCO,
-.VIpgJd-ZVi9od-aZ2wEe,
-.VIpgJd-ZVi9od-ORHb-OiiCO,
-.VIpgJd-ZVi9od-xl07Ob-OiiCO,
 .VIpgJd-ZVi9od-ORHb-OEVmcd,
-.VIpgJd-ZVi9od-l4eHX-hSRGPd,
-.VIpgJd-ZVi9od-xl07Ob-lTBxed {
+.goog-tooltip,
+.goog-tooltip:hover {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   height: 0px !important;
-  width: 0px !important;
   max-height: 0px !important;
-  max-width: 0px !important;
-  border: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
   pointer-events: none !important;
-  z-index: -99999 !important;
 }
 
 body {
@@ -381,9 +361,15 @@ html {
   margin-top: 0px !important;
 }
 
-#google_translate_element,
-.goog-te-gadget {
-  display: none !important;
+#google_translate_element {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .goog-tooltip,

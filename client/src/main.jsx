@@ -31,54 +31,26 @@ if (typeof Node === "function" && Node.prototype) {
   };
 }
 
-// Suppress Google Translate top banner and body top offset
+// Keep body.top at 0 without shifting layout when Google Translate translates
 if (typeof window !== "undefined") {
-  const enforceCleanTop = () => {
-    if (document.body) {
-      if (document.body.style.top && document.body.style.top !== "0px") {
-        document.body.style.setProperty("top", "0px", "important");
-      }
-      if (document.body.style.position && document.body.style.position !== "static") {
-        document.body.style.setProperty("position", "static", "important");
-      }
+  const resetBodyTop = () => {
+    if (document.body && document.body.style.top && document.body.style.top !== "0px") {
+      document.body.style.top = "0px";
     }
-    // Also hide any translate banner iframes if injected
-    const frames = document.querySelectorAll(
-      "iframe.skiptranslate, .goog-te-banner-frame, iframe[id*=':']"
-    );
-    frames.forEach((frame) => {
-      frame.style.setProperty("display", "none", "important");
-      frame.style.setProperty("visibility", "hidden", "important");
-      frame.style.setProperty("height", "0px", "important");
-      frame.style.setProperty("width", "0px", "important");
-    });
   };
 
   if (typeof MutationObserver !== "undefined") {
-    const observer = new MutationObserver(() => {
-      enforceCleanTop();
-    });
-
-    const startObserving = () => {
-      if (document.body) {
-        observer.observe(document.body, {
-          attributes: true,
-          attributeFilter: ["style", "class"],
-          childList: true,
-        });
-        enforceCleanTop();
-      }
-    };
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", startObserving);
+    const observer = new MutationObserver(resetBodyTop);
+    if (document.body) {
+      observer.observe(document.body, { attributes: true, attributeFilter: ["style"] });
     } else {
-      startObserving();
+      document.addEventListener("DOMContentLoaded", () => {
+        if (document.body) {
+          observer.observe(document.body, { attributes: true, attributeFilter: ["style"] });
+        }
+      });
     }
   }
-
-  // Periodic safety check during initial seconds of translation
-  setInterval(enforceCleanTop, 300);
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
