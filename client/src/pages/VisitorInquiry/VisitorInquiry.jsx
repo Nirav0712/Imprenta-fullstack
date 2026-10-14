@@ -206,11 +206,11 @@ const VisitorInquiry = () => {
           </div>
 
           {/* Centered Responsive Heading */}
-          <div className="text-center mb-8 sm:mb-12 max-w-4xl mx-auto px-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight uppercase leading-[1.15]">
-              Imprenta <span className="bg-gradient-to-r from-sky-400 to-cyan-300 bg-clip-text text-transparent">Private Limited</span>
+          <div className="text-center mb-8 sm:mb-12 max-w-4xl mx-auto px-2 sm:px-4">
+            <h1 className="text-[clamp(1.15rem,4.8vw,3rem)] font-black text-white tracking-tight uppercase leading-tight whitespace-nowrap">
+              Imprenta Private Limited
             </h1>
-            <p className="mt-2.5 sm:mt-3.5 text-sm sm:text-base md:text-lg lg:text-xl font-medium text-slate-300 tracking-wide">
+            <p className="mt-2 sm:mt-3 text-xs sm:text-base md:text-lg lg:text-xl font-medium text-slate-300 tracking-wide">
               Label, Printing &amp; Packaging manufacturer
             </p>
           </div>
