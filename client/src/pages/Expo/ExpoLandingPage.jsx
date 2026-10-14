@@ -632,7 +632,7 @@ const ExpoLandingPage = () => {
       <footer className="py-12 border-t border-white/10 bg-[#060D17] text-center text-sm text-slate-500">
         <div className="max-w-7xl mx-auto px-4 space-y-4">
           <img src={logo} alt="Imprenta" className="h-8 w-auto mx-auto object-contain opacity-80" />
-          <p>© {new Date().getFullYear()} Imprenta Pvt Ltd. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Imprenta Private Limited. All Rights Reserved.</p>
         </div>
       </footer>
     </div>

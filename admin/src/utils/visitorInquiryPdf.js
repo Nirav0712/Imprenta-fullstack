@@ -61,7 +61,7 @@ export const exportVisitorInquiryPDF = async (inquiry) => {
   doc.setTextColor(56, 189, 248);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
-  doc.text("IMPRENTA PVT. LTD.", margin + 6, headerY + 8);
+  doc.text("IMPRENTA PRIVATE LIMITED", margin + 6, headerY + 8);
 
   // Form Title
   doc.setTextColor(255, 255, 255);
@@ -301,7 +301,7 @@ export const exportVisitorInquiryPDF = async (inquiry) => {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(7.5);
   doc.setTextColor(148, 163, 184);
-  doc.text("Imprenta Pvt. Ltd. | Packaging & Commercial Printing Solutions", margin, footerY + 1);
+  doc.text("Imprenta Private Limited | Packaging & Commercial Printing Solutions", margin, footerY + 1);
   doc.text(
     `Generated on: ${format(new Date(), "dd-MM-yyyy HH:mm")}`,
     pageWidth - margin,

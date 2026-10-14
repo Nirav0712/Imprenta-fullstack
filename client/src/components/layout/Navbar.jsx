@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchCategories, fetchProducts, fetchBlogs, fetchExpos } from "../../services/api";
 import { Link } from "react-router-dom";
 import SearchBar from "../search/SearchBar";
+import LanguageSelector from "./LanguageSelector";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { FiLogOut } from "react-icons/fi";
@@ -138,21 +139,24 @@ const Navbar = () => {
         <div className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-[#2563EB]/6 blur-[140px] lg:hidden"></div>
 
         <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-br from-white/[0.015] via-transparent to-transparent lg:hidden"></div>
-        <div className="relative w-full h-20 px-4 sm:px-7 lg:px-11 xl:px-15 2xl:px-19 flex items-center">
+        <div className="relative w-full h-18 sm:h-20 px-3.5 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 flex items-center">
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenu(true)}
+            aria-label="Open Mobile Menu"
             className="
     lg:hidden
-    mr-4
+    mr-2.5 sm:mr-4
     relative
     flex
-    h-12
-    w-12
+    h-10
+    w-10
+    sm:h-11
+    sm:w-11
     items-center
     justify-center
-    rounded-2xl
+    rounded-xl
     border
     border-white/10
     bg-white/5
@@ -163,6 +167,7 @@ const Navbar = () => {
     hover:border-sky-400/40
     hover:bg-sky-500/10
     active:scale-95
+    shrink-0
   "
           >
 
@@ -172,14 +177,14 @@ const Navbar = () => {
               className="
       absolute
       inset-0
-      rounded-2xl
+      rounded-xl
       bg-sky-500/10
       blur-xl
     "
             />
 
             <FiMenu
-              size={24}
+              size={20}
               className="relative z-10"
             />
 
@@ -190,27 +195,18 @@ const Navbar = () => {
             to="/"
             className="flex items-center flex-shrink-0 cursor-pointer"
           >
-
-            {/* Logo */}
-            {/* 
-  <div className="text-[46px] font-black text-sky-500 mr-2 leading-none">
-    V
-  </div>
-  */}
-
             <div className="flex items-center">
               <img
                 src={logo}
                 alt="Imprenta"
-                className="h-10 sm:h-11 lg:h-12 w-auto object-contain"
+                className="h-8 sm:h-9 lg:h-10 xl:h-11 w-auto object-contain"
               />
             </div>
-
           </Link>
 
           {/* Main Navigation Links */}
-          <nav className="hidden md:flex flex-1 justify-center items-center gap-8 lg:gap-10 relative">
-            <Link to="/" className="text-[15px] font-medium text-slate-300 hover:text-sky-400 transition-colors">Home</Link>
+          <nav className="hidden lg:flex flex-1 justify-center items-center gap-3 xl:gap-6 2xl:gap-8 relative text-xs xl:text-sm 2xl:text-[15px]">
+            <Link to="/" className="font-medium text-slate-300 hover:text-sky-400 transition-colors whitespace-nowrap">Home</Link>
 
             {/* Company Dropdown */}
             <div
@@ -245,7 +241,7 @@ const Navbar = () => {
               </button>
 
               <div
-                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-[800px] bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform ${activeDropdown === "services" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
+                className={`absolute top-[80px] left-1/2 -translate-x-1/2 w-[720px] xl:w-[820px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 transform ${activeDropdown === "services" ? "opacity-100 translate-y-0 visible" : "opacity-0 translate-y-4 invisible"
                   } flex z-50`}
               >
                 {/* Left Side (Categories) */}
@@ -420,40 +416,32 @@ const Navbar = () => {
           </nav>
 
           {/* Right Side */}
-          <div className="hidden lg:flex items-center gap-10 ml-auto">
+          <div className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-7 ml-auto shrink-0">
+
+            {/* Language Selector */}
+            <LanguageSelector />
 
             {/* Search Toggle */}
             <button
               type="button"
               onClick={() => setShowSearch(!showSearch)}
-              className="flex items-center gap-3 text-white hover:text-sky-300 transition cursor-pointer"
+              className="flex items-center gap-2 text-white hover:text-sky-300 transition cursor-pointer"
             >
-              <FiSearch size={24} />
-              <span className="font-medium">
+              <FiSearch size={20} className="xl:text-[22px]" />
+              <span className="hidden xl:inline font-medium text-sm">
                 Search
               </span>
             </button>
 
-            {/* Favorites */}
-            {/* <button className="flex items-center gap-2 text-white hover:text-sky-300 transition">
-
-              <FiHeart size={22} />
-
-              <span className="font-medium text-white">
-                Favorites
-              </span>
-
-            </button> */}
-
             {isAuthenticated ? (
               <div className="relative group">
                 <button
-                  className="h-12 px-5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 font-medium flex items-center gap-2 transition"
+                  className="h-10 xl:h-12 px-3.5 xl:px-5 rounded-xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 text-xs xl:text-sm font-medium flex items-center gap-2 transition"
                 >
-                  <FiUser size={19} />
-                  Hi, {user.name.split(' ')[0]}
+                  <FiUser size={16} className="xl:text-[18px]" />
+                  <span>Hi, {user.name.split(' ')[0]}</span>
                 </button>
-                <div className="absolute top-full right-0 mt-2 w-48 bg-[#0F1F38] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                <div className="absolute top-full right-0 mt-2 w-48 bg-[#0F1F38] border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                   <Link to="/profile" className="block px-5 py-3 text-sm text-slate-300 hover:text-white hover:bg-white/5 transition rounded-t-xl">
                     My Profile
                   </Link>
@@ -468,24 +456,24 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="h-12 px-7 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-medium flex items-center gap-2 transition shadow-sm hover:shadow-md"
+                className="h-10 xl:h-12 px-4 xl:px-6 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs xl:text-sm font-semibold flex items-center gap-2 transition shadow-sm hover:shadow-md shrink-0 whitespace-nowrap"
               >
-                <FiUser size={19} />
-                Sign In
+                <FiUser size={16} className="xl:text-[18px]" />
+                <span>Sign In</span>
               </Link>
             )}
 
             {/* Cart */}
-            <Link to="/cart" className="flex items-center gap-3 text-white hover:text-sky-300 transition">
+            <Link to="/cart" className="flex items-center gap-2 text-white hover:text-sky-300 transition">
               <div className="relative">
-                <FiShoppingCart size={24} />
+                <FiShoppingCart size={20} className="xl:text-[22px]" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 w-4 h-4 xl:w-5 xl:h-5 rounded-full bg-blue-500 text-white text-[9px] xl:text-[10px] flex items-center justify-center font-bold">
                     {cartCount}
                   </span>
                 )}
               </div>
-              <span className="font-medium">
+              <span className="hidden xl:inline font-medium text-sm">
                 Cart
               </span>
             </Link>
@@ -493,21 +481,23 @@ const Navbar = () => {
           </div>
 
           {/* Tablet & Mobile Icons */}
-          <div className="flex lg:hidden items-center gap-5 ml-auto">
-
+          <div className="flex lg:hidden items-center gap-2 sm:gap-3.5 ml-auto">
+            {/* Mobile Language Selector */}
+            <LanguageSelector isMobile={true} />
 
             {/* mobile search button */}
             <button
               onClick={() => setMobileMenu(true)}
-              className="text-white hover:text-sky-300 transition"
+              className="text-white hover:text-sky-300 transition p-1 sm:p-1.5"
+              aria-label="Search"
             >
-              <FiSearch size={22} />
+              <FiSearch size={20} />
             </button>
 
-            <Link to="/cart" className="relative text-white hover:text-sky-300 transition">
-              <FiShoppingCart size={22} />
+            <Link to="/cart" className="relative text-white hover:text-sky-300 transition p-1 sm:p-1.5" aria-label="Cart">
+              <FiShoppingCart size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold">
                   {cartCount}
                 </span>
               )}

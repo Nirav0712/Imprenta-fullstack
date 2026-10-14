@@ -201,7 +201,7 @@ ${inquiry.notes || "None"}
               {/* Slip Header */}
               <div className="bg-[#0A1626] border-b border-white/10 p-4 text-center">
                 <p className="text-[11px] font-mono uppercase tracking-widest text-sky-400 font-bold">
-                  IMPRENTA PVT. LTD.
+                  IMPRENTA PRIVATE LIMITED
                 </p>
                 <h4 className="text-base sm:text-lg font-black uppercase text-white tracking-wider mt-0.5">
                   VISITOR INQUIRY FORM SLIP

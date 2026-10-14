@@ -188,7 +188,7 @@ const Footer = () => {
 
           {/* COPYRIGHT BOTTOM */}
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5 text-sm text-slate-400">
-            <p className="text-center md:text-left">© {new Date().getFullYear()} Imprenta Pvt. Ltd. All Rights Reserved.</p>
+            <p className="text-center md:text-left">© {new Date().getFullYear()} Imprenta Private Limited. All Rights Reserved.</p>
             <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-medium">
               <Link
                 to="/visitor-inquiry"

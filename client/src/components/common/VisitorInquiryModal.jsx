@@ -266,10 +266,10 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                 <img src={logo} alt="Imprenta" className="h-9 sm:h-10 w-auto object-contain" />
               </div>
               <p className="text-[11px] uppercase tracking-widest font-mono text-sky-400 font-bold">
-                Imprenta Pvt. Ltd.
+                Imprenta Private Limited
               </p>
               <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-white uppercase">
-                Visitor Inquiry Form
+                Visitor Form
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Please provide your contact details & project requirements below.
@@ -329,7 +329,7 @@ const VisitorInquiryModal = ({ isOpen, onClose }) => {
                       required
                       value={formData.companyName}
                       onChange={handleChange}
-                      placeholder="e.g. Imprenta Pvt. Ltd."
+                      placeholder="e.g. Imprenta Private Limited"
                       className="w-full rounded-xl border border-white/10 bg-[#060D17] px-3.5 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-sky-500"
                     />
                   </div>
